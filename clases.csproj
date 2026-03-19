@@ -7,4 +7,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="listado-estaciones-rodalies-barcelona.csv" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="listado-estaciones-rodalies-barcelona.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
