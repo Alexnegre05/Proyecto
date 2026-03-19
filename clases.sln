@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "clases", "clases.csproj", "{EAFE3D4F-E7EA-30FF-D564-6E5D1E0914B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "limpiar_csv", "limpiar_csv\limpiar_csv\limpiar_csv.csproj", "{8323424E-1123-42A8-AD60-12A3C948F8D9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EAFE3D4F-E7EA-30FF-D564-6E5D1E0914B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAFE3D4F-E7EA-30FF-D564-6E5D1E0914B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAFE3D4F-E7EA-30FF-D564-6E5D1E0914B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAFE3D4F-E7EA-30FF-D564-6E5D1E0914B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8323424E-1123-42A8-AD60-12A3C948F8D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8323424E-1123-42A8-AD60-12A3C948F8D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8323424E-1123-42A8-AD60-12A3C948F8D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8323424E-1123-42A8-AD60-12A3C948F8D9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {11412D75-A196-4E1A-9F8C-33A02B9BC8F6}
+	EndGlobalSection
+EndGlobal
