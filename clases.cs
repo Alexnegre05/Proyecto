@@ -3,18 +3,19 @@ using System;
 using System.Collections.Generic;
 namespace clases
 {
+    // usamos double en x,y,z y en distancia recorrida ya que pi es un numero double
 
     // aqui pondremos las clases
     class Estación
     {
         public int id;
         public string nombre;
-        public float x;
-        public float y;
-        public float z;
+        public double x;
+        public double y;
+        public double z;
         public bool obras;
        
-        void calcular_estacion_cercana(float x, float y, float z)
+        void calcular_estacion_cercana(double x, double y, double z)
         {
 
         }
@@ -132,7 +133,7 @@ namespace clases
         public int id_parada_destino;
         public DateTime fecha_guardar;
         public int costo;
-        public float distancia_total_recorrida;
+        public double distancia_total_recorrida;
 
         // devuelve una lista de paradas que forman la ruta
         void calcular_ruta_id(int id_parada_inicio, int id_parada_final)
@@ -158,8 +159,8 @@ namespace clases
     {
         static void Main(string[] args)
         {
-            
-            Console.WriteLine("Hello, World!");
+
+            pasar_xyz.de_polares_a_xyz();
         }
     }
 }
