@@ -480,3 +480,20 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# Archivos de configuración que suelen tener contraseñas
+*.user
+*.userossc
+*.sln.docuser
+appsettings.json
+appsettings.Development.json
+
+# Archivos de variables de entorno (muy comunes para guardar tokens)
+.env
+.env.*
+secrets.json
+
+# Archivos temporales o de backup que podrían guardar texto plano
+*.bak
+*.tmp
+*.log
