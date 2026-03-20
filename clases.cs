@@ -334,19 +334,6 @@ namespace clases
 
             no_query(connection, sql);
 
-            // Dijkstra
-
-
-            //class Dijkstra
-            //    {
-            //        public int id;
-            //        public int id_parada_inicio;
-            //        public int id_parada_destino;
-            //        public DateTime fecha_guardar;
-            //        public int costo;
-            //        public double distancia_total_recorrida;
-
-            //    }
 
 
             sql = "CREATE TABLE IF NOT EXISTS Dijkstra (\n" +
