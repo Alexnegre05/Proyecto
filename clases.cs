@@ -226,7 +226,7 @@ namespace clases
         }
 
 
-       
+
         static void comprovar_crear_tablas(DbConnection connection)
         {
 
@@ -262,7 +262,7 @@ namespace clases
 
             sql = "CREATE TABLE IF NOT EXISTS Nota_Incidencia (\n" +
                                               "   id INTEGER PRIMARY KEY,\n" +
-                                              "   titulo TEXT NOT NULL,\n" + 
+                                              "   titulo TEXT NOT NULL,\n" +
                                               "   id_incidencia INTEGER NOT NULL,\n" +
                                               "   puntuacion INTEGER NOT NULL, \n" +
                                               "   CONSTRAINT fk_incidencia\n" +
@@ -283,7 +283,7 @@ namespace clases
 
                                                   "   CONSTRAINT fk_estacion_inicio\n" +
                                                   "   FOREIGN KEY(id_estacion_inicio)\n" +
-                                                  "   REFERENCES Estacion(id),\n" + 
+                                                  "   REFERENCES Estacion(id),\n" +
 
                                                   "   CONSTRAINT fk_estacion_final\n" +
                                                   "   FOREIGN KEY(id_estacion_final)\n" +
@@ -331,14 +331,45 @@ namespace clases
 
             no_query(connection, sql);
 
+            // Dijkstra
+
+
+            //class Dijkstra
+            //    {
+            //        public int id;
+            //        public int id_parada_inicio;
+            //        public int id_parada_destino;
+            //        public DateTime fecha_guardar;
+            //        public int costo;
+            //        public double distancia_total_recorrida;
+
+            //    }
+
+
+            sql = "CREATE TABLE IF NOT EXISTS Dijkstra (\n" +
+                                                 "   id INTEGER PRIMARY KEY,\n" +
+                                                 "   id_parada_inicio INTEGER NOT NULL,\n" + // puede ser null
+                                                 "   id_parada_destino INTEGER NOT NULL,\n" +
+                                                 "   fecha_guardar TIMESTAMP NOT NULL,\n" +
+                                                 "   costo INTEGER NOT NULL,\n" +
+                                                 "   distancia_total_recorrida DOUBLE PRECISION NOT NULL,\n" +
+
+
+                                                  "   CONSTRAINT fk_id_parada_inicio\n" +
+                                                  "   FOREIGN KEY (id_parada_inicio)\n" +
+                                                  "   REFERENCES Paradas(id),\n" +
+
+                                                  "   CONSTRAINT fk_parada_destino\n" +
+                                                  "   FOREIGN KEY (id_parada_destino)\n" +
+                                                  "   REFERENCES Paradas(id)\n)";
+
+
+            no_query(connection, sql);
+
         }
-
-
-
-
         // funcion principal
         static void Main(string[] args)
-        {
+        { 
 
 
             
@@ -352,7 +383,6 @@ namespace clases
             comprovar_crear_BD(connection);
 
             // comprovacion y creacion de las tablas
-
             comprovar_crear_tablas(connection);
 
             // cerrar conexion
