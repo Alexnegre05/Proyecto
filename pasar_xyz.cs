@@ -60,10 +60,18 @@ namespace clases
                 }
                 else // si la linea es los titulos
                 {
+                    
+                    string[] parts = linea.Split(","); // de el titulo solo queremos la primera parte, descartamos lo otro para poner x,y,z
+
+                    linea = parts[0] + "," + "x" + "," + "y" + "," + "z";
                     writer.WriteLine(linea);
                 }
-                    linea = reader.ReadLine();
+                
+                // leemos la siguiente linea
+                linea = reader.ReadLine();
             }
+
+            // fuera del bucle cerramos los ficheros
             reader.Close();
             file.Close();
 
