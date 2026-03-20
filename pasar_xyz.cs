@@ -54,13 +54,20 @@ namespace clases
                     double longitud_radianes = grados_a_radianes(longitud);
 
 
+                    // formulas que pasan de latitud/longitud a radianes
+                    double x = R*Math.Cos(latitud_radianes)*Math.Cos(longitud_radianes);
+                    double y = R * Math.Cos(latitud_radianes) * Math.Sin(longitud_radianes);
+                    double z = R * Math.Sin(latitud_radianes);
+
+
                     // reconstruimos la linea
-                    Console.WriteLine(latitud_radianes.ToString(CultureInfo.InvariantCulture) + "," + longitud_radianes.ToString(CultureInfo.InvariantCulture));
-                    linea = parts[0] + ',' + parts[1] + ',' + parts[2];
+                    
+                    linea = parts[0] + ',' + x.ToString(CultureInfo.InvariantCulture) + ',' + y.ToString(CultureInfo.InvariantCulture) + ',' + z.ToString(CultureInfo.InvariantCulture);
+                    writer.WriteLine(linea);
                 }
                 else // si la linea es los titulos
                 {
-                    
+                    Console.Write(linea);
                     string[] parts = linea.Split(","); // de el titulo solo queremos la primera parte, descartamos lo otro para poner x,y,z
 
                     linea = parts[0] + "," + "x" + "," + "y" + "," + "z";
