@@ -226,7 +226,10 @@ namespace clases
         }
 
 
+        static void inserts_estaciones()
+        {
 
+        }
         static void comprovar_crear_tablas(DbConnection connection)
         {
 
@@ -385,6 +388,7 @@ namespace clases
             // comprovacion y creacion de las tablas
             comprovar_crear_tablas(connection);
 
+            inserts_estaciones();
             // cerrar conexion
             closeconnection(connection, source);
 
