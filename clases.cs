@@ -371,7 +371,7 @@ namespace clases
             string linea = reader.ReadLine();
             string estacion;
 
-            string lineas;
+            string lineas_estaciones;
             int count = 0;
             count = count + 1;
 
@@ -380,30 +380,39 @@ namespace clases
 
                 if (count != 1)
                 {
-                    
+
+                    linea = linea.Trim('\"');
                     string[] parts = linea.Split(',');
 
-                    estacion = parts[0].ToString(CultureInfo.InvariantCulture); ;
-                    lineas = parts[1].ToString(CultureInfo.InvariantCulture); ;
+                    estacion = parts[0].ToString(CultureInfo.InvariantCulture).Trim('\"').Trim();
 
-                    if (lineas[0] != '\"') // aqui comprovamos si la linea empieza por " o no,
-                    // asi diferenciamos de "R1,R2..." a solo R1 sin comillas extra
+
+                    // sacamos esto fuera de el for para no repetir codigo
+                    Estacion primera_estacion_encontrada = context.Estaciones.FirstOrDefault(e => e.nombre.Trim() == estacion);
+
+
+                    if(primera_estacion_encontrada != null)
                     {
-                        Paradas paradas = new Paradas();
+                        for (int i = 1; i < parts.Length; i = i + 1) // es un for que recorre todas las estaciones que tienes y va haciendo inserts
+                        {
 
-                        // sacamos la estacion a partir del nombre
-                        Estacion Estacion = context.Estaciones.FirstOrDefault(e => e.nombre.Trim() == estacion);
+                            string nombreLineaLimpio = parts[i].Trim('\"').Trim();
+                            
 
-                        paradas.EstacionId = Estacion.Id; // guardamos el id 
+                            Linea lineaBD = context.Lineas.FirstOrDefault(l => l.nombre.Trim() == nombreLineaLimpio);
 
-                        Linea Linea = context.Lineas.FirstOrDefault(l => l.nombre.Trim() == lineas);
+                            if (lineaBD != null)
+                            {
+                                Paradas paradas = new Paradas();
+                                paradas.EstacionId = primera_estacion_encontrada.Id;
+                                paradas.LineaId = lineaBD.Id;
 
-                        paradas.LineaId = Linea.Id;
+                                context.Paradas.Add(paradas);
+                            }
+
+                        }
                     }
-                    else // caso comlicado, el string es "...."
-                    {
-
-                    }
+                    
 
                 }
 
