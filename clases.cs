@@ -224,6 +224,13 @@ namespace clases
 
 
 
+
+
+
+
+
+
+
     internal class Program
     {
         
@@ -235,6 +242,8 @@ namespace clases
             context.Dispose();
             
         }
+
+
 
 
         static void inserts_estaciones(DBProyectoContext context)
@@ -289,6 +298,12 @@ namespace clases
             fichero.Close();
         }
 
+
+
+
+
+
+
         static void inserts_lineas(DBProyectoContext context)
         {
             FileStream fichero = new FileStream("../../../lineas.csv", FileMode.Open, FileAccess.Read);
@@ -311,6 +326,7 @@ namespace clases
 
                 if (count != 1)
                 {
+
                     linea = parts[0].ToString(CultureInfo.InvariantCulture);
                     estacion_inicio = parts[1].ToString(CultureInfo.InvariantCulture);
                     estacion_final = parts[2].ToString(CultureInfo.InvariantCulture);
@@ -329,8 +345,6 @@ namespace clases
                     lineas.EstacionInicioId = Estacion_inicio.Id;
                     lineas.EstacionFinalId = Estacion_final.Id;
 
-                    
-
                     context.Lineas.Add(lineas);
                     context.SaveChanges();
 
@@ -339,11 +353,67 @@ namespace clases
                 linea_leida = reader.ReadLine(); // leemos la linea siguiente
                 count = count + 1; // sumamos uno al contador
             }
+
             // cerramos los ficheros
             reader.Close();
             fichero.Close();
+
         }
 
+
+        static void inserts_paradas(DBProyectoContext context)
+        {
+
+            FileStream fichero = new FileStream("../../../Paradas.csv", FileMode.Open, FileAccess.Read);
+
+            StreamReader reader = new StreamReader(fichero, Encoding.UTF8);
+
+            string linea = reader.ReadLine();
+            string estacion;
+
+            string lineas;
+            int count = 0;
+            count = count + 1;
+
+            while (linea != null)
+            {
+
+                if (count != 1)
+                {
+                    
+                    string[] parts = linea.Split(',');
+
+                    estacion = parts[0].ToString(CultureInfo.InvariantCulture); ;
+                    lineas = parts[1].ToString(CultureInfo.InvariantCulture); ;
+
+                    if (lineas[0] != '\"') // aqui comprovamos si la linea empieza por " o no,
+                    // asi diferenciamos de "R1,R2..." a solo R1 sin comillas extra
+                    {
+                        Paradas paradas = new Paradas();
+
+                        // sacamos la estacion a partir del nombre
+                        Estacion Estacion = context.Estaciones.FirstOrDefault(e => e.nombre.Trim() == estacion);
+
+                        paradas.EstacionId = Estacion.Id; // guardamos el id 
+
+                        Linea Linea = context.Lineas.FirstOrDefault(l => l.nombre.Trim() == lineas);
+
+                        paradas.LineaId = Linea.Id;
+                    }
+                    else // caso comlicado, el string es "...."
+                    {
+
+                    }
+
+                }
+
+                count = count + 1;
+                linea = reader.ReadLine();
+            }
+
+            reader.Close();
+            fichero.Close();
+        }
 
 
 
@@ -367,10 +437,13 @@ namespace clases
             inserts_lineas(context);
             Console.WriteLine("lineas insertadas en BD");
 
+            // insertamos paradas
+            inserts_paradas(context);
+            Console.WriteLine("paradas insertadas en la BD");
+
 
             // cerrar conexion
             closeconnection(context);
-
             Console.WriteLine("conexion cerrada");
             
 
