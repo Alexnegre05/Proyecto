@@ -272,21 +272,31 @@ namespace clases
                     
                     // sacamos de el fichero los datos que vamos a insertar
                     // no podemos hacer casting() hay que usar parse
-                    x = double.Parse(parts[1], System.Globalization.CultureInfo.InvariantCulture);
-                    y = double.Parse(parts[2], System.Globalization.CultureInfo.InvariantCulture);
-                    z = double.Parse(parts[3], System.Globalization.CultureInfo.InvariantCulture); // para que no haya problemas para guardar los doubles
-                
-                    // para ahcer el insert creamos un objeto de clase estacion donde guardamos las variables
-                    Estacion estacion = new Estacion();
+                    x = double.Parse(parts[1], CultureInfo.InvariantCulture);
+                    y = double.Parse(parts[2], CultureInfo.InvariantCulture);
+                    z = double.Parse(parts[3], CultureInfo.InvariantCulture); // para que no haya problemas para guardar los doubles
 
-                    estacion.nombre = nombre;
-                    estacion.x = x;
-                    estacion.y = y;
-                    estacion.z = z;
-                    estacion.obras = false; // dejamos de momento por defecto las obras como false
+                    // con el any nos devuele si existe ya una estacion con un campo en concreto, en este caso el nombre
+                    bool existe = context.Estaciones.Any(e => e.nombre == nombre);
 
-                    context.Estaciones.Add(estacion); // añadimos la estacion
-                    context.SaveChanges();
+
+                    if (existe == false) // si no existe hacemos el insert
+                    {
+                        // para hacer el insert creamos un objeto de clase estacion donde guardamos las variables
+                        Estacion estacion = new Estacion();
+
+                        estacion.nombre = nombre;
+                        estacion.x = x;
+                        estacion.y = y;
+                        estacion.z = z;
+                        estacion.obras = false; // dejamos de momento por defecto las obras como false
+
+                        context.Estaciones.Add(estacion); // añadimos la estacion
+                        context.SaveChanges();
+
+                        
+                    }
+                   
 
                 }
 
@@ -337,16 +347,23 @@ namespace clases
 
                     lineas.nombre = parts[0];
                     // context.Estaciones.FirstOrDefault con esto podemos buscar por nombre si coincide
+                    bool existe = context.Lineas.Any(l => l.nombre == lineas.nombre);
 
-                    Estacion  Estacion_inicio = context.Estaciones.FirstOrDefault(e => e.nombre.Trim() == estacion_inicio);
-                    Estacion  Estacion_final = context.Estaciones.FirstOrDefault(e => e.nombre.Trim() == estacion_final);
+                    if (existe == false)
+                    {
+                        Estacion Estacion_inicio = context.Estaciones.FirstOrDefault(e => e.nombre.Trim() == estacion_inicio);
+                        Estacion Estacion_final = context.Estaciones.FirstOrDefault(e => e.nombre.Trim() == estacion_final);
 
-                    // Asignamos los IDs ahora que sabemos que NO son null
-                    lineas.EstacionInicioId = Estacion_inicio.Id;
-                    lineas.EstacionFinalId = Estacion_final.Id;
+                        // Asignamos los IDs ahora que sabemos que NO son null
+                        lineas.EstacionInicioId = Estacion_inicio.Id;
+                        lineas.EstacionFinalId = Estacion_final.Id;
 
-                    context.Lineas.Add(lineas);
-                    context.SaveChanges();
+                        context.Lineas.Add(lineas);
+                        context.SaveChanges();
+
+                        
+                    }
+                    
 
                 }
 
@@ -390,8 +407,7 @@ namespace clases
                     // sacamos esto fuera de el for para no repetir codigo
                     Estacion primera_estacion_encontrada = context.Estaciones.FirstOrDefault(e => e.nombre.Trim() == estacion);
 
-
-                    if(primera_estacion_encontrada != null)
+                    if (primera_estacion_encontrada != null)
                     {
                         for (int i = 1; i < parts.Length; i = i + 1) // es un for que recorre todas las estaciones que tienes y va haciendo inserts
                         {
@@ -403,11 +419,22 @@ namespace clases
 
                             if (lineaBD != null)
                             {
-                                Paradas paradas = new Paradas();
-                                paradas.EstacionId = primera_estacion_encontrada.Id;
-                                paradas.LineaId = lineaBD.Id;
 
-                                context.Paradas.Add(paradas);
+                                // validacion pero para la linea
+                                bool existe = context.Paradas.Any(p =>p.EstacionId == primera_estacion_encontrada.Id && p.LineaId == lineaBD.Id);
+
+
+                                if (existe == false)
+                                {
+                                    Paradas paradas = new Paradas();
+                                    paradas.EstacionId = primera_estacion_encontrada.Id;
+                                    paradas.LineaId = lineaBD.Id;
+
+                                    context.Paradas.Add(paradas);
+
+                                    Console.WriteLine("No deberias estar aqui");
+                                }
+                               
                             }
 
                         }
@@ -433,7 +460,7 @@ namespace clases
         { 
 
             DBProyectoContext context = new DBProyectoContext();
-            context.Database.EnsureDeleted();
+            
             context.Database.EnsureCreated();
 
             Console.WriteLine("BD + tablas creadas");
