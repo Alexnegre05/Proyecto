@@ -10,6 +10,7 @@ using Npgsql.EntityFrameworkCore;
 using static System.Net.Mime.MediaTypeNames;
 using System.Numerics;
 using System.Text;
+using System.Globalization;
 namespace clases
 {
 
@@ -290,49 +291,52 @@ namespace clases
 
         static void inserts_lineas(DBProyectoContext context)
         {
-            FileStream fichero = new FileStream("../../../estaciones_xyz.csv", FileMode.Open, FileAccess.Read);
+            FileStream fichero = new FileStream("../../../lineas.csv", FileMode.Open, FileAccess.Read);
 
             StreamReader reader = new StreamReader(fichero, Encoding.UTF8);
 
             int count = 0; // contador para que no se haga un insert de la primera linea si count != 1
-            string linea = reader.ReadLine();
+            string linea_leida = reader.ReadLine();
 
             // variables para guardar las estaciones 
-            string nombre;
-            double x;
-            double y;
-            double z;
+            string linea;
+            string estacion_inicio;
+            string estacion_final;
 
             count = count + 1;
 
-            while (linea != null) // leemos el fichero hasta que sea null
+            while (linea_leida != null) // leemos el fichero hasta que sea null
             {
-                string[] parts = linea.Split(",");
+                string[] parts = linea_leida.Split(";"); // se separa por ;
+
                 if (count != 1)
                 {
-                    nombre = parts[0];
-
-                    // sacamos de el fichero los datos que vamos a insertar
-                    // no podemos hacer casting() hay que usar parse
-                    x = double.Parse(parts[1], System.Globalization.CultureInfo.InvariantCulture);
-                    y = double.Parse(parts[2], System.Globalization.CultureInfo.InvariantCulture);
-                    z = double.Parse(parts[3], System.Globalization.CultureInfo.InvariantCulture); // para que no haya problemas para guardar los doubles
+                    linea = parts[0].ToString(CultureInfo.InvariantCulture);
+                    estacion_inicio = parts[1].ToString(CultureInfo.InvariantCulture);
+                    estacion_final = parts[2].ToString(CultureInfo.InvariantCulture);
+                   
 
                     // para ahcer el insert creamos un objeto de clase estacion donde guardamos las variables
-                    Estacion estacion = new Estacion();
+                    Linea lineas = new Linea();
 
-                    estacion.nombre = nombre;
-                    estacion.x = x;
-                    estacion.y = y;
-                    estacion.z = z;
-                    estacion.obras = false; // dejamos de momento por defecto las obras como false
+                    lineas.nombre = parts[0];
+                    // context.Estaciones.FirstOrDefault con esto podemos buscar por nombre si coincide
 
-                    context.Estaciones.Add(estacion); // añadimos la estacion
+                    Estacion  Estacion_inicio = context.Estaciones.FirstOrDefault(e => e.nombre.Trim() == estacion_inicio);
+                    Estacion  Estacion_final = context.Estaciones.FirstOrDefault(e => e.nombre.Trim() == estacion_final);
+
+                    // Asignamos los IDs ahora que sabemos que NO son null
+                    lineas.EstacionInicioId = Estacion_inicio.Id;
+                    lineas.EstacionFinalId = Estacion_final.Id;
+
+                    
+
+                    context.Lineas.Add(lineas);
                     context.SaveChanges();
 
                 }
 
-                linea = reader.ReadLine(); // leemos la linea siguiente
+                linea_leida = reader.ReadLine(); // leemos la linea siguiente
                 count = count + 1; // sumamos uno al contador
             }
             // cerramos los ficheros
@@ -355,10 +359,15 @@ namespace clases
 
             Console.WriteLine("BD + tablas creadas");
 
+            // insertamos las estaciones
             inserts_estaciones(context);
+            Console.WriteLine("estaciones insertadas en la BD");
 
+            // insertamos las lineas
             inserts_lineas(context);
-            Console.WriteLine("estaciones insertadas en BD");
+            Console.WriteLine("lineas insertadas en BD");
+
+
             // cerrar conexion
             closeconnection(context);
 
