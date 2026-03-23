@@ -12,9 +12,10 @@ using System.Numerics;
 using System.Text;
 namespace clases
 {
+
     // usamos double en x,y,z y en distancia recorrida ya que pi es un numero double
 
-    // aqui pondremos las clases
+    // aqui pondremos las clases, usamos EFCORE
 
     
     public class Estacion
@@ -257,7 +258,9 @@ namespace clases
                 string[] parts = linea.Split(","); 
                 if (count != 1)
                 {
-                    nombre = parts[0]; // sacamos de el fichero los datos que vamos a insertar
+                    nombre = parts[0]; 
+                    
+                    // sacamos de el fichero los datos que vamos a insertar
                     // no podemos hacer casting() hay que usar parse
                     x = double.Parse(parts[1], System.Globalization.CultureInfo.InvariantCulture);
                     y = double.Parse(parts[2], System.Globalization.CultureInfo.InvariantCulture);
@@ -285,6 +288,62 @@ namespace clases
             fichero.Close();
         }
 
+        static void inserts_lineas(DBProyectoContext context)
+        {
+            FileStream fichero = new FileStream("../../../estaciones_xyz.csv", FileMode.Open, FileAccess.Read);
+
+            StreamReader reader = new StreamReader(fichero, Encoding.UTF8);
+
+            int count = 0; // contador para que no se haga un insert de la primera linea si count != 1
+            string linea = reader.ReadLine();
+
+            // variables para guardar las estaciones 
+            string nombre;
+            double x;
+            double y;
+            double z;
+
+            count = count + 1;
+
+            while (linea != null) // leemos el fichero hasta que sea null
+            {
+                string[] parts = linea.Split(",");
+                if (count != 1)
+                {
+                    nombre = parts[0];
+
+                    // sacamos de el fichero los datos que vamos a insertar
+                    // no podemos hacer casting() hay que usar parse
+                    x = double.Parse(parts[1], System.Globalization.CultureInfo.InvariantCulture);
+                    y = double.Parse(parts[2], System.Globalization.CultureInfo.InvariantCulture);
+                    z = double.Parse(parts[3], System.Globalization.CultureInfo.InvariantCulture); // para que no haya problemas para guardar los doubles
+
+                    // para ahcer el insert creamos un objeto de clase estacion donde guardamos las variables
+                    Estacion estacion = new Estacion();
+
+                    estacion.nombre = nombre;
+                    estacion.x = x;
+                    estacion.y = y;
+                    estacion.z = z;
+                    estacion.obras = false; // dejamos de momento por defecto las obras como false
+
+                    context.Estaciones.Add(estacion); // añadimos la estacion
+                    context.SaveChanges();
+
+                }
+
+                linea = reader.ReadLine(); // leemos la linea siguiente
+                count = count + 1; // sumamos uno al contador
+            }
+            // cerramos los ficheros
+            reader.Close();
+            fichero.Close();
+        }
+
+
+
+
+
 
         // funcion principal
         static void Main(string[] args)
@@ -298,7 +357,8 @@ namespace clases
 
             inserts_estaciones(context);
 
-            Console.WriteLine("Datos insertados");
+            inserts_lineas(context);
+            Console.WriteLine("estaciones insertadas en BD");
             // cerrar conexion
             closeconnection(context);
 
