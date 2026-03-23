@@ -4,7 +4,11 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Xml.Linq;
 using Npgsql;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using Npgsql.EntityFrameworkCore;
 using static System.Net.Mime.MediaTypeNames;
+using System.Numerics;
 namespace clases
 {
     // usamos double en x,y,z y en distancia recorrida ya que pi es un numero double
@@ -12,15 +16,16 @@ namespace clases
     // aqui pondremos las clases
 
     
-    class Estacion
+    public class Estacion
     {
-        public int id;
-        public string nombre;
-        public double x;
-        public double y;
-        public double z;
-        public bool obras;
-       
+        public int Id { get; set; }
+        public string nombre { get; set; }
+        public double x { get; set; }
+        public double y { get; set; }
+        public double z { get; set; }
+        public bool obras { get; set; }
+
+        public HashSet<Incidencias> Incidencias { get; set; } = new HashSet<Incidencias>();
         void calcular_estacion_cercana(double x, double y, double z)
         {
 
@@ -37,14 +42,19 @@ namespace clases
         }
     }
 
-    class Incidencias
+    public class Incidencias
     {
-        public int id;
-        public DateTime fecha;
-        public int gravedad;
-        public bool solucionado;
-        public int id_estacion;
+        public int Id { get; set; }
+        public DateTime fecha { get; set; }
+        public int gravedad { get; set; }
+        public bool solucionado { get; set; }
+        
 
+        // Relación con Estación (FK)
+        public int EstacionId { get; set; }
+        public Estacion Estacion { get; set; }
+
+        public HashSet<Nota_Incidencia> nota_Incidencias { get; set; } = new HashSet<Nota_Incidencia>();
         void mostrar_listas_incidencias()
         {
 
@@ -61,14 +71,15 @@ namespace clases
         }
     }
 
-    class Nota_Incidencia
+    public class Nota_Incidencia
     {
-        public int id;
-        public int id_incidencia;
-        public string titulo;
-        public string incidencia;
-        public int puntuacion;
+        public int Id { get; set; }
+        public string titulo { get; set; }
+        public string contenido_incidencia { get; set; }
+        public int puntuacion { get; set; }
 
+        public int IncidenciaId { get; set; }
+        public Incidencias Incidencia { get; set; }
         void mostrar_notas_incidencia(int id_incidencia)
         {
 
@@ -90,13 +101,18 @@ namespace clases
     }
 
 
-    class Linea
+    public class Linea
     {
-        public int id;
-        public string nombre;
-        public bool obras;
-        public int id_estacion_inicio;
-        public int id_estacion_final;
+        public int Id { get; set; }
+        public string nombre { get; set; }
+        public bool obras { get; set; }
+        public int EstacionInicioId { get; set; }
+        public Estacion EstacionInicio { get; set; }
+
+        public int EstacionFinalId { get; set; }
+        public Estacion EstacionFinal { get; set; }
+
+        public HashSet<Paradas> ListaParadas { get; set; } = new HashSet<Paradas>();
 
         void linea_obras(bool obras)
         {
@@ -108,13 +124,18 @@ namespace clases
         }
     }
 
-    class Paradas
+    public class Paradas
     {
-        public int id;
-        public int id_tipo_lineas;
-        public int id_estacion;
-        public bool obras;
+        public int Id { get; set; }
+        public bool Obras { get; set; }
 
+        // Conexión con la Línea (N:1)
+        public int LineaId { get; set; }
+        public Linea Linea { get; set; }
+
+        // Conexión con la Estación (N:1)
+        public int EstacionId { get; set; }
+        public Estacion Estacion { get; set; }
         void parada_obras(bool obras)
         {
 
@@ -128,21 +149,35 @@ namespace clases
 
    
 
-    class Enlace
+    public class Enlace
     {
-        public int id;
-        public int id_siguiente_parada;
-        public int id_anterior_parada;
+        public int Id { get; set; }
+
+        // Conexión a la siguiente parada
+        public int SiguienteParadaId { get; set; }
+        public Paradas SiguienteParada { get; set; }
+
+        // Conexión a la parada anterior
+        public int AnteriorParadaId { get; set; }
+        public Paradas AnteriorParada { get; set; }
+
+        // Costo del trayecto (ej: tiempo en minutos o metros entre paradas)
+        public int Costo { get; set; }
     }
 
-    class Dijkstra
+    public class Dijkstra
     {
-        public int id;
-        public int id_parada_inicio;
-        public int id_parada_destino;
-        public DateTime fecha_guardar;
-        public int costo;
-        public double distancia_total_recorrida;
+        public int Id { get; set; }
+        public DateTime FechaGuardar { get; set; }
+        public int Costo { get; set; }
+        public double DistanciaTotalRecorrida { get; set; }
+
+        // FKs hacia Paradas
+        public int ParadaInicioId { get; set; }
+        public Paradas ParadaInicio { get; set; }
+
+        public int ParadaDestinoId { get; set; }
+        public Paradas ParadaDestino { get; set; }
 
         // devuelve una lista de paradas que forman la ruta
         void calcular_ruta_id(int id_parada_inicio, int id_parada_final)
@@ -162,67 +197,40 @@ namespace clases
         }
     }
 
+    public class DBProyectoContext : DbContext
+    {
+        public DbSet<Estacion> Estaciones { get; set; }
+        public DbSet<Linea> Lineas { get; set; }
+        public DbSet<Paradas> Paradas { get; set; }
+        public DbSet<Enlace> Enlaces { get; set; }
+        public DbSet<Dijkstra> Dijkstras { get; set; }
+
+        public DbSet<Incidencias> Incidencias { get; set; }
+        public DbSet<Nota_Incidencia> NotasIncidencias { get; set; }
+        // la funcion de efcore paar hacer la confighuracion(conexion string)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+
+            optionsBuilder.UseNpgsql("Host=localhost;Port=9000;Username=postgres;Password=ifphospi;Database=postgres");
+            
+
+        }
+    }
+
+
 
 
     internal class Program
     {
-        static string connectionString = "Host=localhost;Port=9000;Username=postgres;Password=ifphospi;Database=postgres";
-
-
-        // funciones que simplifican el hacer consultas en BD postgre
-        static void no_query(DbConnection connection,string text)
-        {
-            DbCommand command = connection.CreateCommand();
-            command.CommandText = text;
-            command.ExecuteNonQuery();
-        }
-
-        static DbDataReader query(DbConnection connection, string text)
-        {
-            DbCommand command = connection.CreateCommand();
-            command.CommandText = text;
-
-            DbDataReader reader = command.ExecuteReader();
-
-            return reader;
-        }
-
+        
         // funciones para la BD de conectarse y desconectarse
-        static void connect(string connectionString, out DbConnection connection, out DbDataSource source)
-        {
-            source = NpgsqlDataSource.Create(connectionString); // le pasamos el connectionstring
+       
 
-            connection = source.OpenConnection();// creamos la conexion
+        static void closeconnection(DBProyectoContext context)
+        {
+            context.Dispose();
             
-        }
-
-        static void closeconnection(DbConnection connection, DbDataSource source)
-        {
-            // cerramos la conexion
-            connection.Close();
-            connection.Dispose();
-            source.Dispose();
-            connection = null;
-            source = null;
-        }
-
-        static void comprovar_crear_BD(DbConnection connection)
-        {
-            DbDataReader reader = query(connection, $"SELECT 1 FROM pg_database WHERE datname = '{"proyecto"}'"); // esto sirve para mirar si la BD ya existe 
-
-            if (reader.Read() == false) // si es false entonces no existe la BD y la tenemos que crear
-            {
-                string text = "CREATE DATABASE \"proyecto\" " + "WITH OWNER = \"postgres\" ENCODING = 'UTF8' CONNECTION LIMIT -1";
-
-                reader.Dispose();
-                reader.Close(); // cerramos los readers para que no falle el no_query, solo podemos hacer una cosa a la vez
-                no_query(connection, text);
-
-               
-            }
-
-            reader.Dispose();
-            reader.Close();
         }
 
 
@@ -230,155 +238,21 @@ namespace clases
         {
 
         }
-        static void comprovar_crear_tablas(DbConnection connection)
-        {
-
-            string sql;
-
-            // estacion
-
-            sql = "CREATE TABLE IF NOT EXISTS Estacion (\n" +
-                                          "   id INTEGER PRIMARY KEY,\n" +
-                                          "   nombre TEXT NOT NULL,\n" +
-                                          "   x DOUBLE PRECISION NOT NULL,\n" +
-                                          "   y DOUBLE PRECISION NOT NULL,\n" +
-                                          "   z DOUBLE PRECISION NOT NULL,\n" +
-                                          "   obras BOOLEAN NOT NULL)\n";
-
-            no_query(connection, sql);
-
-
-            // incidencias
-            sql = "CREATE TABLE IF NOT EXISTS Incidencias (\n" +
-                                              "   id INTEGER PRIMARY KEY,\n" +
-                                              "   fecha TIMESTAMP NOT NULL,\n" +
-                                              "   gravedad INTEGER NOT NULL,\n" +
-                                              "   solucionado BOOLEAN NOT NULL,\n" +
-                                              "   id_estacion INTEGER NOT NULL,\n" +
-                                              "   CONSTRAINT fk_estacion\n" +
-                                              "   FOREIGN KEY(id_estacion)\n" +
-                                              "   REFERENCES Estacion(id)\n)";
-
-            no_query(connection, sql);
-
-            // nota_incidencia
-
-            sql = "CREATE TABLE IF NOT EXISTS Nota_Incidencia (\n" +
-                                              "   id INTEGER PRIMARY KEY,\n" +
-                                              "   titulo TEXT NOT NULL,\n" +
-                                              "   id_incidencia INTEGER NOT NULL,\n" +
-                                              "   puntuacion INTEGER NOT NULL, \n" +
-                                              "   CONSTRAINT fk_incidencia\n" +
-                                              "   FOREIGN KEY(id_incidencia)\n" +
-                                              "   REFERENCES Incidencias(id)\n)";
-
-            no_query(connection, sql);
-
-
-
-            // lineas
-            sql = "CREATE TABLE IF NOT EXISTS Linea (\n" +
-                                                  "   id INTEGER PRIMARY KEY,\n" +
-                                                  "   nombre TEXT NOT NULL,\n" +
-                                                  "   id_estacion_inicio INTEGER NOT NULL,\n" +
-                                                  "   id_estacion_final INTEGER NOT NULL,\n" +
-                                                  "   obras BOOLEAN NOT NULL,\n" +
-
-                                                  "   CONSTRAINT fk_estacion_inicio\n" +
-                                                  "   FOREIGN KEY(id_estacion_inicio)\n" +
-                                                  "   REFERENCES Estacion(id),\n" +
-
-                                                  "   CONSTRAINT fk_estacion_final\n" +
-                                                  "   FOREIGN KEY(id_estacion_final)\n" +
-                                                  "   REFERENCES Estacion(id)\n)";
-
-
-            no_query(connection, sql);
-
-
-            // paradas
-            sql = "CREATE TABLE IF NOT EXISTS Paradas (\n" +
-                                                  "   id INTEGER PRIMARY KEY,\n" +
-                                                  "   id_tipo_lineas INTEGER NOT NULL,\n" +
-                                                  "   id_estacion INTEGER NOT NULL,\n" +
-                                                  "   obras BOOLEAN NOT NULL,\n" +
-
-                                                  "   CONSTRAINT fk_linea_parada\n" +
-                                                  "   FOREIGN KEY (id_tipo_lineas)\n" +
-                                                  "   REFERENCES Linea(id),\n" +
-
-                                                  "   CONSTRAINT fk_estacion_parada\n" +
-                                                  "   FOREIGN KEY (id_estacion)\n" +
-                                                  "   REFERENCES Estacion(id)\n)";
-
-
-
-            no_query(connection, sql);
-
-            // enlaces
-
-
-            sql = "CREATE TABLE IF NOT EXISTS Enlaces (\n" +
-                                                  "   id INTEGER PRIMARY KEY,\n" +
-                                                  "   id_siguiente_parada INTEGER,\n" + // puede ser null
-                                                  "   id_anterior_parada INTEGER,\n" +
-
-
-                                                  "   CONSTRAINT fk_siguiente_parada\n" +
-                                                  "   FOREIGN KEY (id_siguiente_parada)\n" +
-                                                  "   REFERENCES Paradas(id),\n" +
-
-                                                  "   CONSTRAINT fk_anterior_parada\n" +
-                                                  "   FOREIGN KEY (id_anterior_parada)\n" +
-                                                  "   REFERENCES Paradas(id)\n)";
-
-            no_query(connection, sql);
-
-
-
-            sql = "CREATE TABLE IF NOT EXISTS Dijkstra (\n" +
-                                                 "   id INTEGER PRIMARY KEY,\n" +
-                                                 "   id_parada_inicio INTEGER NOT NULL,\n" + // puede ser null
-                                                 "   id_parada_destino INTEGER NOT NULL,\n" +
-                                                 "   fecha_guardar TIMESTAMP NOT NULL,\n" +
-                                                 "   costo INTEGER NOT NULL,\n" +
-                                                 "   distancia_total_recorrida DOUBLE PRECISION NOT NULL,\n" +
-
-
-                                                  "   CONSTRAINT fk_id_parada_inicio\n" +
-                                                  "   FOREIGN KEY (id_parada_inicio)\n" +
-                                                  "   REFERENCES Paradas(id),\n" +
-
-                                                  "   CONSTRAINT fk_parada_destino\n" +
-                                                  "   FOREIGN KEY (id_parada_destino)\n" +
-                                                  "   REFERENCES Paradas(id)\n)";
-
-
-            no_query(connection, sql);
-
-        }
         // funcion principal
         static void Main(string[] args)
         { 
 
+            DBProyectoContext context = new DBProyectoContext();
 
-            
-            DbConnection connection = null;
-            DbDataSource source = null;
+            context.Database.EnsureCreated();
 
-            // crear conexion
-            connect(connectionString, out connection, out source);
-
-            // comprovacion y creacion de la BD
-            comprovar_crear_BD(connection);
-
-            // comprovacion y creacion de las tablas
-            comprovar_crear_tablas(connection);
+            Console.WriteLine("BD + tablas creadas");
 
             inserts_estaciones();
             // cerrar conexion
-            closeconnection(connection, source);
+            closeconnection(context);
 
+            Console.WriteLine("conexion cerrada");
             
 
         }
