@@ -264,7 +264,7 @@ namespace clases
 
             count = count + 1;
 
-
+            // la flecha es una funcion lambda donde le pasas una variable y te devuelve el nombre
             HashSet<string> list_estaciones = context.Estaciones.Select(e => e.nombre).ToHashSet();
             // con esto sacamos todos los nombres de las estaciones y lo guardamso con hashset
             // el hashset es como un diccionario, no hace un for para recorrer sus elementos
@@ -455,6 +455,8 @@ namespace clases
                                     paradas.LineaId = lineaId;
 
                                     context.Paradas.Add(paradas);
+
+                                    Console.WriteLine("A");
 
                                     
                                 }
