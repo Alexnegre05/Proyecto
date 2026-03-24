@@ -83,8 +83,7 @@ namespace Servidor
         }
 
 
-
-        static void check_ip_manual(string[] parts)
+        static int check_ip_manual_numeros(string[] parts)
         {
             // usamos try parse para que si falla salte un error nos pide el out, no haremos nada con el numero 
             int numero;
@@ -105,32 +104,40 @@ namespace Servidor
 
                         if (esValido == true && parts[3].Length == 3)
                         {
-
+                            // aqui si que la ip es correcta y por eso devolvemos 1
+                            return 1;
                         }
                         else
                         {
-                            return; // devolvemos nada para que se salga antes de la funcion en casod e que ya falle, ahorramos tiempo
+                            return 0; // devolvemos 0 para que se repita el bucle
                         }
                     }
                     else
                     {
-                        return;
+                        return 0;
                     }
 
                 }
                 else
                 {
-                    return;
+                    return 0;
                 }
 
 
             }
             else
             {
-                return;
+                return 0;
             }
-            // que se repita el bucle y que pete por ip mal puesta, que vuelve al except
         }
+
+
+
+
+
+
+
+
 
 
 
@@ -177,8 +184,10 @@ namespace Servidor
                             
         
                             string ip;
-                            int ip_automatica = 1; 
+                            int ip_automatica = 1;
                             // simplemente esta aqui para saber si la ip automatica falla, si falla ya no te volvera a entrar a la automatica
+
+                            int ip_correcta = 0; // numero que es 0 si la ip no es correcta, 1 en el caso contrario 
 
 
                             try_except = 1; // volvemos a hacer lo mismo pero para si sale mal lo de la ip
@@ -200,21 +209,27 @@ namespace Servidor
                                 {
                                     ip_automatica = 0; // desactivamos el que se use la ip automatica 
 
-                                    // si entra en el catch que se introduzca manualmente el ip 
-                                    Console.Write("introduce la ip: ");
-                                    ip = Console.ReadLine();
-
-                                    string[] parts = ip.Split(".");
-
-                                    while (parts.Length != 4) // aqui comprobamos que el formato sea A.B.C.D y no haya ningun error
+                                    
+                                    while (ip_correcta == 0)
                                     {
-                                        Console.Write("introduce la ip correctamente: ");
+                                        // si entra en el catch que se introduzca manualmente el ip 
+                                        Console.Write("introduce la ip: ");
                                         ip = Console.ReadLine();
-                                        parts = ip.Split(".");
+
+                                        string[] parts = ip.Split(".");
+
+                                        while (parts.Length != 4) // aqui comprobamos que el formato sea A.B.C.D y no haya ningun error
+                                        {
+                                            Console.Write("introduce la ip correctamente: ");
+                                            ip = Console.ReadLine();
+                                            parts = ip.Split(".");
+                                        }
+
+
+                                        ip_correcta = check_ip_manual_numeros(parts); 
+                                        // funcion que mira que haya 4 numeros puestos en la ip manual, si devuelve 0 entonces esta mal y se repite el bucle, 1 no lo hace
                                     }
-
-
-                                    check_ip_manual(parts); // funcion que mira que haya 4 numeros puestos en la ip manual
+                                    
 
 
 
