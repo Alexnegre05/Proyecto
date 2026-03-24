@@ -246,7 +246,7 @@ namespace clases
 
 
 
-
+        // funciones de inserts
         static void inserts_estaciones(DBProyectoContext context)
         {
             FileStream fichero = new FileStream("../../../estaciones_xyz.csv", FileMode.Open, FileAccess.Read);
@@ -266,7 +266,7 @@ namespace clases
 
             // la flecha es una funcion lambda donde le pasas una variable y te devuelve el nombre
             HashSet<string> list_estaciones = context.Estaciones.Select(e => e.nombre).ToHashSet();
-            // con esto sacamos todos los nombres de las estaciones y lo guardamso con hashset
+            // con esto sacamos todos los nombres de las estaciones y lo guardamos con hashset
             // el hashset es como un diccionario, no hace un for para recorrer sus elementos
 
             while(linea != null) // leemos el fichero hasta que sea null
@@ -274,13 +274,15 @@ namespace clases
                 string[] parts = linea.Split(","); 
                 if (count != 1)
                 {
-                    nombre = parts[0]; 
-                    
+                    nombre = parts[0];
+
                     // sacamos de el fichero los datos que vamos a insertar
                     // no podemos hacer casting() hay que usar parse
+                    // para que no haya problemas para guardar los doubles ponemos el cultureinfo invariant culture
+
                     x = double.Parse(parts[1], CultureInfo.InvariantCulture);
                     y = double.Parse(parts[2], CultureInfo.InvariantCulture);
-                    z = double.Parse(parts[3], CultureInfo.InvariantCulture); // para que no haya problemas para guardar los doubles
+                    z = double.Parse(parts[3], CultureInfo.InvariantCulture); 
 
                     // con el any nos devuele si existe ya una estacion con un campo en concreto, en este caso el nombre
                     bool existe = list_estaciones.Contains(nombre);
@@ -338,6 +340,8 @@ namespace clases
 
             count = count + 1;
 
+
+            Dictionary<string, int> estacionesDiccionario = context.Estaciones.ToDictionary(e => e.nombre.Trim(), e => e.Id);
             HashSet<string> list_lineas = context.Lineas.Select(l => l.nombre).ToHashSet();
 
             while (linea_leida != null) // leemos el fichero hasta que sea null
@@ -361,12 +365,12 @@ namespace clases
 
                     if (existe == false)
                     {
-                        Estacion Estacion_inicio = context.Estaciones.FirstOrDefault(e => e.nombre.Trim() == estacion_inicio);
-                        Estacion Estacion_final = context.Estaciones.FirstOrDefault(e => e.nombre.Trim() == estacion_final);
+                        estacionesDiccionario.TryGetValue(estacion_inicio, out int idInicio);
+                        estacionesDiccionario.TryGetValue(estacion_final, out int idFinal);
 
                         // Asignamos los IDs ahora que sabemos que NO son null
-                        lineas.EstacionInicioId = Estacion_inicio.Id;
-                        lineas.EstacionFinalId = Estacion_final.Id;
+                        lineas.EstacionInicioId = idInicio;
+                        lineas.EstacionFinalId = idFinal;
 
                         context.Lineas.Add(lineas);
                         
@@ -389,6 +393,13 @@ namespace clases
         }
 
 
+
+
+
+
+
+
+
         static void inserts_paradas(DBProyectoContext context)
         {
 
@@ -396,12 +407,18 @@ namespace clases
 
             StreamReader reader = new StreamReader(fichero, Encoding.UTF8);
 
-            // para ahorrar consultas e el futuro
-            var estacionesDiccionario = context.Estaciones.ToDictionary(e => e.nombre.Trim(), e => e.Id); // value id, key nombre
-            var lineasDiccionario = context.Lineas.ToDictionary(l => l.nombre.Trim(), l => l.Id); // value id, key nombre
+            // para ahorrar consultas en el futuro
+            // aqui usamos un diccionario ya que necesitamos comparar los nombres con los id
+
+            Dictionary<string, int> estacionesDiccionario = context.Estaciones.ToDictionary(e => e.nombre.Trim(), e => e.Id); // value id, key nombre
+            Dictionary<string, int> lineasDiccionario = context.Lineas.ToDictionary(l => l.nombre.Trim(), l => l.Id); // value id, key nombre
 
             // Para las paradas existentes, usamos un HashSet de "Claves combinadas" (EstacionId-LineaId)
-            var paradasExistentes = context.Paradas
+            // con el $ se le dice que lo que esta entre {} es una variable no texto
+            // es decir la funcion lambda recibe una parada yu devuelve este par de numeros
+            // que hashset es capaz de interpretar como clave valor
+
+            HashSet<string> paradasExistentes = context.Paradas
                 .Select(p => $"{p.EstacionId}-{p.LineaId}")
                 .ToHashSet();
 
@@ -424,7 +441,8 @@ namespace clases
                     estacion = parts[0].ToString(CultureInfo.InvariantCulture).Trim('\"').Trim();
 
 
-                    // sacamos esto fuera de el for para no repetir codigo, value es el id, con el out guardamos el id que servira para despues hacer comprobaciones
+                    // sacamos esto fuera de el for para no repetir codigo, value es el id,
+                    // con el out guardamos el id que servira para despues hacer comprobaciones
                     bool existe = estacionesDiccionario.TryGetValue(estacion, out int estacionId);
 
                     if (existe == true)
@@ -479,6 +497,9 @@ namespace clases
             reader.Close();
             fichero.Close();
         }
+
+
+
 
 
 
