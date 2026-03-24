@@ -461,6 +461,7 @@ namespace clases
 
             DBProyectoContext context = new DBProyectoContext();
             
+            
             context.Database.EnsureCreated();
 
             Console.WriteLine("BD + tablas creadas");

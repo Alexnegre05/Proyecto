@@ -6,7 +6,13 @@
     xmlns:sf="clr-namespace:Syncfusion.Maui.Toolkit.SegmentedControl;assembly=Syncfusion.Maui.Toolkit"
     xmlns:pages="clr-namespace:Frontend.Pages"
     Shell.FlyoutBehavior="Flyout"
-    Title="Frontend">
+    Title="Frontend"
+    
+    Shell.BackgroundColor="White"
+    Shell.ForegroundColor="Black"
+    Shell.TitleColor="Black"
+    Shell.UnselectedColor="Gray"
+    >
 
     <ShellContent
         Title="Dashboard"
