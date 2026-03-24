@@ -414,13 +414,14 @@ namespace clases
 
                             string nombreLineaLimpio = parts[i].Trim('\"').Trim();
                             
-
+                            // hacemos lo mismo para la linea
                             Linea lineaBD = context.Lineas.FirstOrDefault(l => l.nombre.Trim() == nombreLineaLimpio);
 
                             if (lineaBD != null)
                             {
 
-                                // validacion pero para la linea
+                                // validacion pero para la parada
+                                // comprovamos que haya tanto el id de la estacion como para la linea
                                 bool existe = context.Paradas.Any(p =>p.EstacionId == primera_estacion_encontrada.Id && p.LineaId == lineaBD.Id);
 
 
@@ -432,13 +433,15 @@ namespace clases
 
                                     context.Paradas.Add(paradas);
 
-                                    Console.WriteLine("No deberias estar aqui");
+                                    
                                 }
                                
                             }
 
                         }
                     }
+
+                    context.SaveChanges(); // guardamos los cambios
                     
 
                 }
