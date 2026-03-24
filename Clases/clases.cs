@@ -29,17 +29,17 @@ namespace clases
         public bool obras { get; set; }
 
         public HashSet<Incidencias> Incidencias { get; set; } = new HashSet<Incidencias>();
-        void calcular_estacion_cercana(double x, double y, double z)
+        public void calcular_estacion_cercana(double x, double y, double z)
         {
 
         }
 
-        void estacion_obras(bool obras)
+        public void estacion_obras(bool obras)
         {
 
         }
 
-        void calcular_posicion_estacion(List<int> lista_paradas)
+        public void calcular_posicion_estacion(List<int> lista_paradas)
         {
 
         }
@@ -58,17 +58,17 @@ namespace clases
         public Estacion Estacion { get; set; }
 
         public HashSet<Nota_Incidencia> nota_Incidencias { get; set; } = new HashSet<Nota_Incidencia>();
-        void mostrar_listas_incidencias()
+        public void mostrar_listas_incidencias()
         {
 
         }
 
-        void solucionado_nosolucionado(bool solucionado, int id_incidencia)
+        public void solucionado_nosolucionado(bool solucionado, int id_incidencia)
         {
 
         }
 
-        void poner_nueva_incidencia(string title, string text, DateTime fecha, int gravedad)
+        public void poner_nueva_incidencia(string title, string text, DateTime fecha, int gravedad)
         {
 
         }
@@ -83,21 +83,21 @@ namespace clases
 
         public int IncidenciaId { get; set; }
         public Incidencias Incidencia { get; set; }
-        void mostrar_notas_incidencia(int id_incidencia)
+        public void mostrar_notas_incidencia(int id_incidencia)
         {
 
         }
-        void leer_notas(int id_notas_incidencia)
+        public void leer_notas(int id_notas_incidencia)
         {
 
         }
 
-        void modificar_notas(string title, string text, DateTime fecha, int gravedad, int id_notas_incidencia)
+        public void modificar_notas(string title, string text, DateTime fecha, int gravedad, int id_notas_incidencia)
         {
 
         }
         // si puntuacion es true sumamos 1, en caso contrario restamos 1
-        void introducir_puntuacion(bool puntuacion, int id_notas_incidencia)
+        public void introducir_puntuacion(bool puntuacion, int id_notas_incidencia)
         {
 
         }
@@ -117,11 +117,11 @@ namespace clases
 
         public HashSet<Paradas> ListaParadas { get; set; } = new HashSet<Paradas>();
 
-        void linea_obras(bool obras)
+        public void linea_obras(bool obras)
         {
 
         }
-        void mostrar_paradas_linea(List<int> id_paradas)
+        public void mostrar_paradas_linea(List<int> id_paradas)
         {
 
         }
@@ -139,12 +139,12 @@ namespace clases
         // Conexión con la Estación (N:1)
         public int EstacionId { get; set; }
         public Estacion Estacion { get; set; }
-        void parada_obras(bool obras)
+        public void parada_obras(bool obras)
         {
 
         }
         // dependiendo de si la estacion/linea esta en iobras tambien lo estara la parada, y si la parada esta en obras no se mostrara
-        void ocultar_parada(int id_estación, int id_tipo_linea, bool obras)
+        public void ocultar_parada(int id_estación, int id_tipo_linea, bool obras)
         {
 
         }
@@ -183,18 +183,18 @@ namespace clases
         public Paradas ParadaDestino { get; set; }
 
         // devuelve una lista de paradas que forman la ruta
-        void calcular_ruta_id(int id_parada_inicio, int id_parada_final)
-        {
-
-        }
-        
-
-        void guardar_ruta(List<Paradas> list_paradas, DateTime fecha_guardar)
+        public void calcular_ruta_id(int id_parada_inicio, int id_parada_final)
         {
 
         }
 
-        void sacar_rutas_fecha(DateTime fecha1, DateTime fecha2)
+
+        public void guardar_ruta(List<Paradas> list_paradas, DateTime fecha_guardar)
+        {
+
+        }
+
+        public void sacar_rutas_fecha(DateTime fecha1, DateTime fecha2)
         {
 
         }
@@ -210,7 +210,8 @@ namespace clases
 
         public DbSet<Incidencias> Incidencias { get; set; }
         public DbSet<Nota_Incidencia> NotasIncidencias { get; set; }
-        // la funcion de efcore paar hacer la confighuracion(conexion string)
+
+        // la funcion de efcore para hacer la configuracion(conexion string)
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
@@ -263,6 +264,11 @@ namespace clases
 
             count = count + 1;
 
+
+            HashSet<string> list_estaciones = context.Estaciones.Select(e => e.nombre).ToHashSet();
+            // con esto sacamos todos los nombres de las estaciones y lo guardamso con hashset
+            // el hashset es como un diccionario, no hace un for para recorrer sus elementos
+
             while(linea != null) // leemos el fichero hasta que sea null
             {
                 string[] parts = linea.Split(","); 
@@ -277,7 +283,7 @@ namespace clases
                     z = double.Parse(parts[3], CultureInfo.InvariantCulture); // para que no haya problemas para guardar los doubles
 
                     // con el any nos devuele si existe ya una estacion con un campo en concreto, en este caso el nombre
-                    bool existe = context.Estaciones.Any(e => e.nombre == nombre);
+                    bool existe = list_estaciones.Contains(nombre);
 
 
                     if (existe == false) // si no existe hacemos el insert
@@ -292,7 +298,7 @@ namespace clases
                         estacion.obras = false; // dejamos de momento por defecto las obras como false
 
                         context.Estaciones.Add(estacion); // añadimos la estacion
-                        context.SaveChanges();
+                        
 
                         
                     }
@@ -303,6 +309,8 @@ namespace clases
                 linea = reader.ReadLine(); // leemos la linea siguiente
                 count = count + 1; // sumamos uno al contador
             }
+
+            context.SaveChanges(); // guardamos los cambios fuera de el for para que no haya tanta lentitud
             // cerramos los ficheros
             reader.Close();
             fichero.Close();
@@ -330,6 +338,8 @@ namespace clases
 
             count = count + 1;
 
+            HashSet<string> list_lineas = context.Lineas.Select(l => l.nombre).ToHashSet();
+
             while (linea_leida != null) // leemos el fichero hasta que sea null
             {
                 string[] parts = linea_leida.Split(";"); // se separa por ;
@@ -347,7 +357,7 @@ namespace clases
 
                     lineas.nombre = parts[0];
                     // context.Estaciones.FirstOrDefault con esto podemos buscar por nombre si coincide
-                    bool existe = context.Lineas.Any(l => l.nombre == lineas.nombre);
+                    bool existe = list_lineas.Contains(linea);
 
                     if (existe == false)
                     {
@@ -359,7 +369,7 @@ namespace clases
                         lineas.EstacionFinalId = Estacion_final.Id;
 
                         context.Lineas.Add(lineas);
-                        context.SaveChanges();
+                        
 
                         
                     }
@@ -371,6 +381,7 @@ namespace clases
                 count = count + 1; // sumamos uno al contador
             }
 
+            context.SaveChanges();
             // cerramos los ficheros
             reader.Close();
             fichero.Close();
@@ -384,6 +395,15 @@ namespace clases
             FileStream fichero = new FileStream("../../../Paradas.csv", FileMode.Open, FileAccess.Read);
 
             StreamReader reader = new StreamReader(fichero, Encoding.UTF8);
+
+            // para ahorrar consultas e el futuro
+            var estacionesDiccionario = context.Estaciones.ToDictionary(e => e.nombre.Trim(), e => e.Id); // value id, key nombre
+            var lineasDiccionario = context.Lineas.ToDictionary(l => l.nombre.Trim(), l => l.Id); // value id, key nombre
+
+            // Para las paradas existentes, usamos un HashSet de "Claves combinadas" (EstacionId-LineaId)
+            var paradasExistentes = context.Paradas
+                .Select(p => $"{p.EstacionId}-{p.LineaId}")
+                .ToHashSet();
 
             string linea = reader.ReadLine();
             string estacion;
@@ -404,32 +424,35 @@ namespace clases
                     estacion = parts[0].ToString(CultureInfo.InvariantCulture).Trim('\"').Trim();
 
 
-                    // sacamos esto fuera de el for para no repetir codigo
-                    Estacion primera_estacion_encontrada = context.Estaciones.FirstOrDefault(e => e.nombre.Trim() == estacion);
+                    // sacamos esto fuera de el for para no repetir codigo, value es el id, con el out guardamos el id que servira para despues hacer comprobaciones
+                    bool existe = estacionesDiccionario.TryGetValue(estacion, out int estacionId);
 
-                    if (primera_estacion_encontrada != null)
+                    if (existe == true)
                     {
                         for (int i = 1; i < parts.Length; i = i + 1) // es un for que recorre todas las estaciones que tienes y va haciendo inserts
                         {
 
                             string nombreLineaLimpio = parts[i].Trim('\"').Trim();
-                            
-                            // hacemos lo mismo para la linea
-                            Linea lineaBD = context.Lineas.FirstOrDefault(l => l.nombre.Trim() == nombreLineaLimpio);
 
-                            if (lineaBD != null)
+                            // hacemos lo mismo para la linea
+                            existe = lineasDiccionario.TryGetValue(nombreLineaLimpio, out int lineaId);
+
+                            if (existe == true)
                             {
 
                                 // validacion pero para la parada
                                 // comprovamos que haya tanto el id de la estacion como para la linea
-                                bool existe = context.Paradas.Any(p =>p.EstacionId == primera_estacion_encontrada.Id && p.LineaId == lineaBD.Id);
+
+                                string claveNueva = estacionId + "-" + lineaId;
+
+                                existe = paradasExistentes.Contains(claveNueva);
 
 
                                 if (existe == false)
                                 {
                                     Paradas paradas = new Paradas();
-                                    paradas.EstacionId = primera_estacion_encontrada.Id;
-                                    paradas.LineaId = lineaBD.Id;
+                                    paradas.EstacionId = estacionId;
+                                    paradas.LineaId = lineaId;
 
                                     context.Paradas.Add(paradas);
 
@@ -441,7 +464,7 @@ namespace clases
                         }
                     }
 
-                    context.SaveChanges(); // guardamos los cambios
+                    
                     
 
                 }
@@ -450,6 +473,7 @@ namespace clases
                 linea = reader.ReadLine();
             }
 
+            context.SaveChanges(); // guardamos los cambios
             reader.Close();
             fichero.Close();
         }
