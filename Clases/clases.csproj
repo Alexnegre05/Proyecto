@@ -8,10 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="fichero_configuracion.txt" />
     <None Remove="listado-estaciones-rodalies-barcelona.csv" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="fichero_configuracion.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="listado-estaciones-rodalies-barcelona.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

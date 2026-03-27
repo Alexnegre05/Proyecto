@@ -11,6 +11,8 @@ using static System.Net.Mime.MediaTypeNames;
 using System.Numerics;
 using System.Text;
 using System.Globalization;
+using System.Net.Sockets;
+using System.Net;
 namespace clases
 {
 
@@ -500,18 +502,8 @@ namespace clases
 
 
 
-
-
-
-
-
-        // funcion principal
-        static void Main(string[] args)
-        { 
-
-            DBProyectoContext context = new DBProyectoContext();
-            
-            
+        static void sql(DBProyectoContext context)
+        {
             context.Database.EnsureCreated();
 
             Console.WriteLine("BD + tablas creadas");
@@ -527,11 +519,242 @@ namespace clases
             // insertamos paradas
             inserts_paradas(context);
             Console.WriteLine("paradas insertadas en la BD");
+        }
 
 
-            // cerrar conexion
-            closeconnection(context);
-            Console.WriteLine("conexion cerrada");
+        static string calcular_ip_automatico()
+        {
+            // calcular la ip de manera automatica 
+            string hostName = Dns.GetHostName();
+            string ip = "";
+
+            IPAddress[] localIPs = Dns.GetHostAddresses(hostName);
+            foreach (IPAddress ipaddress in localIPs)
+            {
+                // Filtra para obtener solo direcciones IPv4
+                if (ipaddress.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    ip = ipaddress.ToString();
+                }
+            }
+
+            return ip;
+        }
+
+
+
+        static int check_ip_manual_numeros(string[] parts)
+        {
+            // usamos try parse para que si falla salte un error nos pide el out, no haremos nada con el numero 
+            int numero;
+            bool esValido;
+            esValido = Int32.TryParse(parts[0], out numero);
+
+            if (esValido == true && parts[0].Length <= 3) // si es valido comprovamos el segundo numero y asi hasta los 4
+            {
+                esValido = Int32.TryParse(parts[1], out numero);
+
+                if (esValido == true && parts[1].Length <= 3)
+                {
+                    esValido = Int32.TryParse(parts[2], out numero);
+
+                    if (esValido == true && parts[2].Length <= 3)
+                    {
+                        esValido = Int32.TryParse(parts[3], out numero);
+
+                        if (esValido == true && parts[3].Length <= 3)
+                        {
+                            // aqui si que la ip es correcta y por eso devolvemos 1
+                            return 1;
+                        }
+                        else
+                        {
+                            return 0; // devolvemos 0 para que se repita el bucle
+                        }
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+
+                }
+                else
+                {
+                    return 0;
+                }
+
+
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // funcion principal
+        static void Main(string[] args)
+        { 
+
+            DBProyectoContext context = new DBProyectoContext();
+            
+            
+            sql(context); // funcion de inserts... todo lo de sql 
+
+            
+
+            string ip = ""; // string de la ip de el usuario 
+            int try_except = 1; // variable que sirve para que si entras en el catch el while se repita todo el rato
+            int ip_automatica = -1;
+            int ip_correcta = 0;
+
+            while (try_except == 1)
+            {
+                
+                try
+                {
+                    // ip
+
+                    // leemos el fichero_configuracion 
+
+                    FileStream file = new FileStream("fichero_configuracion.txt", FileMode.Open, FileAccess.Read);
+                    StreamReader reader = new StreamReader(file, Encoding.UTF8);
+
+                    string linea = reader.ReadLine(); // con esto cogemos la linea, si es null sabemos de que ha acabado
+                    int count = 0; // 0 si es la primera linea que tenemos que leer  1 en caso de ser la siguiente
+                        
+                    while(linea != null)
+                    {
+                        if (count == 0) // si es la primera linea
+                        {
+                            string[] parts = linea.Split("="); // separamos el = para solo sacar el dato que queremos
+
+                            string tipo_ip = parts[1];
+                            tipo_ip = tipo_ip.Trim().ToLower(); // quita posibles espacios y que todo este en minusculas
+
+                            if(tipo_ip == "automatico")
+                            {
+                                ip_automatica = 1; // lo dejamos en 1 para indicar que es automatico
+                            }
+                            else if (tipo_ip == "manual")
+                            {
+                                ip_automatica = 0;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Siga las instrucciones del fichero, tipo_ip mal introducida");
+                            }
+                        }
+                        else if (count == 1)
+                        {
+                            string[] parts = linea.Split('=');
+                            
+                            ip = parts[1]; // sacamos la ip
+                        }
+                        
+                        linea = reader.ReadLine(); // volvemos a leer la siguiente linea
+                        count = count + 1; // sumamos 1 al contador
+                    }
+
+                    reader.Close();
+                    file.Close();
+
+
+                    if (ip_automatica == 1)
+                    {
+                        ip = calcular_ip_automatico();
+                        ip_automatica = 1;
+
+                        
+
+                        
+                    }
+                    else if (ip_automatica == 0)// ip no automatica
+                    {
+
+                        // comprovamos la ip
+                        while (ip_correcta == 0)
+                        {
+                            // si entra en el catch que se introduzca manualmente el ip 
+                            
+
+                            string[] parts = ip.Split(".");
+
+                            while (parts.Length != 4) // aqui comprobamos que el formato sea A.B.C.D y no haya ningun error
+                            {
+                                Console.Write("introduce la ip correctamente: ");
+                                ip = Console.ReadLine();
+                                parts = ip.Split(".");
+                            }
+
+
+                            ip_correcta = check_ip_manual_numeros(parts);
+                            // funcion que mira que haya 4 numeros puestos en la ip manual de 3 digitos, si devuelve 0 entonces esta mal y se repite el bucle, 1 no lo hace
+
+                            if(ip_correcta == 0)
+                            {
+                                Console.WriteLine("introduce la ip correctamente en el formato A.B.C.D\n donde las letras son numeros de 3 digitos");
+                                Console.Write("ip: ");
+                                ip = Console.ReadLine();
+                            }
+                            
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("no deberias estar aqui");
+                    }
+
+
+
+                    // sockets
+                    // aqui se enviara el socket a el backend
+
+                    IPAddress address = IPAddress.Parse(ip);  // creamos la ip y el endpoint
+                    IPEndPoint endpoint = new IPEndPoint(address, 1000); // el puerto es el 1000
+                    Socket backend_socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                    // creamos el socket
+
+                    //backend_socket.Bind(endpoint);
+                    //backend_socket.Listen(); // para que se escuche el socket
+
+                    //while (backend_socket.IsBound == true)
+                    //{
+                    //    //Socket backend_service_socket = backend_socket.Accept();
+                    //    //backend_service_socket.Close(); // cerramos el socket
+
+
+
+
+                    //}
+
+                    
+                    backend_socket.Close();
+                    try_except = 0; // salimos de el bucle de try_except
+                }
+                catch
+                {
+                    Console.WriteLine("Introduce una ip correcta");
+                }
+
+                // cerrar conexion
+                closeconnection(context);
+            }
             
 
         }

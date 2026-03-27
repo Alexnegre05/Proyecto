@@ -207,21 +207,12 @@ namespace Servidor
 
                                         IPAddress address = IPAddress.Parse(ip);  // creamos la ip y el endpoint
                                         IPEndPoint endpoint = new IPEndPoint(address, puerto_servidor_backend);
-                                        Socket backend_socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                                        Socket client_socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
                                         // creamos el socket
+                                        client_socket.Connect(endpoint);
+                                        
 
-                                        backend_socket.Bind(endpoint);
-                                        backend_socket.Listen(); // para que se escuche el socket
-
-                                        while (backend_socket.IsBound == true)
-                                        {
-                                            Socket backend_service_socket = backend_socket.Accept();
-                                            backend_service_socket.Close(); // cerramos el socket
-                                            Console.WriteLine("ha entrado aqui");
-
-                                        }
-
-                                        backend_socket.Close(); // cerramos los sockets
+                                        client_socket.Close(); // cerramos los sockets
                                     }
 
                                 }
