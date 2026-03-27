@@ -37,7 +37,7 @@ namespace Servidor
             Console.CancelKeyPress += (sender, e) =>
             {
 
-                Console.WriteLine("\n[!] Detectado cierre de ventana. Apagando servidor...");
+                Console.WriteLine("\n Detectado cierre de ventana. Apagando servidor...");
                 server.run = false;
             };
 
