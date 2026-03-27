@@ -10,7 +10,7 @@
              x:Class="Frontend.Pages.MainPage"
              x:DataType="pageModels:MainPageModel"
              Title=""
-             Background="#FFFFFF">
+             Background="Black">
 
     
     <!--le ponemos por defecto el background a blanco-->
@@ -18,172 +18,151 @@
 
     <!--le metemos scroll-->
 
-    <Grid RowDefinitions="*, Auto" BackgroundColor="White">
+    <Grid RowDefinitions="*, Auto" BackgroundColor="Black">
 
-        <ScrollView Grid.Row="0">
-            <!--usamos vertical layout para centrar los botones-->
-            <VerticalStackLayout VerticalOptions="Center" Spacing="20">
+        <!-- Contenido principal: Fondo Negro -->
+        <VerticalStackLayout Grid.Row="0" VerticalOptions="Start" Spacing="20" Padding="0,30,0,40">
 
+            <Label Text="Renfe Solutions" 
+                   FontSize="40" 
+                   FontAttributes="Bold" 
+                   TextColor="#FF6600"
+                   FontFamily="InterBold"
+                   HorizontalOptions="Center" 
+                   Margin="0,0,0,20" />
 
-                <Label Text="Renfe Solutions" 
-           FontSize="40" 
-           FontAttributes="Bold" 
-           TextColor="#FF6600"
-           FontFamily="InterBold"
-           HorizontalOptions="Center" 
-           Margin="0,0,0,40" />
+            <!--
+            En .NET MAUI, los GestureRecognizers son clases que permiten detectar interacciones del usuario (como toques, deslizamientos o movimientos de puntero) en elementos que normalmente no las tienen
 
+            TapGestureRecognizer (Toque/Clic)
+            NumberOfTapsRequired: Cuántos toques activan el gesto (por defecto 1).
+            Buttons: Define si responde al botón primario, secundario o ambos del ratón.
+            Tapped: Evento que se dispara al completar el toque.
+            PointerGestureRecognizer (Puntero/Hover)
+            PointerEntered: Se activa cuando el puntero entra en el área del control.
+            PointerExited: Se activa cuando el puntero sale.
+            PointerMoved: Se activa mientras el puntero se mueve dentro del área.
+            PointerPressed / PointerReleased: Detectan cuando se presiona o suelta un botón del ratón.
+            SwipeGestureRecognizer (Deslizar)
+            Direction: Dirección del deslizamiento (Left, Right, Up, Down).
+            Threshold: Distancia mínima (en unidades independientes del dispositivo) para reconocer el gesto (por defecto 100).
+            PanGestureRecognizer (Desplazamiento)
+            TouchPoints: Número de puntos de contacto necesarios (por defecto 1).
+            PanUpdated: Evento que proporciona TotalX y TotalY, indicando cuánto se ha movido el dedo desde el inicio.
+            PinchGestureRecognizer (Pellizcar/Zoom)
+            PinchUpdated: Proporciona la escala (Scale) y el origen del zoom para manipular imágenes o contenido.
+            -->
 
-                <!--
-        En .NET MAUI, los GestureRecognizers son clases que permiten detectar interacciones del usuario (como toques, deslizamientos o movimientos de puntero) en elementos que normalmente no las tienen
+            <!-- Botones: Ahora fondo Blanco y texto Negro -->
+            <Button Text="Poner Incidencia" WidthRequest="200" 
+                    HeightRequest="70" 
+                    HorizontalOptions="Center" 
+                    BackgroundColor="White" 
+                    TextColor="Black" 
+                    CornerRadius="50">
+                <Button.GestureRecognizers>
+                    <PointerGestureRecognizer PointerEntered="OnHoverEnter" PointerExited="OnHoverExit" />
+                </Button.GestureRecognizers>
+                <Button.Shadow>
+                    <!-- Sombra clara para que resalte sobre el fondo negro -->
+                    <Shadow Brush="Gray" Offset="0,5" Radius="15" Opacity="0.3" />
+                </Button.Shadow>
+            </Button>
 
-        TapGestureRecognizer (Toque/Clic)
-        NumberOfTapsRequired: Cuántos toques activan el gesto (por defecto 1).
-        Buttons: Define si responde al botón primario, secundario o ambos del ratón.
-        Tapped: Evento que se dispara al completar el toque.
-        PointerGestureRecognizer (Puntero/Hover)
-        PointerEntered: Se activa cuando el puntero entra en el área del control.
-        PointerExited: Se activa cuando el puntero sale.
-        PointerMoved: Se activa mientras el puntero se mueve dentro del área.
-        PointerPressed / PointerReleased: Detectan cuando se presiona o suelta un botón del ratón.
-        SwipeGestureRecognizer (Deslizar)
-        Direction: Dirección del deslizamiento (Left, Right, Up, Down).
-        Threshold: Distancia mínima (en unidades independientes del dispositivo) para reconocer el gesto (por defecto 100).
-        PanGestureRecognizer (Desplazamiento)
-        TouchPoints: Número de puntos de contacto necesarios (por defecto 1).
-        PanUpdated: Evento que proporciona TotalX y TotalY, indicando cuánto se ha movido el dedo desde el inicio.
-        PinchGestureRecognizer (Pellizcar/Zoom)
-        PinchUpdated: Proporciona la escala (Scale) y el origen del zoom para manipular imágenes o contenido.
-    
-        -->
+            <Button Text="Leer Incidencias" WidthRequest="200" 
+                    HeightRequest="70" 
+                    HorizontalOptions="Center" 
+                    BackgroundColor="White" 
+                    TextColor="Black" 
+                    CornerRadius="50">
+                <Button.GestureRecognizers>
+                    <PointerGestureRecognizer PointerEntered="OnHoverEnter" PointerExited="OnHoverExit" />
+                </Button.GestureRecognizers>
+                <Button.Shadow>
+                    <Shadow Brush="Gray" Offset="0,5" Radius="15" Opacity="0.3" />
+                </Button.Shadow>
+            </Button>
 
-                <!--botones de la pantalla principal-->
-                <Button Text="Poner Incidencia" WidthRequest="200" 
-                    HeightRequest="80" 
-                    HorizontalOptions="Center" BackgroundColor="#212121" CornerRadius="10" FontFamily="Inter">
-                    <Button.GestureRecognizers>
-                        <PointerGestureRecognizer PointerEntered="OnHoverEnter" PointerExited="OnHoverExit">
+            <Button Text="Modificar Incidencia" WidthRequest="200" 
+                    HeightRequest="70" 
+                    HorizontalOptions="Center" 
+                    BackgroundColor="White" 
+                    TextColor="Black" 
+                    CornerRadius="50">
+                <Button.GestureRecognizers>
+                    <PointerGestureRecognizer PointerEntered="OnHoverEnter" PointerExited="OnHoverExit" />
+                </Button.GestureRecognizers>
+                <Button.Shadow>
+                    <Shadow Brush="Gray" Offset="0,5" Radius="15" Opacity="0.3" />
+                </Button.Shadow>
+            </Button>
 
-                        </PointerGestureRecognizer>
-                    </Button.GestureRecognizers>
+            <Button Text="Calcular Ruta" WidthRequest="200" 
+                    HeightRequest="70" 
+                    HorizontalOptions="Center" 
+                    BackgroundColor="White" 
+                    TextColor="Black" 
+                    CornerRadius="50">
+                <Button.GestureRecognizers>
+                    <PointerGestureRecognizer PointerEntered="OnHoverEnter" PointerExited="OnHoverExit" />
+                </Button.GestureRecognizers>
+                <Button.Shadow>
+                    <Shadow Brush="Gray" Offset="0,5" Radius="15" Opacity="0.3" />
+                </Button.Shadow>
+            </Button>
 
-                    <Button.Shadow>
-                        <Shadow Brush="Black" Offset="0,5" Radius="10" Opacity="0.1" />
-                    </Button.Shadow>
-                </Button>
+            <Button Text="Estadísticas" WidthRequest="200" 
+                    HeightRequest="70" 
+                    HorizontalOptions="Center" 
+                    BackgroundColor="White" 
+                    TextColor="Black" 
+                    CornerRadius="50">
+                <Button.GestureRecognizers>
+                    <PointerGestureRecognizer PointerEntered="OnHoverEnter" PointerExited="OnHoverExit" />
+                </Button.GestureRecognizers>
+                <Button.Shadow>
+                    <Shadow Brush="Gray" Offset="0,5" Radius="15" Opacity="0.3" />
+                </Button.Shadow>
+            </Button>
 
-                <!-- esto es para llamar a funciones de c# en el .PointerEntered="OnHoverEnter" PointerExited="OnHoverExit"-->
+        </VerticalStackLayout>
 
-                <Button Text="Leer Incidencias" WidthRequest="200" 
-                    HeightRequest="80" 
-                    HorizontalOptions="Center" BackgroundColor="#212121" CornerRadius="10" FontFamily="Inter">
-
-                    <Button.GestureRecognizers>
-                        <PointerGestureRecognizer PointerEntered="OnHoverEnter" PointerExited="OnHoverExit">
-
-                        </PointerGestureRecognizer>
-                    </Button.GestureRecognizers>
-
-                    <Button.Shadow>
-                        <Shadow Brush="Black" Offset="0,5" Radius="10" Opacity="0.25" />
-                    </Button.Shadow>
-
-                </Button>
-
-                <Button Text="Modificar Incidencia" WidthRequest="200" 
-                HeightRequest="80" 
-                HorizontalOptions="Center" BackgroundColor="#212121" CornerRadius="10" FontFamily="Inter">
-
-                    <Button.GestureRecognizers>
-                        <PointerGestureRecognizer PointerEntered="OnHoverEnter" PointerExited="OnHoverExit">
-
-                        </PointerGestureRecognizer>
-                    </Button.GestureRecognizers>
-
-                    <Button.Shadow>
-                        <Shadow Brush="Black" Offset="0,5" Radius="10" Opacity="0.25" />
-                    </Button.Shadow>
-                </Button>
-
-                <Button Text="Calcular Ruta" WidthRequest="200" 
-                HeightRequest="80" 
-                HorizontalOptions="Center" BackgroundColor="#212121" CornerRadius="10">
-
-                    <Button.GestureRecognizers>
-                        <PointerGestureRecognizer PointerEntered="OnHoverEnter" PointerExited="OnHoverExit">
-
-                        </PointerGestureRecognizer>
-                    </Button.GestureRecognizers>
-
-                    <Button.Shadow>
-                        <Shadow Brush="Black" Offset="0,5" Radius="10" Opacity="0.25" />
-                    </Button.Shadow>
-
-
-                </Button>
-
-                <Button Text="Estadísticas" WidthRequest="200" 
-                HeightRequest="80" 
-                HorizontalOptions="Center" BackgroundColor="#212121" CornerRadius="10" Margin="0,0,0,60" FontFamily="Inter">
-
-                    <Button.GestureRecognizers>
-                        <PointerGestureRecognizer PointerEntered="OnHoverEnter" PointerExited="OnHoverExit">
-
-                        </PointerGestureRecognizer>
-                    </Button.GestureRecognizers>
-
-                    <Button.Shadow>
-                        <Shadow Brush="Black" Offset="0,5" Radius="10" Opacity="0.25" />
-                    </Button.Shadow>
-
-
-                </Button>
-
-            </VerticalStackLayout>
-
-        </ScrollView>
-
-
-        
-        
+        <!-- FOOTER: Fondo Negro, Línea Blanca y Texto Blanco -->
         <Grid Grid.Row="1" 
               ColumnDefinitions="*, *, *, *, *" 
-              BackgroundColor="White" 
+              BackgroundColor="Black" 
               HeightRequest="80" 
               Padding="0,0">
 
             <BoxView Grid.ColumnSpan="5"
-             HeightRequest="1" 
-             BackgroundColor="Black" 
-             HorizontalOptions="Fill" 
-             VerticalOptions="Start" />
+                     HeightRequest="1" 
+                     BackgroundColor="White" 
+                     HorizontalOptions="Fill" 
+                     VerticalOptions="Start" />
 
-            <!-- Cada sección del footer con su texto centrado -->
             <Label Grid.Column="0" Text="icon1" 
                    HorizontalOptions="Center" VerticalOptions="Center" 
-                   FontSize="12" TextColor="#212121" FontFamily="Inter" />
+                   FontSize="12" TextColor="White" FontFamily="Inter" />
 
             <Label Grid.Column="1" Text="icon2" 
                    HorizontalOptions="Center" VerticalOptions="Center" 
-                   FontSize="12" TextColor="#212121" FontFamily="Inter" />
+                   FontSize="12" TextColor="White" FontFamily="Inter" />
 
             <Label Grid.Column="2" Text="icon3" 
                    HorizontalOptions="Center" VerticalOptions="Center" 
-                   FontSize="12" TextColor="#212121" FontFamily="Inter" />
+                   FontSize="12" TextColor="White" FontFamily="Inter" />
 
             <Label Grid.Column="3" Text="icon4" 
                    HorizontalOptions="Center" VerticalOptions="Center" 
-                   FontSize="12" TextColor="#212121" FontFamily="Inter" />
+                   FontSize="12" TextColor="White" FontFamily="Inter" />
 
             <Label Grid.Column="4" Text="icon5" 
                    HorizontalOptions="Center" VerticalOptions="Center" 
-                   FontSize="12" TextColor="#212121" FontFamily="Inter" />
-
-            <!-- Opcional: Si quieres que toda la celda sea clickable en el futuro, 
-                 puedes envolver cada Label en un VerticalStackLayout con un TapGestureRecognizer -->
+                   FontSize="12" TextColor="White" FontFamily="Inter" />
         </Grid>
+
     </Grid>
-    
+
 
 
 </ContentPage>
