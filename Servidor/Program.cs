@@ -201,7 +201,27 @@ namespace Servidor
                                         ip = calcular_ip_automatico();
                                         ip_automatica = 1;
 
+                                        
+
                                         // aqui se enviara el socket a el backend
+
+                                        IPAddress address = IPAddress.Parse(ip);  // creamos la ip y el endpoint
+                                        IPEndPoint endpoint = new IPEndPoint(address, puerto_servidor_backend);
+                                        Socket backend_socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                                        // creamos el socket
+
+                                        backend_socket.Bind(endpoint);
+                                        backend_socket.Listen(); // para que se escuche el socket
+
+                                        while (backend_socket.IsBound == true)
+                                        {
+                                            Socket backend_service_socket = backend_socket.Accept();
+                                            backend_service_socket.Close(); // cerramos el socket
+                                            Console.WriteLine("ha entrado aqui");
+
+                                        }
+
+                                        backend_socket.Close(); // cerramos los sockets
                                     }
 
                                 }
