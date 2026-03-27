@@ -27,7 +27,7 @@
                    FontSize="40" 
                    FontAttributes="Bold" 
                    TextColor="#FF6600"
-                   FontFamily="InterBold"
+                   FontFamily="Inter"
                    HorizontalOptions="Center" 
                    Margin="0,0,0,20" />
 
@@ -54,7 +54,7 @@
             -->
 
             <!-- Botones: Ahora fondo Blanco y texto Negro -->
-            <Button Text="Poner Incidencia" WidthRequest="200" 
+            <Button Text="Poner Incidencia" WidthRequest="200" FontFamily="Inter"
                     HeightRequest="70" 
                     HorizontalOptions="Center" 
                     BackgroundColor="White" 
@@ -69,7 +69,7 @@
                 </Button.Shadow>
             </Button>
 
-            <Button Text="Leer Incidencias" WidthRequest="200" 
+            <Button Text="Leer Incidencias" WidthRequest="200" FontFamily="Inter"
                     HeightRequest="70" 
                     HorizontalOptions="Center" 
                     BackgroundColor="White" 
@@ -83,7 +83,7 @@
                 </Button.Shadow>
             </Button>
 
-            <Button Text="Modificar Incidencia" WidthRequest="200" 
+            <Button Text="Modificar Incidencia" WidthRequest="200" FontFamily="Inter"
                     HeightRequest="70" 
                     HorizontalOptions="Center" 
                     BackgroundColor="White" 
@@ -97,7 +97,7 @@
                 </Button.Shadow>
             </Button>
 
-            <Button Text="Calcular Ruta" WidthRequest="200" 
+            <Button Text="Calcular Ruta" WidthRequest="200" FontFamily="Inter"
                     HeightRequest="70" 
                     HorizontalOptions="Center" 
                     BackgroundColor="White" 
@@ -111,7 +111,7 @@
                 </Button.Shadow>
             </Button>
 
-            <Button Text="Estadísticas" WidthRequest="200" 
+            <Button Text="Estadísticas" WidthRequest="200" FontFamily="Inter"
                     HeightRequest="70" 
                     HorizontalOptions="Center" 
                     BackgroundColor="White" 

@@ -16,12 +16,16 @@ namespace Frontend
                 .ConfigureMauiHandlers(handlers =>
                 {
                 })
+                // ir a google fonts descargar fuentes alli descomprimir zip ira static y coger el .ttf que queramos
+                // aqui se añaden las fuentes y se pueden usar alias, añadirlas en resource/fonts, añadir arrastrando o clicando en agregar elemento existe
+                // una vez puesta ir a propiedades y poner MauiFont
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                     fonts.AddFont("SegoeUI-Semibold.ttf", "SegoeSemibold");
                     fonts.AddFont("FluentSystemIcons-Regular.ttf", FluentUI.FontFamily);
+                    fonts.AddFont("Inter_24pt-Medium.ttf", "Inter");
                 });
 
 #if DEBUG
