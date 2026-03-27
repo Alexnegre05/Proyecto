@@ -10,9 +10,11 @@
              x:Class="Frontend.Pages.MainPage"
              x:DataType="pageModels:MainPageModel"
              Title=""
+             
              Background="Black">
+             
 
-    
+    <!--esto se pone en el content page para quitar la linea Shell.NavBarIsVisible="False"-->
     <!--le ponemos por defecto el background a blanco-->
 
 
@@ -21,10 +23,10 @@
     <Grid RowDefinitions="*, Auto" BackgroundColor="Black">
 
         <!-- Contenido principal: Fondo Negro -->
-        <VerticalStackLayout Grid.Row="0" VerticalOptions="Start" Spacing="20" Padding="0,30,0,40">
+        <VerticalStackLayout Grid.Row="0" VerticalOptions="Start" Spacing="20" Padding="0,30,0,20">
 
             <Label Text="Renfe Solutions" 
-                   FontSize="40" 
+                   FontSize="32" 
                    FontAttributes="Bold" 
                    TextColor="#FF6600"
                    FontFamily="Inter"
@@ -55,10 +57,12 @@
 
             <!-- Botones: Ahora fondo Blanco y texto Negro -->
             <Button Text="Poner Incidencia" WidthRequest="200" FontFamily="Inter"
-                    HeightRequest="70" 
+                    HeightRequest="55" 
                     HorizontalOptions="Center" 
                     BackgroundColor="White" 
-                    TextColor="Black" 
+                    FontSize="18"
+                    TextColor="Black"
+                    Padding="0"
                     CornerRadius="50">
                 <Button.GestureRecognizers>
                     <PointerGestureRecognizer PointerEntered="OnHoverEnter" PointerExited="OnHoverExit" />
@@ -70,9 +74,10 @@
             </Button>
 
             <Button Text="Leer Incidencias" WidthRequest="200" FontFamily="Inter"
-                    HeightRequest="70" 
+                    HeightRequest="55" 
                     HorizontalOptions="Center" 
                     BackgroundColor="White" 
+                    FontSize="18"
                     TextColor="Black" 
                     CornerRadius="50">
                 <Button.GestureRecognizers>
@@ -84,9 +89,10 @@
             </Button>
 
             <Button Text="Modificar Incidencia" WidthRequest="200" FontFamily="Inter"
-                    HeightRequest="70" 
+                    HeightRequest="55" 
                     HorizontalOptions="Center" 
                     BackgroundColor="White" 
+                    FontSize="18"
                     TextColor="Black" 
                     CornerRadius="50">
                 <Button.GestureRecognizers>
@@ -98,9 +104,10 @@
             </Button>
 
             <Button Text="Calcular Ruta" WidthRequest="200" FontFamily="Inter"
-                    HeightRequest="70" 
+                    HeightRequest="55" 
                     HorizontalOptions="Center" 
                     BackgroundColor="White" 
+                    FontSize="18"
                     TextColor="Black" 
                     CornerRadius="50">
                 <Button.GestureRecognizers>
@@ -112,9 +119,10 @@
             </Button>
 
             <Button Text="Estadísticas" WidthRequest="200" FontFamily="Inter"
-                    HeightRequest="70" 
+                    HeightRequest="55" 
                     HorizontalOptions="Center" 
                     BackgroundColor="White" 
+                    FontSize="18"
                     TextColor="Black" 
                     CornerRadius="50">
                 <Button.GestureRecognizers>
@@ -130,7 +138,8 @@
         <!-- FOOTER: Fondo Negro, Línea Blanca y Texto Blanco -->
         <Grid Grid.Row="1" 
               ColumnDefinitions="*, *, *, *, *" 
-              BackgroundColor="Black" 
+              BackgroundColor="Black"
+            
               HeightRequest="80" 
               Padding="0,0">
 
