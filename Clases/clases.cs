@@ -31,21 +31,17 @@ namespace clases
         public bool obras { get; set; }
 
         public HashSet<Incidencias> Incidencias { get; set; } = new HashSet<Incidencias>();
-        public void calcular_estacion_cercana(double x, double y, double z)
-        {
 
-        }
-
+       
         public void estacion_obras(bool obras)
         {
 
         }
 
-        public void calcular_posicion_estacion(List<int> lista_paradas)
-        {
-
-        }
+        
     }
+
+
 
     public class Incidencias
     {
@@ -137,6 +133,11 @@ namespace clases
         // Conexión con la Línea (N:1)
         public int LineaId { get; set; }
         public Linea Linea { get; set; }
+
+        // la posicion exacta de la parada
+        public double x { get; set; }
+        public double y { get; set; }
+        public double z { get; set; }
 
         // Conexión con la Estación (N:1)
         public int EstacionId { get; set; }
@@ -236,10 +237,10 @@ namespace clases
 
     internal class Program
     {
-        
-        // funciones para la BD de conectarse y desconectarse
-       
 
+        // funciones para la BD de conectarse y desconectarse
+
+       
         static void closeconnection(DBProyectoContext context)
         {
             context.Dispose();
@@ -476,7 +477,7 @@ namespace clases
 
                                     context.Paradas.Add(paradas);
 
-                                    Console.WriteLine("A");
+                                    
 
                                     
                                 }
@@ -521,7 +522,7 @@ namespace clases
             Console.WriteLine("paradas insertadas en la BD");
         }
 
-
+        // funciones de ip
         static string calcular_ip_automatico()
         {
             // calcular la ip de manera automatica 
@@ -592,6 +593,50 @@ namespace clases
         }
 
 
+
+
+        // funciones para las estaciones
+        public static void calcular_estacion_cercana(double x, double y, double z, DBProyectoContext context)
+        {
+            List<Estacion> lista_estaciones = context.Estaciones.ToList(); // cogemos todas las estaciones
+
+            Estacion estacion_cercana = null; // vamos a crear una estacion como variable,
+                                              // vamos recorriendo todas las estaciones y si la nueva estacion es mas cercana a la que hemos encontrado,
+                                              // sera la nueva estacion_cercana
+
+            Estacion nueva_estacion = null;
+
+            double distancia = 0; // variable donde guardamos la distancia entre el usuario y las estaciones
+
+            double nueva_distancia = 0; // otra variable que servira para el calculo con la nueva estacion
+
+
+            for(int i = 0; i < lista_estaciones.Count; i = i + 1)
+            {
+                nueva_estacion = lista_estaciones[i];
+
+                if (estacion_cercana == null)
+                {
+                    estacion_cercana = lista_estaciones[i]; // si es null, la estacion cercana es la primera estacion
+                }
+                if (distancia == 0) // si es 0 entonces cogemos de la estacion mas cercana la distancia
+                {
+                    distancia = Math.Pow(((x - estacion_cercana.x)* (x - estacion_cercana.x) + (y - estacion_cercana.y) * (y - estacion_cercana.y) + (z - estacion_cercana.z) * (z - estacion_cercana.z)), 0.5); 
+                    // pitagoras en 3D
+                }
+
+                nueva_distancia = Math.Pow(((x - nueva_estacion.x) * (x - nueva_estacion.x) + (y - nueva_estacion.y) * (y - nueva_estacion.y) + (z - nueva_estacion.z) * (z - nueva_estacion.z)), 0.5);
+
+                if (nueva_distancia < distancia) // si la nueva distancia es menor, la estacione estara mas cerca
+                {
+                        distancia = nueva_distancia;
+                    estacion_cercana = nueva_estacion;
+                }
+                
+            }
+
+            Console.WriteLine("Estacion mas cercana" + estacion_cercana.nombre);
+        }
 
 
 
@@ -781,6 +826,10 @@ namespace clases
                             Console.WriteLine("x: " + x);
                             Console.WriteLine("y: " + y);
                             Console.WriteLine("z: " + z);
+
+                            // aqui buscamos qual es la estacion mas cercana, solo nuecesitamos el nombre
+                            calcular_estacion_cercana(x,y,z,context);
+
                         }
                         Console.WriteLine("No se esta esperando");
                         backend_service_socket.Close(); // cerramos el socket

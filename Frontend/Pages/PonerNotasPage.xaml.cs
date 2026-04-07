@@ -55,16 +55,15 @@ public partial class PonerNotasPage : ContentPage
 
 
         // lo pasamos a metros, misma formula que el backend pero sumandole la altura de el mar 
-        x = (R + z) * Math.Cos(y) * Math.Cos(x);
-        y = (R + z) * Math.Cos(y) * Math.Sin(x);
-        z = (R + z) * Math.Sin(y);
+        double final_x = (R + z) * Math.Cos(y) * Math.Cos(x);
+        double final_y = (R + z) * Math.Cos(y) * Math.Sin(x);
+        double final_z = (R + z) * Math.Sin(y);
 
-        await Shell.Current.DisplayAlert("Posición Enviada", $"X: {x}\nY: {y}\nZ: {z}", "OK");
         // enviamos el x,y,z a el backend
 
-        send_parameter_xyz(x, frontend_socket);
-        send_parameter_xyz(y, frontend_socket);
-        send_parameter_xyz(z, frontend_socket);
+        send_parameter_xyz(final_x, frontend_socket);
+        send_parameter_xyz(final_y, frontend_socket);
+        send_parameter_xyz(final_z, frontend_socket);
     }
 
     // funciones que envian un numero o un xyz 
