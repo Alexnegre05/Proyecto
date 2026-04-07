@@ -522,6 +522,26 @@ namespace clases
             Console.WriteLine("paradas insertadas en la BD");
         }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         // funciones de ip
         static string calcular_ip_automatico()
         {
@@ -595,8 +615,23 @@ namespace clases
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         // funciones para las estaciones
-        public static void calcular_estacion_cercana(double x, double y, double z, DBProyectoContext context)
+        public static string calcular_estacion_cercana(double x, double y, double z, DBProyectoContext context)
         {
             List<Estacion> lista_estaciones = context.Estaciones.ToList(); // cogemos todas las estaciones
 
@@ -629,25 +664,28 @@ namespace clases
 
                 if (nueva_distancia < distancia) // si la nueva distancia es menor, la estacione estara mas cerca
                 {
-                        distancia = nueva_distancia;
-                    estacion_cercana = nueva_estacion;
+                       distancia = nueva_distancia;
+                       estacion_cercana = nueva_estacion;
                 }
                 
             }
 
-            Console.WriteLine("Estacion mas cercana" + estacion_cercana.nombre);
+            return estacion_cercana.nombre;
         }
 
 
 
 
 
-
-
-
-
-
-
+        // enviar texto
+        public static void enviar_texto(string text, Socket backend_service_socket)
+        {
+            // enviamos texto al frontend
+            byte[] bytes = Encoding.UTF8.GetBytes(text);
+            byte[] lenght = BitConverter.GetBytes(bytes.Length);
+            backend_service_socket.Send(lenght);
+            backend_service_socket.Send(bytes);
+        }
 
 
 
@@ -828,7 +866,9 @@ namespace clases
                             Console.WriteLine("z: " + z);
 
                             // aqui buscamos qual es la estacion mas cercana, solo nuecesitamos el nombre
-                            calcular_estacion_cercana(x,y,z,context);
+                            string estacion_cercana = calcular_estacion_cercana(x,y,z,context);
+
+                            enviar_texto(estacion_cercana, backend_service_socket);
 
                         }
                         Console.WriteLine("No se esta esperando");

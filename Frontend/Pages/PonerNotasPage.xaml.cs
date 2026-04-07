@@ -1,5 +1,6 @@
 using System.Net.Sockets;
 using System.Net;
+using System.Text;
 
 
 namespace Frontend.Pages;
@@ -82,10 +83,27 @@ public partial class PonerNotasPage : ContentPage
     }
 
 
+    public static string recibir_texto(Socket frontend_socket)
+    {
+        byte[] data = new byte[sizeof(int)];
+        frontend_socket.Receive(data);
+
+        string resultado;
+        int num = BitConverter.ToInt32(data);
+        byte[] palabra = new byte[num];
+
+        frontend_socket.Receive(palabra);
+
+        resultado = Encoding.UTF8.GetString(palabra);
+
+        return resultado;
+    }
 
 
 
+    // COMO MOSTRAR TEXTO AQUI CONSOLE WRITELINE
 
+    // await Shell.Current.DisplayAlert("Estación Encontrada", estacion, "Cerrar"); poner funcion como async 
 
 
 
@@ -118,7 +136,9 @@ public partial class PonerNotasPage : ContentPage
             // enviamos el xyz a el servidor
             await send_xyz(frontend_socket);
 
+            string estacion = recibir_texto(frontend_socket);
 
+            
             // cerramos el socket
             frontend_socket.Close();
         }
