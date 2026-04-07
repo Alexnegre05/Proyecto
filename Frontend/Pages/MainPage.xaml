@@ -63,8 +63,10 @@
                     FontSize="18"
                     TextColor="Black"
                     Padding="0"
-                    CornerRadius="50">
+                    CornerRadius="50"
+                    Clicked="OnPonerIncidenciaClicked">
                 <Button.GestureRecognizers>
+                    <!--lo de clicked es para que se active algo cuando cliques-->
                     <PointerGestureRecognizer PointerEntered="OnHoverEnter" PointerExited="OnHoverExit" />
                 </Button.GestureRecognizers>
                 <Button.Shadow>
@@ -73,6 +75,7 @@
                 </Button.Shadow>
             </Button>
 
+            
             <Button Text="Leer Incidencias" WidthRequest="200" FontFamily="Inter"
                     HeightRequest="55" 
                     HorizontalOptions="Center" 

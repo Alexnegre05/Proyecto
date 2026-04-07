@@ -28,5 +28,11 @@ namespace Frontend.Pages
                 button.BorderWidth = 0;
             }
         }
+        // async y await son para que estas funciones se hagan en segundo plano
+        private async void OnPonerIncidenciaClicked(object sender, EventArgs e)
+        {
+            // Navegación usando Shell
+            await Shell.Current.GoToAsync("PonerNotasPage");
+        }
     }
 }

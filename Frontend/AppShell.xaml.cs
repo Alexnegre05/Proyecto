@@ -11,6 +11,7 @@ namespace Frontend
             InitializeComponent();
             var currentTheme = Application.Current!.UserAppTheme;
             ThemeSegmentedControl.SelectedIndex = currentTheme == AppTheme.Light ? 0 : 1;
+            Routing.RegisterRoute("PonerNotasPage", typeof(PonerNotasPage));
         }
         public static async Task DisplaySnackbarAsync(string message)
         {
