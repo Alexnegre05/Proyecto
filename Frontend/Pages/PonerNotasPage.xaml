@@ -8,6 +8,7 @@
         <VerticalStackLayout Grid.Row="0" VerticalOptions="Start" Spacing="20" Padding="0,30,0,20">
 
             <!--usamos el horizontal layout en esta parte para que se pongan los elementos en el eje x-->
+            <!--con fill el horizontaloptions hacemos que ocupe todo el eje x-->
             <HorizontalStackLayout BackgroundColor="White" 
                              Padding="20"
                              Spacing="10"
@@ -26,6 +27,31 @@
                    FontFamily="Inter"
                    VerticalOptions="Center" />
             </HorizontalStackLayout>
+
+
+            <!--lo ponemos todo en un borde para poder ponerle un radius ya que no hay un solo label -->
+            <Border BackgroundColor="White" 
+                StrokeShape="RoundRectangle 25" 
+                StrokeThickness="0"
+                Margin="20,0"
+                Padding="20"
+                HorizontalOptions="Fill">
+
+                <HorizontalStackLayout Spacing="10">
+
+                    <Label Text="R1" 
+                       VerticalOptions="Center" 
+                       TextColor="Gray" />
+
+                    <Label Text="Estacion: " 
+                       FontSize="28" 
+                       FontAttributes="Bold" 
+                       TextColor="#FF6600"
+                       FontFamily="Inter"
+                       VerticalOptions="Center" />
+
+                </HorizontalStackLayout>
+            </Border>
 
 
         </VerticalStackLayout>
