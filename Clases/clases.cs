@@ -238,9 +238,22 @@ namespace clases
     internal class Program
     {
 
+        // funciones de enviar/recibir cosas entre frontend y backend 
+
+        // enviar texto
+        public static void enviar_texto(string text, Socket backend_service_socket)
+        {
+            // enviamos texto al frontend
+            byte[] bytes = Encoding.UTF8.GetBytes(text);
+            byte[] lenght = BitConverter.GetBytes(bytes.Length);
+            backend_service_socket.Send(lenght);
+            backend_service_socket.Send(bytes);
+        }
+
+
         // funciones para la BD de conectarse y desconectarse
 
-       
+
         static void closeconnection(DBProyectoContext context)
         {
             context.Dispose();
@@ -543,6 +556,106 @@ namespace clases
 
 
         // funciones de ip
+
+        static string calculo_ip()
+        {
+
+
+            string ip = ""; // string de la ip de el usuario 
+           
+            int ip_automatica = -1;
+            int ip_correcta = 0;
+
+            FileStream file = new FileStream("fichero_configuracion.txt", FileMode.Open, FileAccess.Read);
+            StreamReader reader = new StreamReader(file, Encoding.UTF8);
+
+            string linea = reader.ReadLine(); // con esto cogemos la linea, si es null sabemos de que ha acabado
+            int count = 0; // 0 si es la primera linea que tenemos que leer  1 en caso de ser la siguiente
+
+            while (linea != null)
+            {
+                if (count == 0) // si es la primera linea
+                {
+                    string[] parts = linea.Split("="); // separamos el = para solo sacar el dato que queremos
+
+                    string tipo_ip = parts[1];
+                    tipo_ip = tipo_ip.Trim().ToLower(); // quita posibles espacios y que todo este en minusculas
+
+                    if (tipo_ip == "automatico")
+                    {
+                        ip_automatica = 1; // lo dejamos en 1 para indicar que es automatico
+                    }
+                    else if (tipo_ip == "manual")
+                    {
+                        ip_automatica = 0;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Siga las instrucciones del fichero, tipo_ip mal introducida");
+                    }
+                }
+                else if (count == 1)
+                {
+                    string[] parts = linea.Split('=');
+
+                    ip = parts[1]; // sacamos la ip
+                }
+
+                linea = reader.ReadLine(); // volvemos a leer la siguiente linea
+                count = count + 1; // sumamos 1 al contador
+            }
+
+            reader.Close();
+            file.Close();
+
+
+            if (ip_automatica == 1)
+            {
+                ip = calcular_ip_automatico();
+                ip_automatica = 1;
+                Console.WriteLine("IP detectada correctamente");
+
+
+
+            }
+            else if (ip_automatica == 0)// ip no automatica
+            {
+
+                // comprovamos la ip
+                while (ip_correcta == 0)
+                {
+                    // si entra en el catch que se introduzca manualmente el ip 
+
+
+                    string[] parts = ip.Split(".");
+
+                    while (parts.Length != 4) // aqui comprobamos que el formato sea A.B.C.D y no haya ningun error
+                    {
+                        Console.Write("introduce la ip correctamente: ");
+                        ip = Console.ReadLine();
+                        parts = ip.Split(".");
+                    }
+
+
+                    ip_correcta = check_ip_manual_numeros(parts);
+                    // funcion que mira que haya 4 numeros puestos en la ip manual de 3 digitos, si devuelve 0 entonces esta mal y se repite el bucle, 1 no lo hace
+
+                    if (ip_correcta == 0)
+                    {
+                        Console.WriteLine("introduce la ip correctamente en el formato A.B.C.D\n donde las letras son numeros de 3 digitos");
+                        Console.Write("ip: ");
+                        ip = Console.ReadLine();
+                    }
+
+                }
+            }
+            else
+            {
+                Console.WriteLine("no deberias estar aqui");
+            }
+
+            return ip;
+        }
         static string calcular_ip_automatico()
         {
             // calcular la ip de manera automatica 
@@ -629,6 +742,45 @@ namespace clases
 
 
 
+        static void poner_notas(Socket backend_service_socket, DBProyectoContext context)
+        {
+            Console.WriteLine("estamos en poner notas");
+            double x;
+            double y;
+            double z;
+
+            byte[] posicion = new byte[sizeof(double)];
+            backend_service_socket.Receive(posicion);
+
+            x = BitConverter.ToDouble(posicion);
+
+            backend_service_socket.Receive(posicion);
+
+            y = BitConverter.ToDouble(posicion);
+
+            backend_service_socket.Receive(posicion);
+
+            z = BitConverter.ToDouble(posicion);
+
+            Console.WriteLine("x: " + x);
+            Console.WriteLine("y: " + y);
+            Console.WriteLine("z: " + z);
+
+            // aqui buscamos qual es la estacion mas cercana, solo nuecesitamos el nombre
+            string estacion_cercana = calcular_estacion_cercana(x, y, z, context);
+
+            enviar_texto(estacion_cercana, backend_service_socket);
+        }
+
+
+
+
+
+
+
+
+
+
 
         // funciones para las estaciones
         public static string calcular_estacion_cercana(double x, double y, double z, DBProyectoContext context)
@@ -677,15 +829,29 @@ namespace clases
 
 
 
-        // enviar texto
-        public static void enviar_texto(string text, Socket backend_service_socket)
-        {
-            // enviamos texto al frontend
-            byte[] bytes = Encoding.UTF8.GetBytes(text);
-            byte[] lenght = BitConverter.GetBytes(bytes.Length);
-            backend_service_socket.Send(lenght);
-            backend_service_socket.Send(bytes);
-        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -699,12 +865,7 @@ namespace clases
             
             sql(context); // funcion de inserts... todo lo de sql 
 
-            
-
-            string ip = ""; // string de la ip de el usuario 
             int try_except = 1; // variable que sirve para que si entras en el catch el while se repita todo el rato
-            int ip_automatica = -1;
-            int ip_correcta = 0;
 
             while (try_except == 1)
             {
@@ -715,95 +876,7 @@ namespace clases
 
                     // leemos el fichero_configuracion 
 
-                    FileStream file = new FileStream("fichero_configuracion.txt", FileMode.Open, FileAccess.Read);
-                    StreamReader reader = new StreamReader(file, Encoding.UTF8);
-
-                    string linea = reader.ReadLine(); // con esto cogemos la linea, si es null sabemos de que ha acabado
-                    int count = 0; // 0 si es la primera linea que tenemos que leer  1 en caso de ser la siguiente
-                        
-                    while(linea != null)
-                    {
-                        if (count == 0) // si es la primera linea
-                        {
-                            string[] parts = linea.Split("="); // separamos el = para solo sacar el dato que queremos
-
-                            string tipo_ip = parts[1];
-                            tipo_ip = tipo_ip.Trim().ToLower(); // quita posibles espacios y que todo este en minusculas
-
-                            if(tipo_ip == "automatico")
-                            {
-                                ip_automatica = 1; // lo dejamos en 1 para indicar que es automatico
-                            }
-                            else if (tipo_ip == "manual")
-                            {
-                                ip_automatica = 0;
-                            }
-                            else
-                            {
-                                Console.WriteLine("Siga las instrucciones del fichero, tipo_ip mal introducida");
-                            }
-                        }
-                        else if (count == 1)
-                        {
-                            string[] parts = linea.Split('=');
-                            
-                            ip = parts[1]; // sacamos la ip
-                        }
-                        
-                        linea = reader.ReadLine(); // volvemos a leer la siguiente linea
-                        count = count + 1; // sumamos 1 al contador
-                    }
-
-                    reader.Close();
-                    file.Close();
-
-
-                    if (ip_automatica == 1)
-                    {
-                        ip = calcular_ip_automatico();
-                        ip_automatica = 1;
-                        Console.WriteLine("IP detectada correctamente");
-                        
-
-                        
-                    }
-                    else if (ip_automatica == 0)// ip no automatica
-                    {
-
-                        // comprovamos la ip
-                        while (ip_correcta == 0)
-                        {
-                            // si entra en el catch que se introduzca manualmente el ip 
-                            
-
-                            string[] parts = ip.Split(".");
-
-                            while (parts.Length != 4) // aqui comprobamos que el formato sea A.B.C.D y no haya ningun error
-                            {
-                                Console.Write("introduce la ip correctamente: ");
-                                ip = Console.ReadLine();
-                                parts = ip.Split(".");
-                            }
-
-
-                            ip_correcta = check_ip_manual_numeros(parts);
-                            // funcion que mira que haya 4 numeros puestos en la ip manual de 3 digitos, si devuelve 0 entonces esta mal y se repite el bucle, 1 no lo hace
-
-                            if(ip_correcta == 0)
-                            {
-                                Console.WriteLine("introduce la ip correctamente en el formato A.B.C.D\n donde las letras son numeros de 3 digitos");
-                                Console.Write("ip: ");
-                                ip = Console.ReadLine();
-                            }
-                            
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("no deberias estar aqui");
-                    }
-
-
+                    string ip = calculo_ip();
 
                     // sockets
                     // aqui se enviara el socket a el backend
@@ -843,32 +916,7 @@ namespace clases
 
                         if (codigo == 1)
                         {
-                            Console.WriteLine("estamos en poner notas");
-                            double x;
-                            double y;
-                            double z;
-
-                            byte[] posicion = new byte[sizeof(double)];
-                            backend_service_socket.Receive(posicion);
-
-                            x = BitConverter.ToDouble(posicion);
-
-                            backend_service_socket.Receive(posicion);
-
-                            y = BitConverter.ToDouble(posicion);
-
-                            backend_service_socket.Receive(posicion);
-
-                            z = BitConverter.ToDouble(posicion);
-
-                            Console.WriteLine("x: " + x);
-                            Console.WriteLine("y: " + y);
-                            Console.WriteLine("z: " + z);
-
-                            // aqui buscamos qual es la estacion mas cercana, solo nuecesitamos el nombre
-                            string estacion_cercana = calcular_estacion_cercana(x,y,z,context);
-
-                            enviar_texto(estacion_cercana, backend_service_socket);
+                            poner_notas(backend_service_socket, context);
 
                         }
                         Console.WriteLine("No se esta esperando");

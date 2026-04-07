@@ -137,8 +137,8 @@ public partial class PonerNotasPage : ContentPage
             await send_xyz(frontend_socket);
 
             string estacion = recibir_texto(frontend_socket);
+            await Shell.Current.DisplayAlert("Estación Encontrada", estacion, "Cerrar");
 
-            
             // cerramos el socket
             frontend_socket.Close();
         }
