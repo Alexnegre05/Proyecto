@@ -29,7 +29,7 @@ public partial class PonerNotasPage : ContentPage
         try
         {
             // ip que se usa para conectarse en el movil
-            string ip = "192.168.1.50";
+            string ip = "172.27.240.1";
 
             // Creamos el socket 
             IPAddress address = IPAddress.Parse(ip);  // creamos la ip y el endpoint
@@ -40,7 +40,7 @@ public partial class PonerNotasPage : ContentPage
 
             Console.WriteLine("Conectado");
             // cerramos el socket
-            frontend_socket.Close();
+            
         }
         catch (Exception e)
         {

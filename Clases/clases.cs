@@ -679,7 +679,7 @@ namespace clases
                     {
                         ip = calcular_ip_automatico();
                         ip_automatica = 1;
-
+                        Console.WriteLine("IP detectada correctamente");
                         
 
                         
@@ -725,25 +725,37 @@ namespace clases
                     // sockets
                     // aqui se enviara el socket a el backend
 
+
+                    if (ip == null)
+                    {
+                        
+                        Console.WriteLine(ip);
+                        
+                    }
+
+                    Console.WriteLine("IP: " + ip);
                     IPAddress address = IPAddress.Parse(ip);  // creamos la ip y el endpoint
                     IPEndPoint endpoint = new IPEndPoint(address, 1000); // el puerto es el 1000
                     Socket backend_socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
                     // creamos el socket
-
-                    //backend_socket.Bind(endpoint);
-                    //backend_socket.Listen(); // para que se escuche el socket
-
-                    //while (backend_socket.IsBound == true)
-                    //{
-                    //    //Socket backend_service_socket = backend_socket.Accept();
-                    //    //backend_service_socket.Close(); // cerramos el socket
-
-
-
-
-                    //}
-
                     
+                    backend_socket.Bind(endpoint);
+                    backend_socket.Listen(); // para que se escuche el socket
+                    
+                    while (backend_socket.IsBound == true)
+                    {
+                        Console.WriteLine("Check");
+                        Socket backend_service_socket = backend_socket.Accept();
+
+                        Console.WriteLine("Conectado");
+                        backend_service_socket.Close(); // cerramos el socket
+
+
+
+
+                    }
+                    
+
                     backend_socket.Close();
                     try_except = 0; // salimos de el bucle de try_except
                 }
