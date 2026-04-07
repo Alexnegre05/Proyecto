@@ -31,7 +31,7 @@ public partial class PonerNotasPage : ContentPage
 
     // funcion para enviar el x,y,z de el movil 
 
-    public static async void send_xyz(Socket frontend_socket)
+    public static async Task send_xyz(Socket frontend_socket)
     {
         // con geolocation sacamos el x,y,z de el movil, el await y el async es porque la funcion es asincrona 
         // esto le dice cuanta precision queremos que haya GeolocationAccuracy.Medium
@@ -59,21 +59,40 @@ public partial class PonerNotasPage : ContentPage
         y = (R + z) * Math.Cos(y) * Math.Sin(x);
         z = (R + z) * Math.Sin(y);
 
-
+        await Shell.Current.DisplayAlert("Posición Enviada", $"X: {x}\nY: {y}\nZ: {z}", "OK");
         // enviamos el x,y,z a el backend
 
         send_parameter_xyz(x, frontend_socket);
         send_parameter_xyz(y, frontend_socket);
         send_parameter_xyz(z, frontend_socket);
     }
+
+    // funciones que envian un numero o un xyz 
     public static void send_parameter_xyz(double var, Socket frontend_socket)
     {
         byte[] bytes = new byte[sizeof(double)];
-        byte[] length = BitConverter.GetBytes(bytes.Length);
         bytes = BitConverter.GetBytes(var);
-        frontend_socket.Send(length);
         frontend_socket.Send(bytes);
     }
+
+    public static void send_num(int num, Socket frontend_socket)
+    {
+        byte[] bytes = new byte[sizeof(int)];
+        bytes = BitConverter.GetBytes(1);
+        frontend_socket.Send(bytes);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     // funcion para saber el nombre de la estacion mas cercana
@@ -90,14 +109,15 @@ public partial class PonerNotasPage : ContentPage
             IPAddress address = IPAddress.Parse(ip);  // creamos la ip y el endpoint
             IPEndPoint endpoint = new IPEndPoint(address, 1000); // el puerto es el 1000
             Socket frontend_socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-
-            await frontend_socket.ConnectAsync(endpoint); // es lo mimso que connect pero preparada para el async 
+            frontend_socket.Connect(endpoint); // es lo mimso que connect pero preparada para el async 
 
             Console.WriteLine("Conectado");
 
+            // enviamos un 1 para decir que va a recibir algo de poner notas 
 
-
-            
+            send_num(1, frontend_socket);
+            // enviamos el xyz a el servidor
+            await send_xyz(frontend_socket);
 
 
             // cerramos el socket

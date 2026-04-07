@@ -747,10 +747,42 @@ namespace clases
                     
                     while (backend_socket.IsBound == true)
                     {
-                        Console.WriteLine("Check");
+                       
                         Socket backend_service_socket = backend_socket.Accept();
 
                         Console.WriteLine("Conectado");
+
+                        // leemos el numero para saber que tiene que pasar(si es poner notas, leer...)
+                        byte[] data = new byte[sizeof(int)];
+                        backend_service_socket.Receive(data);
+
+                        int codigo = BitConverter.ToInt32(data);
+
+                        if (codigo == 1)
+                        {
+                            Console.WriteLine("estamos en poner notas");
+                            double x;
+                            double y;
+                            double z;
+
+                            byte[] posicion = new byte[sizeof(double)];
+                            backend_service_socket.Receive(posicion);
+
+                            x = BitConverter.ToDouble(posicion);
+
+                            backend_service_socket.Receive(posicion);
+
+                            y = BitConverter.ToDouble(posicion);
+
+                            backend_service_socket.Receive(posicion);
+
+                            z = BitConverter.ToDouble(posicion);
+
+                            Console.WriteLine("x: " + x);
+                            Console.WriteLine("y: " + y);
+                            Console.WriteLine("z: " + z);
+                        }
+                        Console.WriteLine("No se esta esperando");
                         backend_service_socket.Close(); // cerramos el socket
 
 

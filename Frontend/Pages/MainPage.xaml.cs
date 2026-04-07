@@ -29,6 +29,7 @@ namespace Frontend.Pages
             }
         }
         // async y await son para que estas funciones se hagan en segundo plano
+        // el async es como hilos
         private async void OnPonerIncidenciaClicked(object sender, EventArgs e)
         {
             // Navegación usando Shell
