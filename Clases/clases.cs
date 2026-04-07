@@ -734,12 +734,15 @@ namespace clases
                     }
 
                     Console.WriteLine("IP: " + ip);
+
                     IPAddress address = IPAddress.Parse(ip);  // creamos la ip y el endpoint
                     IPEndPoint endpoint = new IPEndPoint(address, 1000); // el puerto es el 1000
                     Socket backend_socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
                     // creamos el socket
                     
-                    backend_socket.Bind(endpoint);
+                    
+                    backend_socket.Bind(endpoint); // al usar bind el socket espera recibir que la ip sea de el formato que ha recibido 
+                    // ej si recibe 192.168.32.47 espera que se conecte usando 192.168.x.x o similar
                     backend_socket.Listen(); // para que se escuche el socket
                     
                     while (backend_socket.IsBound == true)
