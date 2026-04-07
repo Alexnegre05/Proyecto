@@ -137,7 +137,17 @@ public partial class PonerNotasPage : ContentPage
             await send_xyz(frontend_socket);
 
             string estacion = recibir_texto(frontend_socket);
-            await Shell.Current.DisplayAlert("Estación Encontrada", estacion, "Cerrar");
+
+
+            // aqui es donde se cambia el nombre, el MainThread es el que se encarga de dibujar por pantalla
+            // le decimos a ese hilo que se invoque y que cambie el texto 
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                LabelEstacion.Text = "Estacion: " + estacion;
+            });
+
+
+            
 
             // cerramos el socket
             frontend_socket.Close();

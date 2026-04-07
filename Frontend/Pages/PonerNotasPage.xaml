@@ -43,7 +43,11 @@
                        VerticalOptions="Center" 
                        TextColor="Gray" />
 
-                    <Label Text="Estacion: " 
+                    <!--x:name sirve como un identificador unico que sirve para poder modificar 
+                    el nombre desde c# como si label fuera una clase-->
+                    <Label 
+                       x:Name="LabelEstacion"
+                       Text="Estacion: " 
                        FontSize="28" 
                        FontAttributes="Bold" 
                        TextColor="#FF6600"
