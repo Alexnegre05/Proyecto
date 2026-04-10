@@ -169,11 +169,21 @@ public partial class PonerNotasPage : ContentPage
     // Función para el botón de la flecha desplegable
     private void OnFlechaClicked(object sender, EventArgs e)
     {
-        // Invierte la visibilidad: si está abierta se cierra, si está cerrada se abre
-        LineasView.IsVisible = !LineasView.IsVisible;
+        // Invierte la visibilidad: si está abierta se cierra, si está cerrada se abre,
+        // esta propiedad es la que indica si la flecha muestra todas las estaciones o no lo muestra
+        // se indica con un booleano 
 
-        // Cambia la flecha según el estado
-        BtnFlecha.Text = LineasView.IsVisible ? "▲" : "▼";
+        if (LineasView.IsVisible == true)
+        {
+            LineasView.IsVisible = false;
+        }
+        else
+        {
+            LineasView.IsVisible = true;
+        }
+
+            // Cambia la flecha según el estado 
+            BtnFlecha.Text = LineasView.IsVisible ? "▲" : "▼";
     }
 
     // funcion para saber el nombre de la estacion mas cercana
