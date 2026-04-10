@@ -7,7 +7,11 @@ using System.Text;
 namespace Frontend.Pages;
 
 
-
+public class InfoLinea
+{
+    public string Nombre { get; set; }
+    public Color Color { get; set; }
+}
 
 public partial class PonerNotasPage : ContentPage
 {
@@ -162,11 +166,6 @@ public partial class PonerNotasPage : ContentPage
 
 
 
-
-
-
-
-
     // funcion para saber el nombre de la estacion mas cercana
     // usamos de nuevo el async y el await pero esta vez en la conexion de el socket 
     private async void EstacionCercana()
@@ -194,50 +193,77 @@ public partial class PonerNotasPage : ContentPage
             string estacion = recibir_texto(frontend_socket);
 
 
-            // aqui es donde se cambia el nombre, el MainThread es el que se encarga de dibujar por pantalla
-            // le decimos a ese hilo que se invoque y que cambie el texto 
-            MainThread.BeginInvokeOnMainThread(() =>
-            {
-                LabelEstacion.Text = "Estacion: " + estacion;
-            });
+            
 
             int num = recibir_numero(frontend_socket); // numero que nos dice cuantas paradas hay 
 
-            List<object> lineas = new List<object>();
-            for (int i = 0; i < num; i++)
-            {
-                string parada = recibir_texto(frontend_socket);
+            List<InfoLinea> paradas = new List<InfoLinea>(); 
+            // Infolinea es una clase donde se guardan los colores y los nombres de las lineas
 
-                lineas.Add(new
+            // recorremos toda la lista
+            for (int i = 0; i < num; i = i + 1)
+            {
+                string linea = recibir_texto(frontend_socket);
+                // obtenemos una de las lineas de la estacion y lo añadimos a paradas
+
+                //esto es un objeto de la clase InfoLinea que se añade a las paradas
+                InfoLinea linea_actual = new InfoLinea
                 {
-                    Nombre = parada,
-                    Color = colores.GetValueOrDefault(parada, Colors.Gray)
-                });
+                    Nombre = linea,
+                    Color = colores.GetValueOrDefault(linea, Colors.Gray)
+                };
+
+
+                paradas.Add(linea_actual);
+
+                //new Nombre = linea, Color = colores.GetValueOrDefault(linea, Colors.Gray)
+                
             }
+
+
+            // aqui es donde se cambia el nombre, y todo el tema de el color.
+            
+            // El MainThread es el que se encarga de dibujar por pantalla
+            // le decimos a ese hilo que se invoque y que cambie el texto y que las lineas son las paradas que hemos cogido
+
 
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                LineasView.ItemsSource = lineas;
-            });
+                LabelEstacion.Text = "Estacion: " + estacion;
+                LineasView.ItemsSource = paradas; 
+                // lineas view es como el id de collectionview y sirve para poder tenerlo en el backend y
+                // modificar sus atributos igual a label estación que es el nombre de la estacion 
 
 
+                // el selectionchanges es que cuando se cambie la estacion(el selector) que se cambie el nombre
+                // el += no es un a= a + 1 sino aqui
+                // es un añade también esta función a la lista de cosas por hacer cuando ocurra el evento SelectionChanged
 
+                // sender el objeto que disparo el evento y la e es el objeto que tiene los datos sobre el evento
 
-            LineasView.SelectionChanged += (s, e) =>
-            {
-                // 1. Obtenemos el elemento seleccionado
-                var seleccion = e.CurrentSelection.FirstOrDefault() as dynamic;
-
-                if (seleccion != null)
+                LineasView.SelectionChanged += (s, e) =>
                 {
-                    // 2. Cambiamos el texto
-                    LabelEstacion.Text = $"Estación: {seleccion.Nombre}";
+                    //  Obtenemos el elemento seleccionado actual, el que es el primero y lo ponemos como dinamico
+                    // lo tenemos que pasar con el as a InfoLinea
 
-                    // 3. CAMBIAMOS EL COLOR (Esta es la parte que te falta)
-                    // Usamos el color que viene guardado en el objeto seleccionado
-                    LabelEstacion.TextColor = (Color)seleccion.Color;
-                }
-            };
+                    InfoLinea seleccion = e.CurrentSelection.FirstOrDefault() as InfoLinea;
+                    // dynamic salta la comprovacion de a la hora de crear un objeto 
+
+                    if (seleccion != null) // miramos que no sea nulo
+                    {
+                        // Cambiamos el texto
+                        LabelEstacion.Text = $"Estación: {estacion} ({seleccion.Nombre})";
+
+
+                        // Usamos el color que viene guardado en el objeto seleccionado
+                        LabelEstacion.TextColor = (Color)seleccion.Color;
+
+                        BordePrincipal.BackgroundColor = (Color)seleccion.Color;
+
+                        Titulo.TextColor = Colors.White;
+                    }
+                };
+            });
 
 
             // cerramos el socket

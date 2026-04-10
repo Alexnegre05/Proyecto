@@ -9,7 +9,7 @@
 
             <!--usamos el horizontal layout en esta parte para que se pongan los elementos en el eje x-->
             <!--con fill el horizontaloptions hacemos que ocupe todo el eje x-->
-            <HorizontalStackLayout BackgroundColor="White" 
+            <HorizontalStackLayout x:Name="BordePrincipal" BackgroundColor="White" 
                              Padding="20"
                              Spacing="10"
                              Margin="20,0"
@@ -20,7 +20,7 @@
                 <Label VerticalOptions="Center" Text="Icon"></Label>
                 
                 <!-- El texto -->
-                <Label Text="Poner Notas" 
+                <Label x:Name="Titulo" Text="Poner Notas" 
                    FontSize="28" 
                    FontAttributes="Bold" 
                    TextColor="#FF6600"
