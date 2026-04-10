@@ -258,7 +258,7 @@ public partial class PonerNotasPage : ContentPage
                         // Usamos el color que viene guardado en el objeto seleccionado
                         LabelEstacion.TextColor = (Color)seleccion.Color;
 
-                        BordePrincipal.BackgroundColor = (Color)seleccion.Color;
+                        BordePrincipal.Background = (Color)seleccion.Color;
 
                         Titulo.TextColor = Colors.White;
                     }

@@ -9,24 +9,32 @@
 
             <!--usamos el horizontal layout en esta parte para que se pongan los elementos en el eje x-->
             <!--con fill el horizontaloptions hacemos que ocupe todo el eje x-->
-            <HorizontalStackLayout x:Name="BordePrincipal" BackgroundColor="White" 
-                             Padding="20"
-                             Spacing="10"
-                             Margin="20,0"
-                             HorizontalOptions="Fill">
 
+            <Border x:Name="BordePrincipal"  Margin="20,0"
+                    StrokeShape="RoundRectangle 15"
+                    StrokeThickness="0"
+                    BackgroundColor="White"
+                    >
 
+                <Grid  
+                      Padding="20"
+                      ColumnDefinitions="*" 
+                      HorizontalOptions="Fill">
 
-                <Label VerticalOptions="Center" Text="Icon"></Label>
-                
-                <!-- El texto -->
-                <Label x:Name="Titulo" Text="Poner Notas" 
-                   FontSize="28" 
-                   FontAttributes="Bold" 
-                   TextColor="#FF6600"
-                   FontFamily="Inter"
-                   VerticalOptions="Center" />
-            </HorizontalStackLayout>
+                    <StackLayout Orientation="Horizontal" 
+                                 HorizontalOptions="Center" 
+                                 Spacing="10">
+
+                        <!--el texto de arriba de el titulo-->
+                        <Label VerticalOptions="Center" Text="Icon" x:Name="LabelIcono" />
+                        <Label x:Name="Titulo" Text="Poner Notas" 
+                               FontSize="28" 
+                               FontAttributes="Bold" 
+                               TextColor="#FF6600"
+                               VerticalOptions="Center" />
+                    </StackLayout>
+                </Grid>
+            </Border>
 
 
             <!--lo ponemos todo en un borde para poder ponerle un radius ya que no hay un solo label -->
@@ -43,7 +51,7 @@
                             Grid.Column="0"
                             SelectionMode="Single"
                             WidthRequest="80">
-                            <!-- Dale un ancho fijo para que no baile -->
+                            
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
                                     <Border Padding="10" Margin="5" BackgroundColor="{Binding Color}">
@@ -59,7 +67,9 @@
                        FontSize="24" 
                        FontAttributes="Bold" 
                        TextColor="#FF6600"
-                       VerticalOptions="Center" />
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center" 
+                       HorizontalTextAlignment="Center" />  
                 </Grid>
             </Border>
             
