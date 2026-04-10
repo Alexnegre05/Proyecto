@@ -5,15 +5,42 @@ using System.Text;
 
 namespace Frontend.Pages;
 
+
+
+
+
 public class LineaItem
 {
     public string Nombre { get; set; }
     public Color Color { get; set; }
-}
+};
 
 public partial class PonerNotasPage : ContentPage
 {
-	public PonerNotasPage()
+
+
+    public Dictionary<string, Color> colores = new()
+    {
+                { "R1", Color.FromArgb("#4499D4") },
+                { "R2", Color.FromArgb("#009900") },
+                { "R2N", Color.FromArgb("#99C83E") },
+                { "R2S", Color.FromArgb("#00642E") },
+                { "R3", Color.FromArgb("#FF131A") },
+                { "R4", Color.FromArgb("#FF9221") },
+                { "R7", Color.FromArgb("#BD7DB5") },
+                { "R8", Color.FromArgb("#9B1987") },
+                { "RG1", Color.FromArgb("#007DC3") },
+                { "R10", Color.FromArgb("#930030") },
+                { "R11", Color.FromArgb("#0064A5") },
+                { "R12", Color.FromArgb("#FFDC00") },
+                { "R13", Color.FromArgb("#E52E87") },
+                { "R14", Color.FromArgb("#675199") },
+                { "R15", Color.FromArgb("#9A8A76") },
+                { "R16", Color.FromArgb("#AF0036") },
+                { "R17", Color.FromArgb("#E97300") }
+    };
+
+    public PonerNotasPage()
 	{
 		InitializeComponent();
 	}
@@ -168,28 +195,6 @@ public partial class PonerNotasPage : ContentPage
             await send_xyz(frontend_socket);
 
             string estacion = recibir_texto(frontend_socket);
-
-
-            Dictionary<string, Color> colores = new()
-            {
-                { "R1", Color.FromArgb("#4499D4") },
-                { "R2", Color.FromArgb("#009900") },
-                { "R2N", Color.FromArgb("#99C83E") },
-                { "R2S", Color.FromArgb("#00642E") },
-                { "R3", Color.FromArgb("#FF131A") },
-                { "R4", Color.FromArgb("#FF9221") },
-                { "R7", Color.FromArgb("#BD7DB5") },
-                { "R8", Color.FromArgb("#9B1987") },
-                { "RG1", Color.FromArgb("#007DC3") },
-                { "R10", Color.FromArgb("#930030") },
-                { "R11", Color.FromArgb("#0064A5") },
-                { "R12", Color.FromArgb("#FFDC00") },
-                { "R13", Color.FromArgb("#E52E87") },
-                { "R14", Color.FromArgb("#675199") },
-                { "R15", Color.FromArgb("#9A8A76") },
-                { "R16", Color.FromArgb("#AF0036") },
-                { "R17", Color.FromArgb("#E97300") }
-            };
 
 
             // aqui es donde se cambia el nombre, el MainThread es el que se encarga de dibujar por pantalla
