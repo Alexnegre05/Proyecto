@@ -166,6 +166,16 @@ public partial class PonerNotasPage : ContentPage
 
 
 
+    // Función para el botón de la flecha desplegable
+    private void OnFlechaClicked(object sender, EventArgs e)
+    {
+        // Invierte la visibilidad: si está abierta se cierra, si está cerrada se abre
+        LineasView.IsVisible = !LineasView.IsVisible;
+
+        // Cambia la flecha según el estado
+        BtnFlecha.Text = LineasView.IsVisible ? "▲" : "▼";
+    }
+
     // funcion para saber el nombre de la estacion mas cercana
     // usamos de nuevo el async y el await pero esta vez en la conexion de el socket 
     private async void EstacionCercana()
@@ -261,6 +271,13 @@ public partial class PonerNotasPage : ContentPage
                         BordePrincipal.Background = (Color)seleccion.Color;
 
                         Titulo.TextColor = Colors.White;
+
+                        LineasView.IsVisible = false;
+                        BtnFlecha.Text = "▼";
+
+                        LineasView.SelectedItem = null; 
+                        // esto es para que el selector se pueda volver a clicar una segunda vez
+                        // si esta en la version resumida ya que si es la misma letra no detectara el evento 
                     }
                 };
             });

@@ -47,20 +47,34 @@
 
                 <Grid ColumnDefinitions="Auto, *" ColumnSpacing="20">
 
-                        <CollectionView x:Name="LineasView"
-                            Grid.Column="0"
-                            SelectionMode="Single"
-                            WidthRequest="80">
-                            
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Padding="10" Margin="5" BackgroundColor="{Binding Color}">
-                                    <Label Text="{Binding Nombre}" TextColor="White" FontAttributes="Bold" HorizontalTextAlignment="Center"></Label>
-                                </Border>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
+                    <!-- Columna 0: Flecha + Lista -->
+                    <VerticalStackLayout Grid.Column="0" WidthRequest="80" Spacing="5">
 
+                        <!-- Botón de Flecha -->
+                        <Button x:Name="BtnFlecha"
+                            Text="▼" 
+                            TextColor="White"
+                            BackgroundColor="Transparent"
+                            FontSize="20"
+                            HeightRequest="40"
+                            Clicked="OnFlechaClicked" />
+
+                                    <!-- La lista ahora tiene un nombre para ocultarla -->
+                                    <CollectionView x:Name="LineasView"
+                                    SelectionMode="Single"
+                                    IsVisible="false">
+                                        <!-- Empieza oculta según tu petición -->
+                                        <CollectionView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Padding="10" Margin="5" BackgroundColor="{Binding Color}">
+                                                    <Label Text="{Binding Nombre}" TextColor="White" FontAttributes="Bold" HorizontalTextAlignment="Center"></Label>
+                                                </Border>
+                                            </DataTemplate>
+                                        </CollectionView.ItemTemplate>
+                                    </CollectionView>
+                                </VerticalStackLayout>
+
+                                <!-- Columna 1: Estación (se mantiene igual) -->
                     <Label Grid.Column="1"
                        x:Name="LabelEstacion"
                        Text="Estacion: " 
@@ -69,7 +83,7 @@
                        TextColor="#FF6600"
                        VerticalOptions="Center"
                        HorizontalOptions="Center" 
-                       HorizontalTextAlignment="Center" />  
+                       HorizontalTextAlignment="Center" />
                 </Grid>
             </Border>
             
