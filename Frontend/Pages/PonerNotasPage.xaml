@@ -5,110 +5,153 @@
              Title="">
 
     <Grid RowDefinitions="*, Auto" BackgroundColor="Black">
-        <VerticalStackLayout Grid.Row="0" VerticalOptions="Start" Spacing="20" Padding="0,30,0,20">
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout  VerticalOptions="Start" Spacing="20" Padding="0,30,0,20">
 
-            <!--usamos el horizontal layout en esta parte para que se pongan los elementos en el eje x-->
-            <!--con fill el horizontaloptions hacemos que ocupe todo el eje x-->
+                <!--usamos el horizontal layout en esta parte para que se pongan los elementos en el eje x-->
+                <!--con fill el horizontaloptions hacemos que ocupe todo el eje x-->
 
-            <Border x:Name="BordePrincipal"  Margin="20,0"
-                    StrokeShape="RoundRectangle 15"
+                <Border x:Name="BordePrincipal"  Margin="20,0"
+                        StrokeShape="RoundRectangle 15"
+                        StrokeThickness="0"
+                        BackgroundColor="White"
+                        >
+
+                    <Grid  
+                          Padding="20"
+                          ColumnDefinitions="*" 
+                          HorizontalOptions="Fill">
+
+                        <StackLayout Orientation="Horizontal" 
+                                     HorizontalOptions="Center" 
+                                     Spacing="10">
+
+                            <!--el texto de arriba de el titulo-->
+                            <Label VerticalOptions="Center" Text="Icon" x:Name="LabelIcono" />
+                            <Label x:Name="Titulo" Text="Poner Notas" 
+                                   FontSize="28" 
+                                   FontAttributes="Bold" 
+                                   TextColor="#FF6600"
+                                   VerticalOptions="Center" />
+                        </StackLayout>
+                    </Grid>
+                </Border>
+
+
+                <!--lo ponemos todo en un borde para poder ponerle un radius ya que no hay un solo label -->
+                <Border BackgroundColor="White" 
+                    StrokeShape="RoundRectangle 25" 
                     StrokeThickness="0"
-                    BackgroundColor="White"
-                    >
+                    Margin="20,0"
+                    Padding="20"
+                    HorizontalOptions="Fill">
 
-                <Grid  
-                      Padding="20"
-                      ColumnDefinitions="*" 
-                      HorizontalOptions="Fill">
-
-                    <StackLayout Orientation="Horizontal" 
-                                 HorizontalOptions="Center" 
-                                 Spacing="10">
-
-                        <!--el texto de arriba de el titulo-->
-                        <Label VerticalOptions="Center" Text="Icon" x:Name="LabelIcono" />
-                        <Label x:Name="Titulo" Text="Poner Notas" 
-                               FontSize="28" 
-                               FontAttributes="Bold" 
-                               TextColor="#FF6600"
-                               VerticalOptions="Center" />
-                    </StackLayout>
-                </Grid>
-            </Border>
+                    <!--usamos grid + vertical layout para que todo que centrado correctamente...-->
+                    <Grid ColumnDefinitions="Auto, *" ColumnSpacing="20">
 
 
-            <!--lo ponemos todo en un borde para poder ponerle un radius ya que no hay un solo label -->
-            <Border BackgroundColor="White" 
+                        <VerticalStackLayout Grid.Column="0" WidthRequest="80" Spacing="5">
+
+                            <!-- Botón de Flecha -->
+                            <Button x:Name="BtnFlecha"
+                                Text="▼" 
+                                TextColor="White"
+                                BackgroundColor="Transparent"
+                                FontSize="20"
+                                HeightRequest="40"
+                                Clicked="OnFlechaClicked" />
+
+                            <!-- La lista de estaciones -->
+                            <!--colection view es para mostrar listas de elementos-->
+
+                            <!--selection mode sirve para ver como puede interactuar el usuario con esta lista
+                                        tiene 3 modos 
+                        
+                                        None: La lista es solo para leer. Aunque el usuario toque una opcion, no pasará nada (no se dispara el evento SelectionChanged).
+                                        Single (El que tú usas): El usuario solo puede tener un elemento seleccionado a la vez. la selección salta de uno a otro. Es el modo ideal para menús o selectores.
+                                        Multiple: Permite al usuario marcar varias opciones a la vez.-->
+                            <CollectionView x:Name="LineasView"
+                                        SelectionMode="Single"
+                                        IsVisible="false">
+
+
+
+                                <!--Item Template indica como se tiene que ver cada elemento de el colection view(diseño de filas o columnas)
+                                            que se pone dentro de datatemplate que es como se tiene que ver cada elemento-->
+
+                                <!-- binding le dice que coja el color de el c#-->
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Padding="10" Margin="5" BackgroundColor="{Binding Color}">
+                                            <Label Text="{Binding Nombre}" TextColor="White" FontAttributes="Bold" HorizontalTextAlignment="Center"></Label>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+
+                        <!-- Estación -->
+                        <Label Grid.Column="1"
+                           x:Name="LabelEstacion"
+                           Text="Estacion: " 
+                           FontSize="24" 
+                           FontAttributes="Bold" 
+                           TextColor="#FF6600"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center" 
+                           HorizontalTextAlignment="Center" />
+                    </Grid>
+                </Border>
+
+                <!--selector incidencias -->
+
+                <Border BackgroundColor="#212025" 
                 StrokeShape="RoundRectangle 25" 
                 StrokeThickness="0"
                 Margin="20,0"
                 Padding="20"
                 HorizontalOptions="Fill">
 
-                <!--usamos grid + vertical layout para que todo que centrado correctamente...-->
-                <Grid ColumnDefinitions="Auto, *" ColumnSpacing="20">
+                    <VerticalStackLayout Spacing="15">
 
-                    
-                    <VerticalStackLayout Grid.Column="0" WidthRequest="80" Spacing="5">
+                        <!-- Título de la incidencia -->
+                        <Border StrokeShape="RoundRectangle 10" 
+                        StrokeThickness="1" 
+                        Stroke="#4A4A4A" 
+                        Padding="10,5">
+                            <Entry x:Name="EntryTitulo"
+                           Placeholder="Ej: Avería en puertas..."
+                           PlaceholderColor="#808080"
+                           TextColor="White"
+                           BackgroundColor="Transparent" />
+                            <!-- BackgroundColor Transparent quita fondos raros del sistema -->
+                        </Border>
 
-                        <!-- Botón de Flecha -->
-                        <Button x:Name="BtnFlecha"
-                            Text="▼" 
+                        <!-- Descripción detallada -->
+                        <Border StrokeShape="RoundRectangle 10" 
+                        StrokeThickness="1" 
+                        Stroke="#4A4A4A" 
+                        Padding="10,5">
+                            <Editor x:Name="EditorDescripcion"
+                            Placeholder="Describe lo que sucede..."
+                            PlaceholderColor="#808080"
                             TextColor="White"
                             BackgroundColor="Transparent"
-                            FontSize="20"
-                            HeightRequest="40"
-                            Clicked="OnFlechaClicked" />
+                            HeightRequest="120"
+                            AutoSize="Disabled" />
+                        </Border>
 
-                                    <!-- La lista de estaciones -->
-                                    <!--colection view es para mostrar listas de elementos-->
-                        
-                                    <!--selection mode sirve para ver como puede interactuar el usuario con esta lista
-                                    tiene 3 modos 
-                        
-                                    None: La lista es solo para leer. Aunque el usuario toque una opcion, no pasará nada (no se dispara el evento SelectionChanged).
-                                    Single (El que tú usas): El usuario solo puede tener un elemento seleccionado a la vez. la selección salta de uno a otro. Es el modo ideal para menús o selectores.
-                                    Multiple: Permite al usuario marcar varias opciones a la vez.-->
-                                    <CollectionView x:Name="LineasView"
-                                    SelectionMode="Single"
-                                    IsVisible="false">
-                                        
-                                        <!-- Empieza oculta  -->
-                                        
-                                        <!--itemtemplate indica como se tiene que ver cada elemento de el colection view(diseño de filas o columnas)
-                                        que se pone dentro de datatemplate que es como se tiene que ver cada elemento-->
-                                        <CollectionView.ItemTemplate>
-                                            <DataTemplate>
-                                                <Border Padding="10" Margin="5" BackgroundColor="{Binding Color}">
-                                                    <Label Text="{Binding Nombre}" TextColor="White" FontAttributes="Bold" HorizontalTextAlignment="Center"></Label>
-                                                </Border>
-                                            </DataTemplate>
-                                        </CollectionView.ItemTemplate>
-                                    </CollectionView>
-                                </VerticalStackLayout>
-
-                    <!-- Estación -->
-                    <Label Grid.Column="1"
-                       x:Name="LabelEstacion"
-                       Text="Estacion: " 
-                       FontSize="24" 
-                       FontAttributes="Bold" 
-                       TextColor="#FF6600"
-                       VerticalOptions="Center"
-                       HorizontalOptions="Center" 
-                       HorizontalTextAlignment="Center" />
-                </Grid>
-            </Border>
-            
-            <!--Continuamos con la siguiente parte -->
-            
+                    </VerticalStackLayout>
+                </Border>
 
 
-        </VerticalStackLayout>
 
-        
-        
-        
+            </VerticalStackLayout>
+        </ScrollView>
+
+
+
+
         <!-- FOOTER: Fondo Negro, Línea Blanca y Texto Blanco -->
         <Grid Grid.Row="1" 
           ColumnDefinitions="*, *, *, *, *" 
