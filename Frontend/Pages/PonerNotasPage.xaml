@@ -119,8 +119,11 @@
                         StrokeThickness="1" 
                         Stroke="#4A4A4A" 
                         Padding="10,5">
-                            <Entry x:Name="EntryTitulo"
-                           Placeholder="Ej: Avería en puertas..."
+                            <!--entry permite a el usuario poder escribir una sola linea,
+                            editor es lo mismo pero para mas de una linea-->
+                            
+                            <Entry x:Name="TituloIncidencia"
+                           Placeholder="Titulo de la incidencia"
                            PlaceholderColor="#808080"
                            TextColor="White"
                            BackgroundColor="Transparent" />
@@ -132,8 +135,8 @@
                         StrokeThickness="1" 
                         Stroke="#4A4A4A" 
                         Padding="10,5">
-                            <Editor x:Name="EditorDescripcion"
-                            Placeholder="Describe lo que sucede..."
+                            <Editor x:Name="DescripcionIncidencia"
+                            Placeholder="Descripcion"
                             PlaceholderColor="#808080"
                             TextColor="White"
                             BackgroundColor="Transparent"
