@@ -254,6 +254,7 @@ namespace clases
         public static void enviar_numero(int num, Socket backend_service_socket)
         {
             
+            
             byte[] bytes = BitConverter.GetBytes(num);
             backend_service_socket.Send(bytes);
         }
@@ -526,6 +527,8 @@ namespace clases
 
         static void sql(DBProyectoContext context)
         {
+
+            context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
             Console.WriteLine("BD + tablas creadas");
@@ -664,6 +667,8 @@ namespace clases
 
             return ip;
         }
+
+
         static string calcular_ip_automatico()
         {
             // calcular la ip de manera automatica 
@@ -788,20 +793,26 @@ namespace clases
             // aqui buscamos qual es la estacion mas cercana, solo nuecesitamos el nombre
             string estacion_cercana = calcular_estacion_cercana(x, y, z, context);
 
+            Console.WriteLine(estacion_cercana);
             enviar_texto(estacion_cercana, backend_service_socket);
 
             string nombre_paradas; // para saber todas las lineas que tiene una estacion vamos a la clase paradas
-            
-            // sacamos la parada con todas sus lineas
 
-            // el .include es para que no haya problemas con el tema de llamar a otras tablas
-            List<Paradas> lista_paradas = context.Paradas.Include(p => p.Linea).Include(p => p.Estacion)
-                .Where(p => p.Estacion.nombre == estacion_cercana).ToList();
+            //// sacamos la parada con todas sus lineas
+
+            //// el .include es para que no haya problemas con el tema de llamar a otras tablas
+            List<Paradas> lista_paradas = context.Paradas
+            .Include(p => p.Linea)
+            .Include(p => p.Estacion)
+            .Where(p => p.Estacion != null &&
+                        p.Estacion.nombre.Trim().ToLower() == estacion_cercana.Trim().ToLower())
+            .ToList();
 
 
             List<string> paradas = lista_paradas.Select(p => p.Linea.nombre).Distinct().ToList();
-            // cogemos solo las lineas el nombre que tienen no su id Select(p => p.Linea.nombre)
+            //cogemos solo las lineas el nombre que tienen no su id Select(p => p.Linea.nombre)
 
+            
             // vamos a enviar en este orden las cosas, el numero de paradas y despues todas las paradas con formato R1,R2...
             enviar_numero(paradas.Count, backend_service_socket);
 
@@ -870,7 +881,20 @@ namespace clases
 
 
 
+        static Socket crear_backend_socket(string ip)
+        {
+            IPAddress address = IPAddress.Parse(ip);  // creamos la ip y el endpoint
+            IPEndPoint endpoint = new IPEndPoint(address, 1000); // el puerto es el 1000
+            Socket backend_socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            // creamos el socket
 
+
+            backend_socket.Bind(endpoint); // al usar bind el socket espera recibir que la ip sea de el formato que ha recibido 
+                                           // ej si recibe 192.168.32.47 espera que se conecte usando 192.168.x.x o similar
+            backend_socket.Listen(); // para que se escuche el socket
+
+            return backend_socket;
+        }
 
 
 
@@ -943,16 +967,9 @@ namespace clases
 
                     Console.WriteLine("IP: " + ip);
 
-                    IPAddress address = IPAddress.Parse(ip);  // creamos la ip y el endpoint
-                    IPEndPoint endpoint = new IPEndPoint(address, 1000); // el puerto es el 1000
-                    Socket backend_socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                    // creamos el socket
-                    
-                    
-                    backend_socket.Bind(endpoint); // al usar bind el socket espera recibir que la ip sea de el formato que ha recibido 
-                    // ej si recibe 192.168.32.47 espera que se conecte usando 192.168.x.x o similar
-                    backend_socket.Listen(); // para que se escuche el socket
-                    
+                    Socket backend_socket = crear_backend_socket(ip);
+
+
                     while (backend_socket.IsBound == true)
                     {
                        
@@ -968,10 +985,11 @@ namespace clases
 
                         if (codigo == 1)
                         {
+                            
                             poner_notas(backend_service_socket, context);
 
                         }
-                        Console.WriteLine("No se esta esperando");
+                        
                         backend_service_socket.Close(); // cerramos el socket
 
 

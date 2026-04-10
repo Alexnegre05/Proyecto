@@ -86,26 +86,43 @@ public partial class PonerNotasPage : ContentPage
     public static string recibir_texto(Socket frontend_socket)
     {
         byte[] data = new byte[sizeof(int)];
-        frontend_socket.Receive(data);
 
-        string resultado;
+        // 1. LEER SOLO UNA VEZ el tamaño
+        int bytesRecibidos = frontend_socket.Receive(data);
+
+        // Si por red no llegaron los 4 bytes de golpe, completamos la lectura
+        while (bytesRecibidos < 4)
+        {
+            bytesRecibidos += frontend_socket.Receive(data, bytesRecibidos, 4 - bytesRecibidos, SocketFlags.None);
+
+        }
+
         int num = BitConverter.ToInt32(data);
+
+        // 2. Leer la palabra usando ese tamaño
         byte[] palabra = new byte[num];
+        int textoLeido = 0;
+        while (textoLeido < num)
+        {
+            textoLeido += frontend_socket.Receive(palabra, textoLeido, num - textoLeido, SocketFlags.None);
+        }
 
-        frontend_socket.Receive(palabra);
-
-        resultado = Encoding.UTF8.GetString(palabra);
-
-        return resultado;
+        return Encoding.UTF8.GetString(palabra);
     }
 
     public static int recibir_numero(Socket frontend_socket)
     {
-        int num;
-        byte[] data = new byte[sizeof(int)];
-        frontend_socket.Receive(data);
+        byte[] data = new byte[sizeof(int)]; // 4 bytes
+        int leidos = 0;
 
-        num = BitConverter.ToInt32(data);
+        // Forzamos a leer hasta que tengamos los 4 bytes exactos del int
+        while (leidos < 4)
+        {
+            int r = frontend_socket.Receive(data, leidos, 4 - leidos, SocketFlags.None);
+            if (r <= 0) return -1; // O maneja el error si la conexión se corta
+            leidos += r;
+        }
+        int num = BitConverter.ToInt32(data);
         return num;
     }
 
@@ -145,8 +162,9 @@ public partial class PonerNotasPage : ContentPage
             await send_xyz(frontend_socket);
 
             string estacion = recibir_texto(frontend_socket);
-            //string linea = recibir_texto(frontend_socket);
             
+
+            await Shell.Current.DisplayAlert("Estación Encontrada", estacion, "Cerrar");
             // aqui es donde se cambia el nombre, el MainThread es el que se encarga de dibujar por pantalla
             // le decimos a ese hilo que se invoque y que cambie el texto 
             MainThread.BeginInvokeOnMainThread(() =>
@@ -154,9 +172,9 @@ public partial class PonerNotasPage : ContentPage
                 LabelEstacion.Text = "Estacion: " + estacion;
             });
 
-
             int num = recibir_numero(frontend_socket);
-            await Shell.Current.DisplayAlert("Num lineas", num.ToString(), "Cerrar");
+            await Shell.Current.DisplayAlert("numero", num.ToString(), "Cerrar");
+
 
 
             // cerramos el socket
