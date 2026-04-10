@@ -1,9 +1,15 @@
-using System.Net.Sockets;
+﻿using System.Net.Sockets;
 using System.Net;
 using System.Text;
 
 
 namespace Frontend.Pages;
+
+public class LineaItem
+{
+    public string Nombre { get; set; }
+    public Color Color { get; set; }
+}
 
 public partial class PonerNotasPage : ContentPage
 {
@@ -87,7 +93,7 @@ public partial class PonerNotasPage : ContentPage
     {
         byte[] data = new byte[sizeof(int)];
 
-        // 1. LEER SOLO UNA VEZ el tama�o
+        // 1. LEER SOLO UNA VEZ el tamaño
         int bytesRecibidos = frontend_socket.Receive(data);
 
         // Si por red no llegaron los 4 bytes de golpe, completamos la lectura
@@ -99,7 +105,7 @@ public partial class PonerNotasPage : ContentPage
 
         int num = BitConverter.ToInt32(data);
 
-        // 2. Leer la palabra usando ese tama�o
+        // 2. Leer la palabra usando ese tamaño
         byte[] palabra = new byte[num];
         int textoLeido = 0;
         while (textoLeido < num)
@@ -119,7 +125,7 @@ public partial class PonerNotasPage : ContentPage
         while (leidos < 4)
         {
             int r = frontend_socket.Receive(data, leidos, 4 - leidos, SocketFlags.None);
-            if (r <= 0) return -1; // O maneja el error si la conexi�n se corta
+            if (r <= 0) return -1; // O maneja el error si la conexión se corta
             leidos += r;
         }
         int num = BitConverter.ToInt32(data);
@@ -128,7 +134,7 @@ public partial class PonerNotasPage : ContentPage
 
     // COMO MOSTRAR TEXTO AQUI CONSOLE WRITELINE
 
-    // await Shell.Current.DisplayAlert("Estaci�n Encontrada", estacion, "Cerrar"); poner funcion como async 
+    // await Shell.Current.DisplayAlert("Estación Encontrada", estacion, "Cerrar"); poner funcion como async 
 
 
 
@@ -162,9 +168,30 @@ public partial class PonerNotasPage : ContentPage
             await send_xyz(frontend_socket);
 
             string estacion = recibir_texto(frontend_socket);
-            
 
-            
+
+            Dictionary<string, Color> colores = new()
+            {
+                { "R1", Color.FromArgb("#4499D4") },
+                { "R2", Color.FromArgb("#009900") },
+                { "R2N", Color.FromArgb("#99C83E") },
+                { "R2S", Color.FromArgb("#00642E") },
+                { "R3", Color.FromArgb("#FF131A") },
+                { "R4", Color.FromArgb("#FF9221") },
+                { "R7", Color.FromArgb("#BD7DB5") },
+                { "R8", Color.FromArgb("#9B1987") },
+                { "RG1", Color.FromArgb("#007DC3") },
+                { "R10", Color.FromArgb("#930030") },
+                { "R11", Color.FromArgb("#0064A5") },
+                { "R12", Color.FromArgb("#FFDC00") },
+                { "R13", Color.FromArgb("#E52E87") },
+                { "R14", Color.FromArgb("#675199") },
+                { "R15", Color.FromArgb("#9A8A76") },
+                { "R16", Color.FromArgb("#AF0036") },
+                { "R17", Color.FromArgb("#E97300") }
+            };
+
+
             // aqui es donde se cambia el nombre, el MainThread es el que se encarga de dibujar por pantalla
             // le decimos a ese hilo que se invoque y que cambie el texto 
             MainThread.BeginInvokeOnMainThread(() =>
@@ -175,21 +202,39 @@ public partial class PonerNotasPage : ContentPage
             int num = recibir_numero(frontend_socket); // numero que nos dice cuantas paradas hay 
             
 
-            List<string> lineas = new List<string>();
-            for (int i = 0; i < num; i = i + 1) // for que va cogiendo parada por parada y lo va a a�adir a una lista
+            List<LineaItem> lineas = new List<LineaItem>();
+            for (int i = 0; i < num; i = i + 1) // for que va cogiendo parada por parada y lo va a añadir a una lista
             {
                 string parada = recibir_texto(frontend_socket);
-                lineas.Add(parada);
-                
+
+                lineas.Add(new LineaItem
+                {
+                    Nombre = parada,
+                    Color = colores.ContainsKey(parada)
+                ? colores[parada]
+                : Colors.Gray
+                    });
+
             }
 
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                ParadaEstacionPicker.ItemsSource = lineas;
-
-                if (lineas.Count > 0)
-                    ParadaEstacionPicker.SelectedIndex = 0; // selecciona la primera por defecto
+                LineasView.ItemsSource = lineas;
             });
+
+           
+
+            
+
+            LineasView.SelectionChanged += (s, e) =>
+            {
+                var seleccion = e.CurrentSelection.FirstOrDefault() as LineaItem;
+
+                if (seleccion != null)
+                {
+                    Console.WriteLine(seleccion.Nombre);
+                }
+            };
 
 
             // cerramos el socket

@@ -798,15 +798,17 @@ namespace clases
 
             string nombre_paradas; // para saber todas las lineas que tiene una estacion vamos a la clase paradas
 
-            //// sacamos la parada con todas sus lineas
+            // sacamos la parada con todas sus lineas
 
-            //// el .include es para que no haya problemas con el tema de llamar a otras tablas
+            // el .include es para que no haya problemas con el tema de llamar a otras tablas
             List<Paradas> lista_paradas = context.Paradas
             .Include(p => p.Linea)
             .Include(p => p.Estacion)
             .Where(p => p.Estacion != null &&
-                        p.Estacion.nombre.Trim().ToLower() == estacion_cercana.Trim().ToLower())
-            .ToList();
+                        p.Estacion.nombre.Trim().ToLower() == estacion_cercana.Trim().ToLower()).ToList();
+            // el ToLower y trim es para que todos los nombres coincidan
+
+
 
 
             List<string> paradas = lista_paradas.Select(p => p.Linea.nombre).Distinct().ToList();

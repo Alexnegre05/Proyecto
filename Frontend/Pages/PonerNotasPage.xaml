@@ -39,13 +39,25 @@
 
                 <HorizontalStackLayout Spacing="10">
 
-                    <Picker
-                    x:Name="ParadaEstacionPicker"
-                    Title="Selecciona línea"
-                    FontSize="20"
-                    TextColor="Blue"
-                    HorizontalOptions="Fill"
-                    VerticalOptions="Center" />     
+                    <!--picker es como label pero permite tener un seleccionador -->
+                    <CollectionView x:Name="LineasView"
+                        SelectionMode="Single">
+
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                <Border Padding="10"
+                           Margin="5"
+                           
+                           BackgroundColor="{Binding Color}">
+
+                                    <Label Text="{Binding Nombre}"
+                               TextColor="White"
+                               FontAttributes="Bold"/>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+
+                    </CollectionView>
 
                     <!--x:name sirve como un identificador unico que sirve para poder modificar 
                     el nombre desde c# como si label fuera una clase-->
