@@ -45,9 +45,10 @@
                 Padding="20"
                 HorizontalOptions="Fill">
 
+                <!--usamos grid + vertical layout para que todo que centrado correctamente...-->
                 <Grid ColumnDefinitions="Auto, *" ColumnSpacing="20">
 
-                    <!-- Columna 0: Flecha + Lista -->
+                    
                     <VerticalStackLayout Grid.Column="0" WidthRequest="80" Spacing="5">
 
                         <!-- Botón de Flecha -->
@@ -59,11 +60,23 @@
                             HeightRequest="40"
                             Clicked="OnFlechaClicked" />
 
-                                    <!-- La lista ahora tiene un nombre para ocultarla -->
+                                    <!-- La lista de estaciones -->
+                                    <!--colection view es para mostrar listas de elementos-->
+                        
+                                    <!--selection mode sirve para ver como puede interactuar el usuario con esta lista
+                                    tiene 3 modos 
+                        
+                                    None: La lista es solo para leer. Aunque el usuario toque una opcion, no pasará nada (no se dispara el evento SelectionChanged).
+                                    Single (El que tú usas): El usuario solo puede tener un elemento seleccionado a la vez. la selección salta de uno a otro. Es el modo ideal para menús o selectores.
+                                    Multiple: Permite al usuario marcar varias opciones a la vez.-->
                                     <CollectionView x:Name="LineasView"
                                     SelectionMode="Single"
                                     IsVisible="false">
-                                        <!-- Empieza oculta según tu petición -->
+                                        
+                                        <!-- Empieza oculta  -->
+                                        
+                                        <!--itemtemplate indica como se tiene que ver cada elemento de el colection view(diseño de filas o columnas)
+                                        que se pone dentro de datatemplate que es como se tiene que ver cada elemento-->
                                         <CollectionView.ItemTemplate>
                                             <DataTemplate>
                                                 <Border Padding="10" Margin="5" BackgroundColor="{Binding Color}">
@@ -74,7 +87,7 @@
                                     </CollectionView>
                                 </VerticalStackLayout>
 
-                                <!-- Columna 1: Estación (se mantiene igual) -->
+                    <!-- Estación -->
                     <Label Grid.Column="1"
                        x:Name="LabelEstacion"
                        Text="Estacion: " 
