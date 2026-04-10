@@ -8,18 +8,14 @@ namespace Frontend.Pages;
 
 
 
-
-public class LineaItem
-{
-    public string Nombre { get; set; }
-    public Color Color { get; set; }
-};
-
 public partial class PonerNotasPage : ContentPage
 {
 
+    // aqui tenemos un diccionario que relaciona una linea con su color correspondiente,
+    // esta aqui arriba para poder reutilizarlo
 
-    public Dictionary<string, Color> colores = new()
+
+    public Dictionary<string, Color> colores = new Dictionary<string, Color>
     {
                 { "R1", Color.FromArgb("#4499D4") },
                 { "R2", Color.FromArgb("#009900") },
@@ -205,21 +201,17 @@ public partial class PonerNotasPage : ContentPage
             });
 
             int num = recibir_numero(frontend_socket); // numero que nos dice cuantas paradas hay 
-            
 
-            List<LineaItem> lineas = new List<LineaItem>();
-            for (int i = 0; i < num; i = i + 1) // for que va cogiendo parada por parada y lo va a añadir a una lista
+            List<object> lineas = new List<object>();
+            for (int i = 0; i < num; i++)
             {
                 string parada = recibir_texto(frontend_socket);
 
-                lineas.Add(new LineaItem
+                lineas.Add(new
                 {
                     Nombre = parada,
-                    Color = colores.ContainsKey(parada)
-                ? colores[parada]
-                : Colors.Gray
-                    });
-
+                    Color = colores.GetValueOrDefault(parada, Colors.Gray)
+                });
             }
 
             MainThread.BeginInvokeOnMainThread(() =>
@@ -227,13 +219,12 @@ public partial class PonerNotasPage : ContentPage
                 LineasView.ItemsSource = lineas;
             });
 
-           
 
-            
+
 
             LineasView.SelectionChanged += (s, e) =>
             {
-                var seleccion = e.CurrentSelection.FirstOrDefault() as LineaItem;
+                var seleccion = e.CurrentSelection.FirstOrDefault() as dynamic;
 
                 if (seleccion != null)
                 {

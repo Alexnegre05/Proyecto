@@ -39,7 +39,7 @@
 
                 <HorizontalStackLayout Spacing="10">
 
-                    <!--picker es como label pero permite tener un seleccionador -->
+                    
                     <CollectionView x:Name="LineasView"
                         SelectionMode="Single">
 
