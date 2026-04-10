@@ -106,12 +106,12 @@
                 <!--selector incidencias -->
 
                 <Border x:Name="ContenedorIncidencias" BackgroundColor="#212025" 
-                StrokeShape="RoundRectangle 25" 
-                StrokeThickness="0"
-                Margin="20,0"
-                Padding="20"
-                IsVisible="False"
-                HorizontalOptions="Fill">
+                    StrokeShape="RoundRectangle 25" 
+                    StrokeThickness="0"
+                    Margin="20,0"
+                    Padding="20"
+                    IsVisible="False"
+                    HorizontalOptions="Fill">
 
                     <VerticalStackLayout Spacing="15">
 
@@ -144,6 +144,24 @@
                             HeightRequest="120"
                             AutoSize="Disabled" />
                         </Border>
+
+                        <Grid ColumnDefinitions="*, *" ColumnSpacing="10">
+                            <Button Grid.Column="0"
+                            Text="Guardar"
+                            BackgroundColor="#FF6600"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            CornerRadius="15"
+                            Clicked="OnGuardarClicked" />
+
+                            <Button Grid.Column="1"
+                            Text="Cargar"
+                            BackgroundColor="Gray"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            CornerRadius="15"
+                            Clicked="OnEliminarClicked" />
+                        </Grid>
 
                     </VerticalStackLayout>
                 </Border>

@@ -161,6 +161,25 @@ public partial class PonerNotasPage : ContentPage
         return num;
     }
 
+
+
+
+
+    // funcion para crear el socket 
+    private static Socket crear_frontend_socket()
+    {
+        // ip que se usa para conectarse en el movil
+        string ip = "172.23.192.1";
+
+        // Creamos el socket 
+        IPAddress address = IPAddress.Parse(ip);  // creamos la ip y el endpoint
+        IPEndPoint endpoint = new IPEndPoint(address, 1000); // el puerto es el 1000
+        Socket frontend_socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+        frontend_socket.Connect(endpoint); // es lo mimso que connect pero preparada para el async 
+
+        return frontend_socket;
+
+    }
     // COMO MOSTRAR TEXTO AQUI CONSOLE WRITELINE
 
     // await Shell.Current.DisplayAlert("Estación Encontrada", estacion, "Cerrar"); poner funcion como async 
@@ -186,6 +205,24 @@ public partial class PonerNotasPage : ContentPage
             // Cambia la flecha según el estado 
             BtnFlecha.Text = LineasView.IsVisible ? "▲" : "▼";
     }
+
+
+    private void OnGuardarClicked(object sender, EventArgs e)
+    {
+
+        Socket frontend_socket = crear_frontend_socket();
+        // Lógica para enviar los datos al socket o guardarlos localmente
+
+        frontend_socket.Close();
+    }
+
+    private void OnEliminarClicked(object sender, EventArgs e)
+    {
+
+        // Lógica para borrar la nota que estabas escribiendo
+    }
+
+
 
 
     // funcion que se encarga de el main thread
@@ -251,8 +288,6 @@ public partial class PonerNotasPage : ContentPage
 
 
 
-
-
     // funcion para saber el nombre de la estacion mas cercana
     // usamos de nuevo el async y el await pero esta vez en la conexion de el socket 
     private async void EstacionCercana()
@@ -260,17 +295,9 @@ public partial class PonerNotasPage : ContentPage
 
         try
         {
-            // ip que se usa para conectarse en el movil
-            string ip = "172.23.192.1";
-
-            // Creamos el socket 
-            IPAddress address = IPAddress.Parse(ip);  // creamos la ip y el endpoint
-            IPEndPoint endpoint = new IPEndPoint(address, 1000); // el puerto es el 1000
-            Socket frontend_socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            frontend_socket.Connect(endpoint); // es lo mimso que connect pero preparada para el async 
-
-            Console.WriteLine("Conectado");
-
+          
+            Socket frontend_socket = crear_frontend_socket();
+            
             // enviamos un 1 para decir que va a recibir algo de poner notas 
 
             send_num(1, frontend_socket);
