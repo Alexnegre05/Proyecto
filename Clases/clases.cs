@@ -243,10 +243,18 @@ namespace clases
         // enviar texto
         public static void enviar_texto(string text, Socket backend_service_socket)
         {
-            // enviamos texto al frontend
+
+            
             byte[] bytes = Encoding.UTF8.GetBytes(text);
             byte[] lenght = BitConverter.GetBytes(bytes.Length);
             backend_service_socket.Send(lenght);
+            backend_service_socket.Send(bytes);
+        }
+
+        public static void enviar_numero(int num, Socket backend_service_socket)
+        {
+            
+            byte[] bytes = BitConverter.GetBytes(num);
             backend_service_socket.Send(bytes);
         }
 
@@ -742,6 +750,17 @@ namespace clases
 
 
 
+
+
+
+
+
+
+
+
+
+
+
         static void poner_notas(Socket backend_service_socket, DBProyectoContext context)
         {
             Console.WriteLine("estamos en poner notas");
@@ -770,6 +789,24 @@ namespace clases
             string estacion_cercana = calcular_estacion_cercana(x, y, z, context);
 
             enviar_texto(estacion_cercana, backend_service_socket);
+
+            string nombre_paradas; // para saber todas las lineas que tiene una estacion vamos a la clase paradas
+            
+            // sacamos la parada con todas sus lineas
+
+            // el .include es para que no haya problemas con el tema de llamar a otras tablas
+            List<Paradas> lista_paradas = context.Paradas.Include(p => p.Linea).Include(p => p.Estacion)
+                .Where(p => p.Estacion.nombre == estacion_cercana).ToList();
+
+
+            List<string> paradas = lista_paradas.Select(p => p.Linea.nombre).Distinct().ToList();
+            // cogemos solo las lineas el nombre que tienen no su id Select(p => p.Linea.nombre)
+
+            // vamos a enviar en este orden las cosas, el numero de paradas y despues todas las paradas con formato R1,R2...
+            enviar_numero(paradas.Count, backend_service_socket);
+
+
+
         }
 
 
@@ -822,8 +859,23 @@ namespace clases
                 
             }
 
+            
             return estacion_cercana.nombre;
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

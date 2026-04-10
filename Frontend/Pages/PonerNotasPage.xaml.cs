@@ -78,7 +78,7 @@ public partial class PonerNotasPage : ContentPage
     public static void send_num(int num, Socket frontend_socket)
     {
         byte[] bytes = new byte[sizeof(int)];
-        bytes = BitConverter.GetBytes(1);
+        bytes = BitConverter.GetBytes(num);
         frontend_socket.Send(bytes);
     }
 
@@ -99,7 +99,15 @@ public partial class PonerNotasPage : ContentPage
         return resultado;
     }
 
+    public static int recibir_numero(Socket frontend_socket)
+    {
+        int num;
+        byte[] data = new byte[sizeof(int)];
+        frontend_socket.Receive(data);
 
+        num = BitConverter.ToInt32(data);
+        return num;
+    }
 
     // COMO MOSTRAR TEXTO AQUI CONSOLE WRITELINE
 
@@ -120,7 +128,7 @@ public partial class PonerNotasPage : ContentPage
         try
         {
             // ip que se usa para conectarse en el movil
-            string ip = "172.27.240.1";
+            string ip = "172.23.192.1";
 
             // Creamos el socket 
             IPAddress address = IPAddress.Parse(ip);  // creamos la ip y el endpoint
@@ -137,8 +145,8 @@ public partial class PonerNotasPage : ContentPage
             await send_xyz(frontend_socket);
 
             string estacion = recibir_texto(frontend_socket);
-
-
+            //string linea = recibir_texto(frontend_socket);
+            
             // aqui es donde se cambia el nombre, el MainThread es el que se encarga de dibujar por pantalla
             // le decimos a ese hilo que se invoque y que cambie el texto 
             MainThread.BeginInvokeOnMainThread(() =>
@@ -147,7 +155,9 @@ public partial class PonerNotasPage : ContentPage
             });
 
 
-            
+            int num = recibir_numero(frontend_socket);
+            await Shell.Current.DisplayAlert("Num lineas", num.ToString(), "Cerrar");
+
 
             // cerramos el socket
             frontend_socket.Close();
