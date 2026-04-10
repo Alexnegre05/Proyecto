@@ -3,6 +3,7 @@ using System.Net;
 using System.Text;
 
 
+
 namespace Frontend.Pages;
 
 
@@ -224,11 +225,17 @@ public partial class PonerNotasPage : ContentPage
 
             LineasView.SelectionChanged += (s, e) =>
             {
+                // 1. Obtenemos el elemento seleccionado
                 var seleccion = e.CurrentSelection.FirstOrDefault() as dynamic;
 
                 if (seleccion != null)
                 {
-                    Console.WriteLine(seleccion.Nombre);
+                    // 2. Cambiamos el texto
+                    LabelEstacion.Text = $"Estación: {seleccion.Nombre}";
+
+                    // 3. CAMBIAMOS EL COLOR (Esta es la parte que te falta)
+                    // Usamos el color que viene guardado en el objeto seleccionado
+                    LabelEstacion.TextColor = (Color)seleccion.Color;
                 }
             };
 

@@ -37,40 +37,30 @@
                 Padding="20"
                 HorizontalOptions="Fill">
 
-                <HorizontalStackLayout Spacing="10">
+                <Grid ColumnDefinitions="Auto, *" ColumnSpacing="20">
 
-                    
-                    <CollectionView x:Name="LineasView"
-                        SelectionMode="Single">
-
+                        <CollectionView x:Name="LineasView"
+                            Grid.Column="0"
+                            SelectionMode="Single"
+                            WidthRequest="80">
+                            <!-- Dale un ancho fijo para que no baile -->
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
-                                <Border Padding="10"
-                           Margin="5"
-                           
-                           BackgroundColor="{Binding Color}">
-
-                                    <Label Text="{Binding Nombre}"
-                               TextColor="White"
-                               FontAttributes="Bold"/>
+                                    <Border Padding="10" Margin="5" BackgroundColor="{Binding Color}">
+                                    <Label Text="{Binding Nombre}" TextColor="White" FontAttributes="Bold" HorizontalTextAlignment="Center"></Label>
                                 </Border>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
 
-                    </CollectionView>
-
-                    <!--x:name sirve como un identificador unico que sirve para poder modificar 
-                    el nombre desde c# como si label fuera una clase-->
-                    <Label 
+                    <Label Grid.Column="1"
                        x:Name="LabelEstacion"
                        Text="Estacion: " 
-                       FontSize="28" 
+                       FontSize="24" 
                        FontAttributes="Bold" 
                        TextColor="#FF6600"
-                       FontFamily="Inter"
                        VerticalOptions="Center" />
-
-                </HorizontalStackLayout>
+                </Grid>
             </Border>
             
             <!--Continuamos con la siguiente parte -->
