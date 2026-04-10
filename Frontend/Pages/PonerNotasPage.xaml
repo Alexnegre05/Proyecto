@@ -105,11 +105,12 @@
 
                 <!--selector incidencias -->
 
-                <Border BackgroundColor="#212025" 
+                <Border x:Name="ContenedorIncidencias" BackgroundColor="#212025" 
                 StrokeShape="RoundRectangle 25" 
                 StrokeThickness="0"
                 Margin="20,0"
                 Padding="20"
+                IsVisible="False"
                 HorizontalOptions="Fill">
 
                     <VerticalStackLayout Spacing="15">

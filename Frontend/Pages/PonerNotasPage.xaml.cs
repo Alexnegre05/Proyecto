@@ -232,6 +232,18 @@ public partial class PonerNotasPage : ContentPage
                     LineasView.SelectedItem = null;
                     // esto es para que el selector se pueda volver a clicar una segunda vez
                     // si esta en la version resumida ya que si es la misma letra no detectara el evento 
+
+
+                    // si no hay nada seleccionado, que no salga la posibilidad de poner notas
+                    if(seleccion == null)
+                    {
+                        ContenedorIncidencias.IsVisible = false;// para que se oculte 
+                    }
+                    else // caso contrario
+                    {
+                        ContenedorIncidencias.IsVisible= true;
+                    }
+                    
                 }
             };
         });
