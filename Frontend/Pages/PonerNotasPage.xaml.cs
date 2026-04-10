@@ -164,7 +164,7 @@ public partial class PonerNotasPage : ContentPage
             string estacion = recibir_texto(frontend_socket);
             
 
-            await Shell.Current.DisplayAlert("Estación Encontrada", estacion, "Cerrar");
+            
             // aqui es donde se cambia el nombre, el MainThread es el que se encarga de dibujar por pantalla
             // le decimos a ese hilo que se invoque y que cambie el texto 
             MainThread.BeginInvokeOnMainThread(() =>
@@ -172,9 +172,24 @@ public partial class PonerNotasPage : ContentPage
                 LabelEstacion.Text = "Estacion: " + estacion;
             });
 
-            int num = recibir_numero(frontend_socket);
-            await Shell.Current.DisplayAlert("numero", num.ToString(), "Cerrar");
+            int num = recibir_numero(frontend_socket); // numero que nos dice cuantas paradas hay 
+            
 
+            List<string> lineas = new List<string>();
+            for (int i = 0; i < num; i = i + 1) // for que va cogiendo parada por parada y lo va a añadir a una lista
+            {
+                string parada = recibir_texto(frontend_socket);
+                lineas.Add(parada);
+                
+            }
+
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                ParadaEstacionPicker.ItemsSource = lineas;
+
+                if (lineas.Count > 0)
+                    ParadaEstacionPicker.SelectedIndex = 0; // selecciona la primera por defecto
+            });
 
 
             // cerramos el socket

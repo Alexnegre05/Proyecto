@@ -39,9 +39,13 @@
 
                 <HorizontalStackLayout Spacing="10">
 
-                    <Label Text="R1" 
-                       VerticalOptions="Center" 
-                       TextColor="Gray" />
+                    <Picker
+                    x:Name="ParadaEstacionPicker"
+                    Title="Selecciona línea"
+                    FontSize="20"
+                    TextColor="Blue"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="Center" />     
 
                     <!--x:name sirve como un identificador unico que sirve para poder modificar 
                     el nombre desde c# como si label fuera una clase-->
