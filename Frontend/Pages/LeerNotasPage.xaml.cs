@@ -63,6 +63,20 @@ public partial class LeerNotasPage : ContentPage
         EstacionCercana();
     }
 
+    protected override void OnDisappearing()
+    {
+
+        base.OnDisappearing();
+        // cuando hace esto le enviamos un 0 en el frontend a el backend
+
+        send_num(0, frontend_socket);
+
+
+
+        // y cerramos los sockets
+        frontend_socket.Dispose();
+        frontend_socket.Close();
+    }
 
     public static async Task send_xyz(Socket frontend_socket)
     {
