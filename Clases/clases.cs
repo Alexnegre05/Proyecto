@@ -923,7 +923,7 @@ namespace clases
                     string parada = recibir_texto(backend_service_socket);
 
                     // recibimos el titulo y la incidencia
-                    string titulo = recibir_texto(backend_service_socket);
+                    string titulo_incidencia = recibir_texto(backend_service_socket);
                     string incidencia = recibir_texto(backend_service_socket);
 
                     string[] nombre_parada =  parada.Split("Estación: ");
@@ -942,7 +942,7 @@ namespace clases
                     Console.WriteLine(parada);
                     Console.WriteLine(estacion);
                     Console.WriteLine(linea);
-                    Console.WriteLine(titulo);
+                    
                     Console.WriteLine(incidencia);
 
                      parada_actual = context.Paradas.Include(p => p.Estacion).Include(p => p.Linea)
@@ -950,8 +950,36 @@ namespace clases
               
                     if(parada_actual != null)
                     {
-                        Console.WriteLine("hola");
+
+
+                        Incidencias nuevaIncidencia = new Incidencias // creamos una incidencia
+                        {
+                            fecha = DateTime.UtcNow, // la fecha es la actual, nos pide que sea UTC sino peta
+                            gravedad = 1, // Valor por defecto
+                            solucionado = false, // Valor por defecto
+                            EstacionId = parada_actual.Id, // FK a Parada
+                            Paradas = parada_actual               // Relación con Parada
+                        };
+
+                        context.Incidencias.Add(nuevaIncidencia);
+                        context.SaveChanges();
+
+                        // guardamos la nota de la incidencia
+                        Nota_Incidencia nota_incidencia = new Nota_Incidencia
+                        {
+
+                            titulo = titulo_incidencia,
+                            contenido_incidencia = incidencia,
+                            puntuacion = 0,
+                            IncidenciaId = nuevaIncidencia.Id // le pasamos el id de la incidsencia cxreada antes,
+                                                              // por esto hacemos el savechanges antes de crear este objeto
+                        };
+
+                        Console.WriteLine("Incidencia registrada");
+
+                       
                     }
+                    
                 }   
                
             }
@@ -1085,8 +1113,7 @@ namespace clases
             while (try_except == 1)
             {
                 
-                try
-                {
+               
                     // ip
 
                     // leemos el fichero_configuracion 
@@ -1140,10 +1167,7 @@ namespace clases
                     backend_socket.Close();
                     try_except = 0; // salimos de el bucle de try_except
                 }
-                catch
-                {
-                    Console.WriteLine("Introduce una ip correcta");
-                }
+                
 
                 // cerrar conexion
                 closeconnection(context);
@@ -1152,4 +1176,4 @@ namespace clases
 
         }
     }
-}
+
