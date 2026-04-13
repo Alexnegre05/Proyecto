@@ -260,6 +260,38 @@ namespace clases
         }
 
 
+        public static string recibir_texto(Socket backend_socket)
+        {
+            byte[] data = new byte[sizeof(int)];
+
+            // 1. LEER SOLO UNA VEZ el tamaño
+            int bytesRecibidos = backend_socket.Receive(data);
+
+            // Si por red no llegaron los 4 bytes de golpe, completamos la lectura
+            while (bytesRecibidos < 4)
+            {
+                bytesRecibidos += backend_socket.Receive(data, bytesRecibidos, 4 - bytesRecibidos, SocketFlags.None);
+
+            }
+
+            int num = BitConverter.ToInt32(data);
+
+            // 2. Leer la palabra usando ese tamaño
+            byte[] palabra = new byte[num];
+            int textoLeido = 0;
+            while (textoLeido < num)
+            {
+                textoLeido += backend_socket.Receive(palabra, textoLeido, num - textoLeido, SocketFlags.None);
+            }
+
+            return Encoding.UTF8.GetString(palabra);
+        }
+
+
+
+
+
+
         // funciones para la BD de conectarse y desconectarse
 
 
@@ -769,59 +801,98 @@ namespace clases
         static void poner_notas(Socket backend_service_socket, DBProyectoContext context)
         {
             Console.WriteLine("estamos en poner notas");
+
+            Console.WriteLine("Hacemos un bucle donde tendra este menu");
+            Console.WriteLine("0. salir");
+            Console.WriteLine("1. enviar estacion cercana");
+            Console.WriteLine("2 recibir nota");
+
+            // como es un bucle while ponemos las variables afuera para no reservar memoria de mas
+            int opcion = -1;
+
             double x;
             double y;
             double z;
+            byte[] data;
+            byte[] posicion;
+            string estacion_cercana;
 
-            byte[] posicion = new byte[sizeof(double)];
-            backend_service_socket.Receive(posicion);
-
-            x = BitConverter.ToDouble(posicion);
-
-            backend_service_socket.Receive(posicion);
-
-            y = BitConverter.ToDouble(posicion);
-
-            backend_service_socket.Receive(posicion);
-
-            z = BitConverter.ToDouble(posicion);
-
-            Console.WriteLine("x: " + x);
-            Console.WriteLine("y: " + y);
-            Console.WriteLine("z: " + z);
-
-            // aqui buscamos qual es la estacion mas cercana, solo nuecesitamos el nombre
-            string estacion_cercana = calcular_estacion_cercana(x, y, z, context);
-
-            Console.WriteLine(estacion_cercana);
-            enviar_texto(estacion_cercana, backend_service_socket);
-
-            string nombre_paradas; // para saber todas las lineas que tiene una estacion vamos a la clase paradas
-
-            // sacamos la parada con todas sus lineas
-
-            // el .include es para que no haya problemas con el tema de llamar a otras tablas
-            List<Paradas> lista_paradas = context.Paradas
-            .Include(p => p.Linea)
-            .Include(p => p.Estacion)
-            .Where(p => p.Estacion != null &&
-                        p.Estacion.nombre.Trim().ToLower() == estacion_cercana.Trim().ToLower()).ToList();
-            // el ToLower y trim es para que todos los nombres coincidan
+            List<Paradas> lista_paradas;
+            List<string> paradas;
 
 
-
-
-            List<string> paradas = lista_paradas.Select(p => p.Linea.nombre).Distinct().ToList();
-            //cogemos solo las lineas el nombre que tienen no su id Select(p => p.Linea.nombre)
-
-            
-            // vamos a enviar en este orden las cosas, el numero de paradas y despues todas las paradas con formato R1,R2...
-            enviar_numero(paradas.Count, backend_service_socket);
-
-            for(int i = 0; i <  paradas.Count; i = i + 1)
+            while (opcion != 0)
             {
-                enviar_texto(paradas[i], backend_service_socket);   
+                // leemos la opcion 
+                data = new byte[sizeof(int)];
+                backend_service_socket.Receive(data);
+
+                opcion = BitConverter.ToInt32(data);
+
+
+                if (opcion == 1) // dependiendo de la opcion enviamos una cosa u otra
+                {
+                    posicion = new byte[sizeof(double)];
+                    backend_service_socket.Receive(posicion);
+
+                    x = BitConverter.ToDouble(posicion);
+
+                    backend_service_socket.Receive(posicion);
+
+                    y = BitConverter.ToDouble(posicion);
+
+                    backend_service_socket.Receive(posicion);
+
+                    z = BitConverter.ToDouble(posicion);
+
+                    Console.WriteLine("x: " + x);
+                    Console.WriteLine("y: " + y);
+                    Console.WriteLine("z: " + z);
+
+                    // aqui buscamos qual es la estacion mas cercana, solo nuecesitamos el nombre
+                    estacion_cercana = calcular_estacion_cercana(x, y, z, context);
+
+                    Console.WriteLine(estacion_cercana);
+                    enviar_texto(estacion_cercana, backend_service_socket);
+
+
+
+                    // sacamos la parada con todas sus lineas
+
+                    // el .include es para que no haya problemas con el tema de llamar a otras tablas
+                    lista_paradas = context.Paradas
+                    .Include(p => p.Linea)
+                    .Include(p => p.Estacion)
+                    .Where(p => p.Estacion != null &&
+                                p.Estacion.nombre.Trim().ToLower() == estacion_cercana.Trim().ToLower()).ToList();
+                    // el ToLower y trim es para que todos los nombres coincidan
+
+
+
+                    paradas = lista_paradas.Select(p => p.Linea.nombre).Distinct().ToList();
+                    //cogemos solo las lineas el nombre que tienen no su id Select(p => p.Linea.nombre)
+
+
+                    // vamos a enviar en este orden las cosas, el numero de paradas y despues todas las paradas con formato R1,R2...
+                    enviar_numero(paradas.Count, backend_service_socket);
+
+                    for (int i = 0; i < paradas.Count; i = i + 1)
+                    {
+                        enviar_texto(paradas[i], backend_service_socket);
+                    }
+                }
+                else if (opcion == 2)
+                {
+                    // recibimos el titulo y la incidencia
+                    string titulo = recibir_texto(backend_service_socket);
+                    string incidencia = recibir_texto(backend_service_socket);
+
+                    Console.WriteLine(titulo);
+                    Console.WriteLine(incidencia);
+                }
+               
             }
+            
 
         }
 

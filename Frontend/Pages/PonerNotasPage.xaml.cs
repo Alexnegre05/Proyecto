@@ -17,10 +17,13 @@ public class InfoLinea
 public partial class PonerNotasPage : ContentPage
 {
 
+    
+    // variable global frontend sockets
+    public Socket frontend_socket;
+
+
     // aqui tenemos un diccionario que relaciona una linea con su color correspondiente,
     // esta aqui arriba para poder reutilizarlo
-
-
     public Dictionary<string, Color> colores = new Dictionary<string, Color>
     {
                 { "R1", Color.FromArgb("#4499D4") },
@@ -55,6 +58,24 @@ public partial class PonerNotasPage : ContentPage
 
         EstacionCercana();
     }
+
+    // es lo mismo que on apearing pero para cuando un usuario cierra la pantalla o cambia de pestaña
+    protected override void OnDisappearing()
+    {
+
+        base.OnDisappearing();
+        // cuando hace esto le enviamos un 0 en el frontend a el backend
+
+        send_num(0, frontend_socket);
+
+        
+
+        // y cerramos los sockets
+        frontend_socket.Dispose();
+        frontend_socket.Close();
+    }
+
+
 
     // funcion que pasa de grados a radianes
     public static double grados_a_radianes(double grados)
@@ -118,6 +139,17 @@ public partial class PonerNotasPage : ContentPage
     }
 
 
+    public static void enviar_texto(string text, Socket frontend_socket)
+    {
+
+
+        byte[] bytes = Encoding.UTF8.GetBytes(text);
+        byte[] lenght = BitConverter.GetBytes(bytes.Length);
+        frontend_socket.Send(lenght);
+        frontend_socket.Send(bytes);
+    }
+
+
     public static string recibir_texto(Socket frontend_socket)
     {
         byte[] data = new byte[sizeof(int)];
@@ -166,14 +198,14 @@ public partial class PonerNotasPage : ContentPage
 
 
     // funcion para crear el socket 
-    private static Socket crear_frontend_socket()
+    private static Socket crear_frontend_socket(int puerto)
     {
         // ip que se usa para conectarse en el movil
-        string ip = "172.23.192.1";
+        string ip = "192.168.111.22";
 
         // Creamos el socket 
         IPAddress address = IPAddress.Parse(ip);  // creamos la ip y el endpoint
-        IPEndPoint endpoint = new IPEndPoint(address, 1000); // el puerto es el 1000
+        IPEndPoint endpoint = new IPEndPoint(address, puerto); // el puerto es el 1000
         Socket frontend_socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
         frontend_socket.Connect(endpoint); // es lo mimso que connect pero preparada para el async 
 
@@ -204,22 +236,40 @@ public partial class PonerNotasPage : ContentPage
 
             // Cambia la flecha según el estado 
             BtnFlecha.Text = LineasView.IsVisible ? "▲" : "▼";
+
+            
     }
 
 
     private void OnGuardarClicked(object sender, EventArgs e)
     {
 
-        Socket frontend_socket = crear_frontend_socket();
-        // Lógica para enviar los datos al socket o guardarlos localmente
+       
+        // usamos el puerto 1000
 
-        frontend_socket.Close();
+        // le decimos que la opcion es la 2
+        send_num(2, frontend_socket);
+
+
+        // Lógica para enviar los datos al socket o guardarlos localmente
+        string titulo = TituloIncidencia.Text;
+        string descripcion = DescripcionIncidencia.Text;
+
+        enviar_texto(titulo, frontend_socket);
+        enviar_texto(descripcion, frontend_socket);
+
+        Shell.Current.DisplayAlert("Incidencia guardada", "", "Cerrar");
+        // cuando enviamos el numero llamamos a OnEliminarCliked para reiniciar el texto 
+        OnEliminarClicked(sender, e);
     }
 
     private void OnEliminarClicked(object sender, EventArgs e)
     {
 
-        // Lógica para borrar la nota que estabas escribiendo
+        // Lógica para borrar la nota que estabas escribiendo dejamos el placeholder
+
+        TituloIncidencia.Text = TituloIncidencia.Placeholder;
+        DescripcionIncidencia.Text = DescripcionIncidencia.Placeholder;
     }
 
 
@@ -261,6 +311,7 @@ public partial class PonerNotasPage : ContentPage
 
                     BordePrincipal.Background = (Color)seleccion.Color;
 
+                    guardar.Background = (Color)seleccion.Color;
                     Titulo.TextColor = Colors.White;
 
                     LineasView.IsVisible = false;
@@ -287,7 +338,6 @@ public partial class PonerNotasPage : ContentPage
     }
 
 
-
     // funcion para saber el nombre de la estacion mas cercana
     // usamos de nuevo el async y el await pero esta vez en la conexion de el socket 
     private async void EstacionCercana()
@@ -296,11 +346,16 @@ public partial class PonerNotasPage : ContentPage
         try
         {
           
-            Socket frontend_socket = crear_frontend_socket();
+            frontend_socket = crear_frontend_socket(1000);
             
             // enviamos un 1 para decir que va a recibir algo de poner notas 
 
             send_num(1, frontend_socket);
+
+            // enviamos otro 1 para decirle que queremos que nos de la opcion de la estacion mas cercana en el backend
+            send_num(1, frontend_socket);
+
+
             // enviamos el xyz a el servidor
             await send_xyz(frontend_socket);
 
@@ -334,7 +389,7 @@ public partial class PonerNotasPage : ContentPage
                 
             }
 
-
+            
             // aqui es donde se cambia el nombre, y todo el tema de el color.
 
             // El MainThread es el que se encarga de dibujar por pantalla
@@ -344,8 +399,7 @@ public partial class PonerNotasPage : ContentPage
 
 
 
-            // cerramos el socket
-            frontend_socket.Close();
+
         }
         catch (Exception e)
         {

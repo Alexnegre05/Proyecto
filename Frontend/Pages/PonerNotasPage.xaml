@@ -106,7 +106,7 @@
                 <!--selector incidencias -->
 
                 <Border x:Name="ContenedorIncidencias" BackgroundColor="#212025" 
-                    StrokeShape="RoundRectangle 25" 
+                    StrokeShape="RoundRectangle 15" 
                     StrokeThickness="0"
                     Margin="20,0"
                     Padding="20"
@@ -137,7 +137,7 @@
                         Stroke="#4A4A4A" 
                         Padding="10,5">
                             <Editor x:Name="DescripcionIncidencia"
-                            Placeholder="Descripcion"
+                            Placeholder="Descripción"
                             PlaceholderColor="#808080"
                             TextColor="White"
                             BackgroundColor="Transparent"
@@ -146,7 +146,7 @@
                         </Border>
 
                         <Grid ColumnDefinitions="*, *" ColumnSpacing="10">
-                            <Button Grid.Column="0"
+                            <Button x:Name="guardar" Grid.Column="0" 
                             Text="Guardar"
                             BackgroundColor="#FF6600"
                             TextColor="White"
@@ -155,7 +155,7 @@
                             Clicked="OnGuardarClicked" />
 
                             <Button Grid.Column="1"
-                            Text="Cargar"
+                            Text="Eliminar"
                             BackgroundColor="Gray"
                             TextColor="White"
                             FontAttributes="Bold"
