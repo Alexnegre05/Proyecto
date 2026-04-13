@@ -54,6 +54,16 @@ public partial class LeerNotasPage : ContentPage
                 { "R17", Color.FromArgb("#E97300") }
     };
 
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        // esto es para decirle que como estamos sobreescribiendo una pagina que primero ejecute lo que hacia antes la funcion original(con el base)
+
+        EstacionCercana();
+    }
+
+
     public static async Task send_xyz(Socket frontend_socket)
     {
         // con geolocation sacamos el x,y,z de el movil, el await y el async es porque la funcion es asincrona 
@@ -198,13 +208,16 @@ public partial class LeerNotasPage : ContentPage
 
 
     }
+   
+
 
     private void mainthread(string estacion, List<InfoLinea> paradas)
     {
-        //MainThread.BeginInvokeOnMainThread(() =>
-        //{
-           
-        //}
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            LabelEstacion.Text = "Estacion: " + estacion;
+            LineasView.ItemsSource = paradas;
+        });
 
     }
 
@@ -218,9 +231,9 @@ public partial class LeerNotasPage : ContentPage
 
             frontend_socket = crear_frontend_socket(1000);
 
-            // enviamos un 1 para decir que va a recibir algo de poner notas 
+            // enviamos un 2 para decir que va a recibir algo de enviar notas 
 
-            send_num(1, frontend_socket);
+            send_num(2, frontend_socket);
 
             // enviamos otro 1 para decirle que queremos que nos de la opcion de la estacion mas cercana en el backend
             send_num(1, frontend_socket);

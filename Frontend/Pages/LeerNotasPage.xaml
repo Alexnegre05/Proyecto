@@ -28,7 +28,7 @@
 
                             <!--el texto de arriba de el titulo-->
                             <Label VerticalOptions="Center" Text="Icon" x:Name="LabelIcono" />
-                            <Label x:Name="Titulo" Text="Poner Notas" 
+                            <Label x:Name="Titulo" Text="Leer Notas" 
                                    FontSize="28" 
                                    FontAttributes="Bold" 
                                    TextColor="#FF6600"
