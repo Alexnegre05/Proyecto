@@ -244,23 +244,35 @@ public partial class PonerNotasPage : ContentPage
     private void OnGuardarClicked(object sender, EventArgs e)
     {
 
-       
+
         // usamos el puerto 1000
 
-        // le decimos que la opcion es la 2
-        send_num(2, frontend_socket);
+        // comprovamos si el texto no es null 
 
-
-        // Lógica para enviar los datos al socket o guardarlos localmente
         string titulo = TituloIncidencia.Text;
         string descripcion = DescripcionIncidencia.Text;
 
-        enviar_texto(titulo, frontend_socket);
-        enviar_texto(descripcion, frontend_socket);
+        if(titulo == null || descripcion == null) // si el titulo o la descripcion es nula entonces no enviar nada
+        {
+            Shell.Current.DisplayAlert("Introduce texto", "", "Cerrar");
+        }
+        else
+        {
+            // le decimos que la opcion es la 2
+            send_num(2, frontend_socket);
 
-        Shell.Current.DisplayAlert("Incidencia guardada", "", "Cerrar");
-        // cuando enviamos el numero llamamos a OnEliminarCliked para reiniciar el texto 
-        OnEliminarClicked(sender, e);
+
+            // Lógica para enviar los datos al socket o guardarlos localmente
+
+
+            enviar_texto(titulo, frontend_socket);
+            enviar_texto(descripcion, frontend_socket);
+
+            Shell.Current.DisplayAlert("Incidencia guardada", "", "Cerrar");
+            // cuando enviamos el numero llamamos a OnEliminarCliked para reiniciar el texto 
+            OnEliminarClicked(sender, e);
+        }
+        
     }
 
     private void OnEliminarClicked(object sender, EventArgs e)
