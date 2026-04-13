@@ -51,9 +51,9 @@ namespace clases
         public bool solucionado { get; set; }
         
 
-        // Relación con Estación (FK)
+        // Relación con Paradas (FK)
         public int EstacionId { get; set; }
-        public Estacion Estacion { get; set; }
+        public Paradas Paradas { get; set; }
 
         public HashSet<Nota_Incidencia> nota_Incidencias { get; set; } = new HashSet<Nota_Incidencia>();
         public void mostrar_listas_incidencias()
@@ -883,10 +883,29 @@ namespace clases
                 }
                 else if (opcion == 2)
                 {
+                    // recibimos la estacion(parada) actual
+                    string parada = recibir_texto(backend_service_socket);
+
                     // recibimos el titulo y la incidencia
                     string titulo = recibir_texto(backend_service_socket);
                     string incidencia = recibir_texto(backend_service_socket);
 
+                    string[] nombre_parada =  parada.Split("Estación: ");
+
+
+                    string[] partes = nombre_parada[1].Split("(");
+                    string estacion = partes[0].Trim();
+
+                    // La segunda parte es la línea, pero tiene el ')' al final
+                    string linea = partes[1].Replace(")", "").Trim();
+
+                    //string estacion = variables[0];
+                    //string linea = variables[1];
+
+
+                    Console.WriteLine(parada);
+                    Console.WriteLine(estacion);
+                    Console.WriteLine(linea);
                     Console.WriteLine(titulo);
                     Console.WriteLine(incidencia);
                 }

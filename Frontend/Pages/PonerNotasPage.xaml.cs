@@ -264,7 +264,7 @@ public partial class PonerNotasPage : ContentPage
 
             // Lógica para enviar los datos al socket o guardarlos localmente
 
-
+            enviar_texto(LabelEstacion.Text, frontend_socket);
             enviar_texto(titulo, frontend_socket);
             enviar_texto(descripcion, frontend_socket);
 
