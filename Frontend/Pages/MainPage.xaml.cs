@@ -35,5 +35,11 @@ namespace Frontend.Pages
             // Navegación usando Shell
             await Shell.Current.GoToAsync("PonerNotasPage");
         }
+
+        private async void OnLeerIncidenciaClicked(object sender, EventArgs e)
+        {
+            // Navegación usando Shell
+            await Shell.Current.GoToAsync("LeerNotasPage");
+        }
     }
 }

@@ -82,7 +82,8 @@
                     BackgroundColor="White" 
                     FontSize="18"
                     TextColor="Black" 
-                    CornerRadius="50">
+                    CornerRadius="50"
+                    Clicked="OnLeerIncidenciaClicked">
                 <Button.GestureRecognizers>
                     <PointerGestureRecognizer PointerEntered="OnHoverEnter" PointerExited="OnHoverExit" />
                 </Button.GestureRecognizers>

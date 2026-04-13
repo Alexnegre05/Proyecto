@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
@@ -121,7 +121,7 @@ public partial class LeerNotasPage : ContentPage
     {
         byte[] data = new byte[sizeof(int)];
 
-        // 1. LEER SOLO UNA VEZ el tama�o
+        // 1. LEER SOLO UNA VEZ el tamaño
         int bytesRecibidos = frontend_socket.Receive(data);
 
         // Si por red no llegaron los 4 bytes de golpe, completamos la lectura
@@ -133,7 +133,7 @@ public partial class LeerNotasPage : ContentPage
 
         int num = BitConverter.ToInt32(data);
 
-        // 2. Leer la palabra usando ese tama�o
+        // 2. Leer la palabra usando ese tamaño
         byte[] palabra = new byte[num];
         int textoLeido = 0;
         while (textoLeido < num)
@@ -153,7 +153,7 @@ public partial class LeerNotasPage : ContentPage
         while (leidos < 4)
         {
             int r = frontend_socket.Receive(data, leidos, 4 - leidos, SocketFlags.None);
-            if (r <= 0) return -1; // O maneja el error si la conexi�n se corta
+            if (r <= 0) return -1; // O maneja el error si la conexión se corta
             leidos += r;
         }
         int num = BitConverter.ToInt32(data);
@@ -174,6 +174,28 @@ public partial class LeerNotasPage : ContentPage
         frontend_socket.Connect(endpoint); // es lo mimso que connect pero preparada para el async 
 
         return frontend_socket;
+
+    }
+
+
+    private void OnFlechaClicked(object sender, EventArgs e)
+    {
+        // Invierte la visibilidad: si está abierta se cierra, si está cerrada se abre,
+        // esta propiedad es la que indica si la flecha muestra todas las estaciones o no lo muestra
+        // se indica con un booleano 
+
+        if (LineasView.IsVisible == true)
+        {
+            LineasView.IsVisible = false;
+        }
+        else
+        {
+            LineasView.IsVisible = true;
+        }
+
+        // Cambia la flecha según el estado 
+        BtnFlecha.Text = LineasView.IsVisible ? "▲" : "▼";
+
 
     }
 
@@ -221,9 +243,9 @@ public partial class LeerNotasPage : ContentPage
             for (int i = 0; i < num; i = i + 1)
             {
                 string linea = recibir_texto(frontend_socket);
-                // obtenemos una de las lineas de la estacion y lo a�adimos a paradas
+                // obtenemos una de las lineas de la estacion y lo añadimos a paradas
 
-                //esto es un objeto de la clase InfoLinea que se a�ade a las paradas
+                //esto es un objeto de la clase InfoLinea que se añade a las paradas
                 InfoLinea linea_actual = new InfoLinea
                 {
                     Nombre = linea,
