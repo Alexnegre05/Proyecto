@@ -935,15 +935,7 @@ namespace clases
                     // La segunda parte es la línea, pero tiene el ')' al final
                     string linea = partes[1].Replace(")", "").Trim();
 
-                    //string estacion = variables[0];
-                    //string linea = variables[1];
-
-
-                    Console.WriteLine(parada);
-                    Console.WriteLine(estacion);
-                    Console.WriteLine(linea);
-                    
-                    Console.WriteLine(incidencia);
+                   
 
                      parada_actual = context.Paradas.Include(p => p.Estacion).Include(p => p.Linea)
                     .FirstOrDefault(p => p.Estacion.nombre.Trim().ToLower() == estacion.ToLower() && p.Linea.nombre.Trim().ToLower() == linea.ToLower());

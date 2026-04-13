@@ -76,12 +76,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Pages\LeerNotasPage.xaml.cs">
+	    <DependentUpon>LeerNotasPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Pages\PonerNotasPage.xaml.cs">
 	    <DependentUpon>PonerNotasPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Pages\LeerNotasPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\PonerNotasPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
