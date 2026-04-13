@@ -798,6 +798,42 @@ namespace clases
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         static void poner_notas(Socket backend_service_socket, DBProyectoContext context)
         {
             Console.WriteLine("estamos en poner notas");
@@ -819,7 +855,7 @@ namespace clases
 
             List<Paradas> lista_paradas;
             List<string> paradas;
-
+            Paradas parada_actual;
 
             while (opcion != 0)
             {
@@ -908,7 +944,15 @@ namespace clases
                     Console.WriteLine(linea);
                     Console.WriteLine(titulo);
                     Console.WriteLine(incidencia);
-                }
+
+                     parada_actual = context.Paradas.Include(p => p.Estacion).Include(p => p.Linea)
+                    .FirstOrDefault(p => p.Estacion.nombre.Trim().ToLower() == estacion.ToLower() && p.Linea.nombre.Trim().ToLower() == linea.ToLower());
+              
+                    if(parada_actual != null)
+                    {
+                        Console.WriteLine("hola");
+                    }
+                }   
                
             }
             
