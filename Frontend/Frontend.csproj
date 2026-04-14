@@ -76,6 +76,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\BibliotecaFrontend\BibliotecaFrontend.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Compile Update="Pages\LeerNotasPage.xaml.cs">
 	    <DependentUpon>LeerNotasPage.xaml</DependentUpon>
 	  </Compile>
