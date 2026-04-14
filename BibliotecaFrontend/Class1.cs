@@ -241,6 +241,7 @@ namespace BibliotecaFrontend
                             ContenedorIncidencias.IsVisible = true;
                         }
 
+                        
                     }
                 };
             });
@@ -249,7 +250,7 @@ namespace BibliotecaFrontend
 
 
 
-        public static void mainthreadLeerNotas(string estacion, List<InfoLinea> paradas, Label LabelEstacion, CollectionView LineasView, Border BordePrincipal, Label Titulo, Button BtnFlecha)
+        public static void mainthreadLeerNotas(string estacion, List<InfoLinea> paradas, Label LabelEstacion, CollectionView LineasView, Border BordePrincipal, Label Titulo, Button BtnFlecha, Socket frontend_socket)
         {
             MainThread.BeginInvokeOnMainThread(() =>
             {
@@ -291,6 +292,11 @@ namespace BibliotecaFrontend
                         BtnFlecha.Text = "▼";
 
                         LineasView.SelectedItem = null;
+
+                        // cada vez que cambie de linea aqui le pedimos la opcion 2 al backend en leer noats para que nos pase las notas
+                        // ahora ponemos la opcion 2 a el backend 
+                        send_num(2, frontend_socket);
+                        enviar_texto(LabelEstacion.Text, frontend_socket);
 
 
                     }

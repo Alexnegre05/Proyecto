@@ -348,9 +348,7 @@ namespace clases
                     // recibimos la estacion(parada) actual
                     string parada = recibir_texto(backend_service_socket);
 
-                    // recibimos el titulo y la incidencia
-                    string titulo_incidencia = recibir_texto(backend_service_socket);
-                    string incidencia = recibir_texto(backend_service_socket);
+                    
 
                     string[] nombre_parada = parada.Split("Estación: ");
 
@@ -365,6 +363,12 @@ namespace clases
 
                     parada_actual = context.Paradas.Include(p => p.Estacion).Include(p => p.Linea)
                    .FirstOrDefault(p => p.Estacion.nombre.Trim().ToLower() == estacion.ToLower() && p.Linea.nombre.Trim().ToLower() == linea.ToLower());
+
+
+                    // recibimos el titulo y la incidencia
+                    string titulo_incidencia = recibir_texto(backend_service_socket);
+                    string incidencia = recibir_texto(backend_service_socket);
+
 
                     if (parada_actual != null)
                     {
@@ -474,7 +478,30 @@ namespace clases
                 }
                 else if(opcion == 2)
                 {
+                    // vamos a recibir la estacion actual 
 
+                    // recibimos la estacion(parada) actual
+                    string parada = recibir_texto(backend_service_socket);
+
+
+                    string[] nombre_parada = parada.Split("Estación: ");
+
+
+                    string[] partes = nombre_parada[1].Split("(");
+                    string estacion = partes[0].Trim();
+
+                    // La segunda parte es la línea, pero tiene el ')' al final
+                    string linea = partes[1].Replace(")", "").Trim();
+
+
+
+                    parada_actual = context.Paradas.Include(p => p.Estacion).Include(p => p.Linea)
+                   .FirstOrDefault(p => p.Estacion.nombre.Trim().ToLower() == estacion.ToLower() && p.Linea.nombre.Trim().ToLower() == linea.ToLower());
+
+                    if(parada_actual != null)
+                    {
+                        Console.WriteLine("Entra aqui");
+                    }
                 }
             }
         }

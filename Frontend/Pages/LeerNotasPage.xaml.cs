@@ -17,13 +17,6 @@ public partial class LeerNotasPage : ContentPage
 	}
 
 
-    // funcion que pasa de grados a radianes
-    public static double grados_a_radianes(double grados)
-    {
-        double radianes = (grados * Math.PI) / 180;
-
-        return radianes;
-    }
 
 
 
@@ -138,9 +131,9 @@ public partial class LeerNotasPage : ContentPage
             // El MainThread es el que se encarga de dibujar por pantalla
             // le decimos a ese hilo que se invoque y que cambie el texto y que las lineas son las paradas que hemos cogido
 
-            mainthreadLeerNotas(estacion, paradas, LabelEstacion, LineasView, BordePrincipal, Titulo, BtnFlecha);
+            mainthreadLeerNotas(estacion, paradas, LabelEstacion, LineasView, BordePrincipal, Titulo, BtnFlecha, frontend_socket);
 
-
+            
 
 
         }
