@@ -13,14 +13,21 @@ using System.Text;
 using System.Globalization;
 using System.Net.Sockets;
 using System.Net;
+
+// cosas referentes a las librerias
 using BibliotecaBackend;
-using static BibliotecaBackend.BibliotecaBackend;
+using static BibliotecaBackend.Clases;
+using static BibliotecaBackend.SQL;
+using static BibliotecaBackend.Sockets;
+using static BibliotecaBackend.IP;
+
+
+
 namespace clases
 {
 
-    // usamos double en x,y,z y en distancia recorrida ya que pi es un numero double
+   
 
-    // aqui pondremos las clases, usamos EFCORE
 
     
 
@@ -262,8 +269,11 @@ namespace clases
                             {
                                 // enviamos el titulo y el contenido de la incidencia
                                 enviar_texto(nota_incidencias[j].titulo, backend_service_socket);
+
                                 Console.WriteLine("Titulo: " + nota_incidencias[j].titulo);
+
                                 enviar_texto(nota_incidencias[j].contenido_incidencia, backend_service_socket);
+
                                 Console.WriteLine("Descripcion: " + nota_incidencias[j].contenido_incidencia);
                             }
                         }
