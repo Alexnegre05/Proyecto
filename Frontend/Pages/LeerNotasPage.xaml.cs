@@ -17,7 +17,11 @@ public partial class LeerNotasPage : ContentPage
 	}
 
 
-
+    public class Incidencia
+    {
+        public string titulo { get; set; }
+        public string descripcion { get; set; }
+    }
 
 
 
@@ -92,25 +96,51 @@ public partial class LeerNotasPage : ContentPage
                     BtnFlecha.Text = "▼";
 
                     LineasView.SelectedItem = null;
+                    
 
-                    // cada vez que cambie de linea aqui le pedimos la opcion 2 al backend en leer noats para que nos pase las notas
+                    // cada vez que cambie de linea aqui le pedimos la opcion 2 al backend en leer notas para que nos pase las notas
                     // ahora ponemos la opcion 2 a el backend 
                     send_num(2, frontend_socket);
                     enviar_texto(LabelEstacion.Text, frontend_socket);
                     int num_incidencias = recibir_numero(frontend_socket);
 
-                    
-                    
+
+
                     if (num_incidencias >= 0)
                     {
                         // hacemos que el contenedor sea visible
                         lista_incidencias.IsVisible = true;
 
-                        for(int i = 0; i < num_incidencias; i = i + 1) // vamos incidencia por incidencia
+                        List<Incidencia> lista_temporal_incidencias = new List<Incidencia>();
+
+                        
+                        for (int i = 0; i < num_incidencias; i = i + 1) // vamos incidencia por incidencia
                         {
-                            string titulo = recibir_texto(frontend_socket);
-                            string descripcion = recibir_texto(frontend_socket); // vamos cogiendo los textos de el titulo y su descripcion 
+
+                            
+                            // como funciona el binding exactamente 
+                            string titulo_actual = recibir_texto(frontend_socket);
+                            string descripcion_actual = recibir_texto(frontend_socket);
+
+                            Incidencia incidencia = new Incidencia
+                            {
+                                titulo = titulo_actual,
+                                descripcion = descripcion_actual
+                            };
+                            lista_temporal_incidencias.Add(incidencia); // añadimos la incidencia a la lista
+
+
+                            // el binding funciona como que le dices que tienes un objeto y que quieres mostrar las propiedades de ese objeto
+
+                            lista_incidencias.ItemsSource = lista_temporal_incidencias;
+                            // le decimos que la lista de objetos de incidencia es lo que tiene que mostrar,
+                            // el binding mira si existe la propiedad titulo o descripcion en lo que esta recibiendo de el collectionview
+                            // solo puede leer si tiene {get;set}
                         }
+                    }
+                    else
+                    {
+                        Shell.Current.DisplayAlert("No hay notas que mostrar", "", "cerrar");
                     }
 
                 }

@@ -369,6 +369,10 @@ namespace clases
                                                               // por esto hacemos el savechanges antes de crear este objeto
                         };
 
+
+                        context.NotasIncidencias.Add(nota_incidencia);
+                        context.SaveChanges();
+
                         Console.WriteLine("Incidencia registrada");
 
 
@@ -469,9 +473,10 @@ namespace clases
                     if (parada_actual != null)
                     {
                         
-                        List<Incidencias> listaIncidencias = context.Incidencias.Where(i => i.ParadaId == parada_actual.Id).ToList(); 
+                        List<Incidencias> listaIncidencias = context.Incidencias.Where(i => i.ParadaId == parada_actual.Id).ToList();
                         // sacamos la lista de incidencias de esta estacion y enviamos un numero con cuantas incidencias hay 
 
+                        Console.WriteLine("Incidencias: " + listaIncidencias.Count);
                         enviar_numero(listaIncidencias.Count, backend_service_socket);
 
 
@@ -481,13 +486,15 @@ namespace clases
                             
                             // por cada incidencia vamos a buscar cuantas notas tiene
                             List<Nota_Incidencia> nota_incidencias = context.NotasIncidencias.Where(n => n.IncidenciaId == listaIncidencias[i].Id).ToList();
-                            
+                            Console.WriteLine("Count: " + nota_incidencias.Count);
                             // vamos nota a nota en la incidencia 
                             for(int j = 0; j < nota_incidencias.Count; j = j + 1)
                             {
                                 // enviamos el titulo y el contenido de la incidencia
                                 enviar_texto(nota_incidencias[j].titulo, backend_service_socket);
+                                Console.WriteLine("Titulo: " + nota_incidencias[j].titulo);
                                 enviar_texto(nota_incidencias[j].contenido_incidencia, backend_service_socket);
+                                Console.WriteLine("Descripcion: " + nota_incidencias[j].contenido_incidencia);
                             }
                         }
                     }

@@ -110,9 +110,9 @@
                                 
                                 <Border Padding="10" Margin="5" BackgroundColor="Black">
                                     <VerticalStackLayout Spacing="5">
-                                        <Label x:Name="Titulo_incidencia" Text="" TextColor="White" HorizontalTextAlignment="Center"></Label>
+                                    <Label x:Name="{Binding Titulo}" Text="" TextColor="White" HorizontalTextAlignment="Center"></Label>
 
-                                        <Label x:Name="Descripcion_incidencia" Text="" TextColor="White" HorizontalTextAlignment="Center"></Label>
+                                    <Label x:Name="{Binding Descripcion}" Text="" TextColor="White" HorizontalTextAlignment="Center"></Label>
                                     </VerticalStackLayout>
                                 </Border>
                                 
