@@ -9,11 +9,6 @@ using static BibliotecaFrontend.BibliotecaFrontend;
 namespace Frontend.Pages;
 
 
-public class InfoLinea
-{
-    public string Nombre { get; set; }
-    public Color Color { get; set; }
-}
 
 public partial class PonerNotasPage : ContentPage
 {
@@ -22,29 +17,6 @@ public partial class PonerNotasPage : ContentPage
     // variable global frontend sockets
     public Socket frontend_socket;
 
-
-    // aqui tenemos un diccionario que relaciona una linea con su color correspondiente,
-    // esta aqui arriba para poder reutilizarlo
-    public Dictionary<string, Color> colores = new Dictionary<string, Color>
-    {
-                { "R1", Color.FromArgb("#4499D4") },
-                { "R2", Color.FromArgb("#009900") },
-                { "R2N", Color.FromArgb("#99C83E") },
-                { "R2S", Color.FromArgb("#00642E") },
-                { "R3", Color.FromArgb("#FF131A") },
-                { "R4", Color.FromArgb("#FF9221") },
-                { "R7", Color.FromArgb("#BD7DB5") },
-                { "R8", Color.FromArgb("#9B1987") },
-                { "RG1", Color.FromArgb("#007DC3") },
-                { "R10", Color.FromArgb("#930030") },
-                { "R11", Color.FromArgb("#0064A5") },
-                { "R12", Color.FromArgb("#FFDC00") },
-                { "R13", Color.FromArgb("#E52E87") },
-                { "R14", Color.FromArgb("#675199") },
-                { "R15", Color.FromArgb("#9A8A76") },
-                { "R16", Color.FromArgb("#AF0036") },
-                { "R17", Color.FromArgb("#E97300") }
-    };
 
     public PonerNotasPage()
 	{
@@ -154,67 +126,6 @@ public partial class PonerNotasPage : ContentPage
 
 
 
-    // funcion que se encarga de el main thread
-    private void mainthread(string estacion, List<InfoLinea> paradas)
-    {
-        MainThread.BeginInvokeOnMainThread(() =>
-        {
-            LabelEstacion.Text = "Estacion: " + estacion;
-            LineasView.ItemsSource = paradas;
-            // lineas view es como el id de collectionview y sirve para poder tenerlo en el backend y
-            // modificar sus atributos igual a label estación que es el nombre de la estacion 
-
-
-            // el selectionchanges es que cuando se cambie la estacion(el selector) que se cambie el nombre
-            // el += no es un a= a + 1 sino aqui
-            // es un añade también esta función a la lista de cosas por hacer cuando ocurra el evento SelectionChanged
-
-            // sender el objeto que disparo el evento y la e es el objeto que tiene los datos sobre el evento
-
-            LineasView.SelectionChanged += (s, e) =>
-            {
-                //  Obtenemos el elemento seleccionado actual, el que es el primero y lo ponemos como dinamico
-                // lo tenemos que pasar con el as a InfoLinea
-
-                InfoLinea seleccion = e.CurrentSelection.FirstOrDefault() as InfoLinea;
-                // dynamic salta la comprovacion de a la hora de crear un objeto 
-
-                if (seleccion != null) // miramos que no sea nulo
-                {
-                    // Cambiamos el texto
-                    LabelEstacion.Text = $"Estación: {estacion} ({seleccion.Nombre})";
-
-
-                    // Usamos el color que viene guardado en el objeto seleccionado
-                    LabelEstacion.TextColor = (Color)seleccion.Color;
-
-                    BordePrincipal.Background = (Color)seleccion.Color;
-
-                    guardar.Background = (Color)seleccion.Color;
-                    Titulo.TextColor = Colors.White;
-
-                    LineasView.IsVisible = false;
-                    BtnFlecha.Text = "▼";
-
-                    LineasView.SelectedItem = null;
-                    // esto es para que el selector se pueda volver a clicar una segunda vez
-                    // si esta en la version resumida ya que si es la misma letra no detectara el evento 
-
-
-                    // si no hay nada seleccionado, que no salga la posibilidad de poner notas
-                    if(seleccion == null)
-                    {
-                        ContenedorIncidencias.IsVisible = false;// para que se oculte 
-                    }
-                    else // caso contrario
-                    {
-                        ContenedorIncidencias.IsVisible= true;
-                    }
-                    
-                }
-            };
-        });
-    }
 
 
     // funcion para saber el nombre de la estacion mas cercana
@@ -268,13 +179,13 @@ public partial class PonerNotasPage : ContentPage
                 
             }
 
-            
+
             // aqui es donde se cambia el nombre, y todo el tema de el color.
 
             // El MainThread es el que se encarga de dibujar por pantalla
             // le decimos a ese hilo que se invoque y que cambie el texto y que las lineas son las paradas que hemos cogido
 
-            mainthread(estacion, paradas);
+            mainthreadPonerNotas(estacion, paradas, LabelEstacion, LineasView, BordePrincipal, guardar, Titulo, BtnFlecha, ContenedorIncidencias);
 
 
 

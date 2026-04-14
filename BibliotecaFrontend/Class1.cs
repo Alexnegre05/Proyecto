@@ -1,14 +1,50 @@
 ﻿using System.Net.Sockets;
 using System.Net;
 using System.Text;
-using Microsoft.Maui.Devices.Sensors;
+using Microsoft.Maui.Devices.Sensors; // para los sensores
+using Microsoft.Maui.ApplicationModel; // para qeu sepa que es de maui 
+using Microsoft.Maui.Graphics; // para Color
+using Microsoft.Maui.Controls; // para label y colectionview
 namespace BibliotecaFrontend
 {
     public class BibliotecaFrontend
     {
 
+
+        public class InfoLinea
+        {
+            public string Nombre { get; set; }
+            public Color Color { get; set; }
+        }
+
+
+        // Diccionario de colores
+        // aqui tenemos un diccionario que relaciona una linea con su color correspondiente
+        public static Dictionary<string, Color> colores = new Dictionary<string, Color>
+        {
+                { "R1", Color.FromArgb("#4499D4") },
+                { "R2", Color.FromArgb("#009900") },
+                { "R2N", Color.FromArgb("#99C83E") },
+                { "R2S", Color.FromArgb("#00642E") },
+                { "R3", Color.FromArgb("#FF131A") },
+                { "R4", Color.FromArgb("#FF9221") },
+                { "R7", Color.FromArgb("#BD7DB5") },
+                { "R8", Color.FromArgb("#9B1987") },
+                { "RG1", Color.FromArgb("#007DC3") },
+                { "R10", Color.FromArgb("#930030") },
+                { "R11", Color.FromArgb("#0064A5") },
+                { "R12", Color.FromArgb("#FFDC00") },
+                { "R13", Color.FromArgb("#E52E87") },
+                { "R14", Color.FromArgb("#675199") },
+                { "R15", Color.FromArgb("#9A8A76") },
+                { "R16", Color.FromArgb("#AF0036") },
+                { "R17", Color.FromArgb("#E97300") }
+        };
+
+
+
         // funciones de grados
-        
+
         // funcion que pasa de grados a radianes
         public static double grados_a_radianes(double grados)
         {
@@ -145,7 +181,70 @@ namespace BibliotecaFrontend
         }
 
 
+        // cosas de mainthread y calculo de estación cercana 
 
+
+        // funcion que se encarga de el main thread de poner notas
+        public static void mainthreadPonerNotas(string estacion, List<InfoLinea> paradas, Label LabelEstacion, CollectionView LineasView, Border BordePrincipal, Button guardar, Label Titulo, Button BtnFlecha, Border ContenedorIncidencias)
+        {
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                LabelEstacion.Text = "Estacion: " + estacion;
+                LineasView.ItemsSource = paradas;
+                // lineas view es como el id de collectionview y sirve para poder tenerlo en el backend y
+                // modificar sus atributos igual a label estación que es el nombre de la estacion 
+
+
+                // el selectionchanges es que cuando se cambie la estacion(el selector) que se cambie el nombre
+                // el += no es un a= a + 1 sino aqui
+                // es un añade también esta función a la lista de cosas por hacer cuando ocurra el evento SelectionChanged
+
+                // sender el objeto que disparo el evento y la e es el objeto que tiene los datos sobre el evento
+
+                LineasView.SelectionChanged += (s, e) =>
+                {
+                    //  Obtenemos el elemento seleccionado actual, el que es el primero y lo ponemos como dinamico
+                    // lo tenemos que pasar con el as a InfoLinea
+
+                    InfoLinea seleccion = e.CurrentSelection.FirstOrDefault() as InfoLinea;
+                    // dynamic salta la comprovacion de a la hora de crear un objeto 
+
+                    if (seleccion != null) // miramos que no sea nulo
+                    {
+                        // Cambiamos el texto
+                        LabelEstacion.Text = $"Estación: {estacion} ({seleccion.Nombre})";
+
+
+                        // Usamos el color que viene guardado en el objeto seleccionado
+                        LabelEstacion.TextColor = (Color)seleccion.Color;
+
+                        BordePrincipal.Background = (Color)seleccion.Color;
+
+                        guardar.Background = (Color)seleccion.Color;
+                        Titulo.TextColor = Colors.White;
+
+                        LineasView.IsVisible = false;
+                        BtnFlecha.Text = "▼";
+
+                        LineasView.SelectedItem = null;
+                        // esto es para que el selector se pueda volver a clicar una segunda vez
+                        // si esta en la version resumida ya que si es la misma letra no detectara el evento 
+
+
+                        // si no hay nada seleccionado, que no salga la posibilidad de poner notas
+                        if (seleccion == null)
+                        {
+                            ContenedorIncidencias.IsVisible = false;// para que se oculte 
+                        }
+                        else // caso contrario
+                        {
+                            ContenedorIncidencias.IsVisible = true;
+                        }
+
+                    }
+                };
+            });
+        }
 
 
     }
