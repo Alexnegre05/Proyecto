@@ -281,36 +281,25 @@ namespace clases
 
             List<Paradas> lista_paradas;
             List<string> paradas;
-            Paradas parada_actual;
+            Paradas parada_actual = null;
 
             while (opcion != 0)
             {
                 // leemos la opcion 
-                data = new byte[sizeof(int)];
-                backend_service_socket.Receive(data);
-
-                opcion = BitConverter.ToInt32(data);
+                opcion = recibir_numero(backend_service_socket);
 
 
                 if (opcion == 1) // dependiendo de la opcion enviamos una cosa u otra
                 {
-                    posicion = new byte[sizeof(double)];
-                    backend_service_socket.Receive(posicion);
+                    
 
-                    x = BitConverter.ToDouble(posicion);
+                    x = recibir_double(backend_service_socket);
 
-                    backend_service_socket.Receive(posicion);
+                    y = recibir_double(backend_service_socket);
 
-                    y = BitConverter.ToDouble(posicion);
+                    z = recibir_double(backend_service_socket);
 
-                    backend_service_socket.Receive(posicion);
-
-                    z = BitConverter.ToDouble(posicion);
-
-                    Console.WriteLine("x: " + x);
-                    Console.WriteLine("y: " + y);
-                    Console.WriteLine("z: " + z);
-
+                   
                     // aqui buscamos qual es la estacion mas cercana, solo nuecesitamos el nombre
                     estacion_cercana = calcular_estacion_cercana(x, y, z, context);
 
@@ -343,26 +332,10 @@ namespace clases
                         enviar_texto(paradas[i], backend_service_socket);
                     }
                 }
+
                 else if (opcion == 2)
                 {
-                    // recibimos la estacion(parada) actual
-                    string parada = recibir_texto(backend_service_socket);
-
-                    
-
-                    string[] nombre_parada = parada.Split("Estación: ");
-
-
-                    string[] partes = nombre_parada[1].Split("(");
-                    string estacion = partes[0].Trim();
-
-                    // La segunda parte es la línea, pero tiene el ')' al final
-                    string linea = partes[1].Replace(")", "").Trim();
-
-
-
-                    parada_actual = context.Paradas.Include(p => p.Estacion).Include(p => p.Linea)
-                   .FirstOrDefault(p => p.Estacion.nombre.Trim().ToLower() == estacion.ToLower() && p.Linea.nombre.Trim().ToLower() == linea.ToLower());
+                    parada_actual = saber_parada_seleccionada_frontend(backend_service_socket, context, parada_actual);
 
 
                     // recibimos el titulo y la incidencia
@@ -407,6 +380,17 @@ namespace clases
             }
         }
 
+
+
+
+
+
+
+
+
+
+
+
         static void leer_notas(Socket backend_service_socket, DBProyectoContext context)
         {
             Console.WriteLine("estamos en leer notas");
@@ -427,7 +411,7 @@ namespace clases
 
             List<Paradas> lista_paradas;
             List<string> paradas;
-            Paradas parada_actual;
+            Paradas parada_actual = null;
 
             while (opcion != 0)
             {
@@ -478,36 +462,44 @@ namespace clases
                 }
                 else if(opcion == 2)
                 {
-                    // vamos a recibir la estacion actual 
+
 
                     // recibimos la estacion(parada) actual
-                    string parada = recibir_texto(backend_service_socket);
+                    parada_actual = saber_parada_seleccionada_frontend(backend_service_socket, context, parada_actual);
 
-
-                    string[] nombre_parada = parada.Split("Estación: ");
-
-
-                    string[] partes = nombre_parada[1].Split("(");
-                    string estacion = partes[0].Trim();
-
-                    // La segunda parte es la línea, pero tiene el ')' al final
-                    string linea = partes[1].Replace(")", "").Trim();
-
-
-
-                    parada_actual = context.Paradas.Include(p => p.Estacion).Include(p => p.Linea)
-                   .FirstOrDefault(p => p.Estacion.nombre.Trim().ToLower() == estacion.ToLower() && p.Linea.nombre.Trim().ToLower() == linea.ToLower());
-
-                    if(parada_actual != null)
+                    if (parada_actual != null)
                     {
                         Console.WriteLine("Entra aqui");
                     }
                 }
             }
         }
-        
-                    
 
+
+        static Paradas saber_parada_seleccionada_frontend(Socket backend_service_socket, DBProyectoContext context, Paradas parada_actual)
+        {
+
+
+            // recibimos la estacion(parada) actual
+            string parada = recibir_texto(backend_service_socket);
+
+
+            string[] nombre_parada = parada.Split("Estación: ");
+
+
+            string[] partes = nombre_parada[1].Split("(");
+            string estacion = partes[0].Trim();
+
+            // La segunda parte es la línea, pero tiene el ')' al final
+            string linea = partes[1].Replace(")", "").Trim();
+
+
+
+            parada_actual = context.Paradas.Include(p => p.Estacion).Include(p => p.Linea)
+           .FirstOrDefault(p => p.Estacion.nombre.Trim().ToLower() == estacion.ToLower() && p.Linea.nombre.Trim().ToLower() == linea.ToLower());
+
+            return parada_actual;
+        }
            
 
         
