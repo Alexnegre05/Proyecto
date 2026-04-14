@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using BibliotecaFrontend;
@@ -8,12 +9,6 @@ namespace Frontend.Pages;
 
 public partial class LeerNotasPage : ContentPage
 {
-
-    public class InfoLinea
-    {
-        public string Nombre { get; set; }
-        public Color Color { get; set; }
-    }
 
 
     public LeerNotasPage()
@@ -35,26 +30,6 @@ public partial class LeerNotasPage : ContentPage
 
     Socket frontend_socket;
 
-    public Dictionary<string, Color> colores = new Dictionary<string, Color>
-    {
-                { "R1", Color.FromArgb("#4499D4") },
-                { "R2", Color.FromArgb("#009900") },
-                { "R2N", Color.FromArgb("#99C83E") },
-                { "R2S", Color.FromArgb("#00642E") },
-                { "R3", Color.FromArgb("#FF131A") },
-                { "R4", Color.FromArgb("#FF9221") },
-                { "R7", Color.FromArgb("#BD7DB5") },
-                { "R8", Color.FromArgb("#9B1987") },
-                { "RG1", Color.FromArgb("#007DC3") },
-                { "R10", Color.FromArgb("#930030") },
-                { "R11", Color.FromArgb("#0064A5") },
-                { "R12", Color.FromArgb("#FFDC00") },
-                { "R13", Color.FromArgb("#E52E87") },
-                { "R14", Color.FromArgb("#675199") },
-                { "R15", Color.FromArgb("#9A8A76") },
-                { "R16", Color.FromArgb("#AF0036") },
-                { "R17", Color.FromArgb("#E97300") }
-    };
 
 
     protected override void OnAppearing()
@@ -105,54 +80,6 @@ public partial class LeerNotasPage : ContentPage
 
 
 
-    private void mainthread(string estacion, List<InfoLinea> paradas)
-    {
-        MainThread.BeginInvokeOnMainThread(() =>
-        {
-            LabelEstacion.Text = "Estacion: " + estacion;
-            LineasView.ItemsSource = paradas;
-            // lineas view es como el id de collectionview y sirve para poder tenerlo en el backend y
-            // modificar sus atributos igual a label estación que es el nombre de la estacion 
-
-
-            // el selectionchanges es que cuando se cambie la estacion(el selector) que se cambie el nombre
-            // el += no es un a= a + 1 sino aqui
-            // es un añade también esta función a la lista de cosas por hacer cuando ocurra el evento SelectionChanged
-
-            // sender el objeto que disparo el evento y la e es el objeto que tiene los datos sobre el evento
-
-            LineasView.SelectionChanged += (s, e) =>
-            {
-                //  Obtenemos el elemento seleccionado actual, el que es el primero y lo ponemos como dinamico
-                // lo tenemos que pasar con el as a InfoLinea
-
-                InfoLinea seleccion = e.CurrentSelection.FirstOrDefault() as InfoLinea;
-                // dynamic salta la comprovacion de a la hora de crear un objeto 
-
-                if (seleccion != null) // miramos que no sea nulo
-                {
-                    // Cambiamos el texto
-                    LabelEstacion.Text = $"Estación: {estacion} ({seleccion.Nombre})";
-
-
-                    // Usamos el color que viene guardado en el objeto seleccionado
-                    LabelEstacion.TextColor = (Color)seleccion.Color;
-
-                    BordePrincipal.Background = (Color)seleccion.Color;
-
-                   
-                    Titulo.TextColor = Colors.White;
-
-                    LineasView.IsVisible = false;
-                    BtnFlecha.Text = "▼";
-
-                    LineasView.SelectedItem = null;
-                   
-
-                }
-            };
-        });
-    }
 
     // repetimos la funcion de estacion cercana para que te salga por defecto la estacion mas cercana 
 
@@ -211,7 +138,7 @@ public partial class LeerNotasPage : ContentPage
             // El MainThread es el que se encarga de dibujar por pantalla
             // le decimos a ese hilo que se invoque y que cambie el texto y que las lineas son las paradas que hemos cogido
 
-            mainthread(estacion, paradas);
+            mainthreadLeerNotas(estacion, paradas, LabelEstacion, LineasView, BordePrincipal, Titulo, BtnFlecha);
 
 
 
