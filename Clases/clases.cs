@@ -54,7 +54,7 @@ namespace clases
         
 
         // Relación con Paradas (FK)
-        public int EstacionId { get; set; }
+        public int ParadaId { get; set; }
         public Paradas Paradas { get; set; }
 
         public HashSet<Nota_Incidencia> nota_Incidencias { get; set; } = new HashSet<Nota_Incidencia>();
@@ -275,8 +275,7 @@ namespace clases
             double x;
             double y;
             double z;
-            byte[] data;
-            byte[] posicion;
+            
             string estacion_cercana;
 
             List<Paradas> lista_paradas;
@@ -352,7 +351,7 @@ namespace clases
                             fecha = DateTime.UtcNow, // la fecha es la actual, nos pide que sea UTC sino peta
                             gravedad = 1, // Valor por defecto
                             solucionado = false, // Valor por defecto
-                            EstacionId = parada_actual.Id, // FK a Parada
+                            ParadaId = parada_actual.Id, // FK a Parada
                             Paradas = parada_actual               // Relación con Parada
                         };
 
@@ -469,7 +468,28 @@ namespace clases
 
                     if (parada_actual != null)
                     {
-                        Console.WriteLine("Entra aqui");
+                        
+                        List<Incidencias> listaIncidencias = context.Incidencias.Where(i => i.ParadaId == parada_actual.Id).ToList(); 
+                        // sacamos la lista de incidencias de esta estacion y enviamos un numero con cuantas incidencias hay 
+
+                        enviar_numero(listaIncidencias.Count, backend_service_socket);
+
+
+                        // for que recorre las listas de incidencias y mira si hay notas de incidencia
+                        for (int i = 0; i < listaIncidencias.Count; i = i + 1)
+                        {
+                            
+                            // por cada incidencia vamos a buscar cuantas notas tiene
+                            List<Nota_Incidencia> nota_incidencias = context.NotasIncidencias.Where(n => n.IncidenciaId == listaIncidencias[i].Id).ToList();
+                            
+                            // vamos nota a nota en la incidencia 
+                            for(int j = 0; j < nota_incidencias.Count; j = j + 1)
+                            {
+                                // enviamos el titulo y el contenido de la incidencia
+                                enviar_texto(nota_incidencias[j].titulo, backend_service_socket);
+                                enviar_texto(nota_incidencias[j].contenido_incidencia, backend_service_socket);
+                            }
+                        }
                     }
                 }
             }

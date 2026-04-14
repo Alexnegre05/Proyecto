@@ -68,7 +68,7 @@
                                         tiene 3 modos 
                         
                                         None: La lista es solo para leer. Aunque el usuario toque una opcion, no pasará nada (no se dispara el evento SelectionChanged).
-                                        Single (El que tú usas): El usuario solo puede tener un elemento seleccionado a la vez. la selección salta de uno a otro. Es el modo ideal para menús o selectores.
+                                        Single: El usuario solo puede tener un elemento seleccionado a la vez. la selección salta de uno a otro. Es el modo ideal para menús o selectores.
                                         Multiple: Permite al usuario marcar varias opciones a la vez.-->
                             <CollectionView x:Name="LineasView"
                                         SelectionMode="Single"
@@ -102,8 +102,29 @@
                            HorizontalTextAlignment="Center" />
                     </Grid>
                 </Border>
+                
+               
+                <CollectionView x:Name="lista_incidencias" SelectionMode="Single" IsVisible="false">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                
+                                <Border Padding="10" Margin="5" BackgroundColor="Black">
+                                    <VerticalStackLayout Spacing="5">
+                                        <Label x:Name="Titulo_incidencia" Text="" TextColor="White" HorizontalTextAlignment="Center"></Label>
+
+                                        <Label x:Name="Descripcion_incidencia" Text="" TextColor="White" HorizontalTextAlignment="Center"></Label>
+                                    </VerticalStackLayout>
+                                </Border>
+                                
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                </CollectionView>
+                
+
 
             </VerticalStackLayout>
+
+            
         </ScrollView>
 
 
