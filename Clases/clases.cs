@@ -240,54 +240,7 @@ namespace clases
     internal class Program
     {
 
-        // funciones de enviar/recibir cosas entre frontend y backend 
-
-        // enviar texto
-        public static void enviar_texto(string text, Socket backend_service_socket)
-        {
-
-            
-            byte[] bytes = Encoding.UTF8.GetBytes(text);
-            byte[] lenght = BitConverter.GetBytes(bytes.Length);
-            backend_service_socket.Send(lenght);
-            backend_service_socket.Send(bytes);
-        }
-
-        public static void enviar_numero(int num, Socket backend_service_socket)
-        {
-            
-            
-            byte[] bytes = BitConverter.GetBytes(num);
-            backend_service_socket.Send(bytes);
-        }
-
-
-        public static string recibir_texto(Socket backend_socket)
-        {
-            byte[] data = new byte[sizeof(int)];
-
-            // 1. LEER SOLO UNA VEZ el tamaño
-            int bytesRecibidos = backend_socket.Receive(data);
-
-            // Si por red no llegaron los 4 bytes de golpe, completamos la lectura
-            while (bytesRecibidos < 4)
-            {
-                bytesRecibidos += backend_socket.Receive(data, bytesRecibidos, 4 - bytesRecibidos, SocketFlags.None);
-
-            }
-
-            int num = BitConverter.ToInt32(data);
-
-            // 2. Leer la palabra usando ese tamaño
-            byte[] palabra = new byte[num];
-            int textoLeido = 0;
-            while (textoLeido < num)
-            {
-                textoLeido += backend_socket.Receive(palabra, textoLeido, num - textoLeido, SocketFlags.None);
-            }
-
-            return Encoding.UTF8.GetString(palabra);
-        }
+        
 
 
 
@@ -302,18 +255,6 @@ namespace clases
             context.Dispose();
             
         }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -477,8 +418,7 @@ namespace clases
             double x;
             double y;
             double z;
-            byte[] data;
-            byte[] posicion;
+            
             string estacion_cercana;
 
             List<Paradas> lista_paradas;
@@ -488,28 +428,18 @@ namespace clases
             while (opcion != 0)
             {
                 // leemos la opcion 
-                data = new byte[sizeof(int)];
-                backend_service_socket.Receive(data);
-
-                opcion = BitConverter.ToInt32(data);
+                opcion = recibir_numero(backend_service_socket);
 
 
                 if (opcion == 1) // dependiendo de la opcion enviamos una cosa u otra
                 {
-                    posicion = new byte[sizeof(double)];
-                    backend_service_socket.Receive(posicion);
+                    x = recibir_double(backend_service_socket);
 
-                    x = BitConverter.ToDouble(posicion);
-                    
-                    backend_service_socket.Receive(posicion);
+                    y = recibir_double(backend_service_socket);
 
-                    y = BitConverter.ToDouble(posicion);
+                    z = recibir_double(backend_service_socket);
 
-                    backend_service_socket.Receive(posicion);
 
-                    z = BitConverter.ToDouble(posicion);
-
-                        
                     // aqui buscamos qual es la estacion mas cercana, solo nuecesitamos el nombre
                     estacion_cercana = calcular_estacion_cercana(x, y, z, context);
 
@@ -970,11 +900,7 @@ namespace clases
 
                         Console.WriteLine("Conectado");
 
-                        // leemos el numero para saber que tiene que pasar(si es poner notas, leer...)
-                        byte[] data = new byte[sizeof(int)];
-                        backend_service_socket.Receive(data);
-
-                        int codigo = BitConverter.ToInt32(data);
+                        int codigo = recibir_numero(backend_service_socket);
 
                         if (codigo == 1)
                         {
