@@ -280,7 +280,7 @@ namespace BibliotecaBackend
 
         }
 
-        public static void sql(DBProyectoContext context)
+        public static void insert_ensurecreated(DBProyectoContext context)
         {
 
             
