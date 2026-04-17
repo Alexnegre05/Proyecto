@@ -3,19 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Graphics;
 using static BibliotecaFrontend.Classes;
 
 namespace BibliotecaFrontend
 {
     public class PonerNota
     {
+        // Eliminamos las líneas de variables sueltas que daban error, 
+        // ya que ahora todo viaja dentro del struct 'parametros'
 
-        public static void mainthreadPonerNotas(string estacion, List<InfoLinea> paradas, Label LabelEstacion, CollectionView LineasView, Border BordePrincipal, Button guardar, Label Titulo, Button BtnFlecha, Border ContenedorIncidencias)
+        public static void mainthreadPonerNotas(PonerNotasParams parametros)
         {
+
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                LabelEstacion.Text = "Estacion: " + estacion;
-                LineasView.ItemsSource = paradas;
+                // Usamos parametros. para acceder a los datos del struct
+                parametros.LabelEstacion.Text = "Estacion: " + parametros.Estacion;
+                parametros.LineasView.ItemsSource = parametros.Paradas;
                 // lineas view es como el id de collectionview y sirve para poder tenerlo en el backend y
                 // modificar sus atributos igual a label estación que es el nombre de la estacion 
 
@@ -26,7 +33,7 @@ namespace BibliotecaFrontend
 
                 // sender el objeto que disparo el evento y la e es el objeto que tiene los datos sobre el evento
 
-                LineasView.SelectionChanged += (s, e) =>
+                parametros.LineasView.SelectionChanged += (s, e) =>
                 {
                     //  Obtenemos el elemento seleccionado actual, el que es el primero y lo ponemos como dinamico
                     // lo tenemos que pasar con el as a InfoLinea
@@ -36,41 +43,40 @@ namespace BibliotecaFrontend
 
                     if (seleccion != null) // miramos que no sea nulo
                     {
-                        // Cambiamos el texto
-                        LabelEstacion.Text = $"Estación: {estacion} ({seleccion.Nombre})";
+                        // Cambiamos el texto usando los datos del struct y la selección
+                        parametros.LabelEstacion.Text = $"Estación: {parametros.Estacion} ({seleccion.Nombre})";
 
 
                         // Usamos el color que viene guardado en el objeto seleccionado
-                        LabelEstacion.TextColor = (Color)seleccion.Color;
+                        parametros.LabelEstacion.TextColor = (Color)seleccion.Color;
 
-                        BordePrincipal.Background = (Color)seleccion.Color;
+                        parametros.BordePrincipal.Background = (Color)seleccion.Color;
 
-                        guardar.Background = (Color)seleccion.Color;
-                        Titulo.TextColor = Colors.White;
+                        parametros.Guardar.Background = (Color)seleccion.Color;
+                        parametros.Titulo.TextColor = Colors.White;
 
-                        LineasView.IsVisible = false;
-                        BtnFlecha.Text = "▼";
+                        parametros.LineasView.IsVisible = false;
+                        parametros.BtnFlecha.Text = "▼";
 
-                        LineasView.SelectedItem = null;
+                        parametros.LineasView.SelectedItem = null;
                         // esto es para que el selector se pueda volver a clicar una segunda vez
                         // si esta en la version resumida ya que si es la misma letra no detectara el evento 
 
 
                         // si no hay nada seleccionado, que no salga la posibilidad de poner notas
+                        // (Nota: aquí 'seleccion' ya sabemos que no es null por el if de arriba, 
+                        // pero mantenemos tu lógica de visibilidad)
                         if (seleccion == null)
                         {
-                            ContenedorIncidencias.IsVisible = false;// para que se oculte 
+                            parametros.ContenedorIncidencias.IsVisible = false;// para que se oculte 
                         }
                         else // caso contrario
                         {
-                            ContenedorIncidencias.IsVisible = true;
+                            parametros.ContenedorIncidencias.IsVisible = true;
                         }
-
-
                     }
                 };
             });
-
         }
     }
 }

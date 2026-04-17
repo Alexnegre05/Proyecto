@@ -41,7 +41,7 @@ public partial class LeerNotasPage : ContentPage
         // ejecutamos primero una funcion que coja de el backend las estaciones disponibles, solo los nombres
         todas_estaciones();
 
-        EstacionCercana();
+        EstacionCercana(2);
     }
 
     protected override void OnDisappearing()
@@ -92,7 +92,7 @@ public partial class LeerNotasPage : ContentPage
     {
 
     }
-    private async void EstacionCercana()
+    private async void EstacionCercana(int num_opcion)
     {
 
         try
@@ -100,9 +100,11 @@ public partial class LeerNotasPage : ContentPage
 
             frontend_socket = crear_frontend_socket(1000);
 
-            // enviamos un 2 para decir que va a recibir algo de enviar notas 
-
-            send_num(2, frontend_socket);
+            // enviamos un 2 para decir que va a recibir algo de enviar notas, un 1 si es de 
+           
+            send_num(num_opcion, frontend_socket);
+            
+            
 
             // enviamos otro 2 para decirle que queremos que nos de la opcion de la estacion mas cercana en el backend
             send_num(2, frontend_socket);
@@ -146,8 +148,15 @@ public partial class LeerNotasPage : ContentPage
 
             // El MainThread es el que se encarga de dibujar por pantalla
             // le decimos a ese hilo que se invoque y que cambie el texto y que las lineas son las paradas que hemos cogido
-
-            mainthreadLeerNotas(estacion, paradas, LabelEstacion, LineasView, BordePrincipal, Titulo, BtnFlecha, frontend_socket, lista_incidencias);
+            if (num == 1)
+            {
+                mainthreadPonerNotas(estacion, paradas, LabelEstacion, LineasView, BordePrincipal, guardar, Titulo, BtnFlecha, ContenedorIncidencias);
+            }
+            else if (num == 2)
+            {
+                mainthreadLeerNotas(estacion, paradas, LabelEstacion, LineasView, BordePrincipal, Titulo, BtnFlecha, frontend_socket, lista_incidencias);
+            }
+            
 
             
 
