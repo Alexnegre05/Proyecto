@@ -34,65 +34,6 @@ namespace clases
         
 
 
-        static public void hilo_cliente(object list)
-        {
-            object parametros = (object)list;
-            
-            DBProyectoContext context = new DBProyectoContext(); // los hilos no pueden compartir contextos, hay que crear uno por cada usuario 
-
-            Socket backend_service_socket = (Socket)parametros; // pasamos esta variable a ip
-
-            int codigo = recibir_numero(backend_service_socket);
-
-            if (codigo == 1)
-            {
-
-                poner_notas(backend_service_socket, context);
-
-            }
-            else if (codigo == 2)
-            {
-                leer_notas(backend_service_socket, context);
-            }
-
-            backend_service_socket.Close(); // cerramos el socket
-
-            closeconnection(context); // cerramos la conexion 
-        }
-
-
-        static public void bucle_principal(object list)
-        {
-
-            object parametros = (object)list;
-            
-            
-            string ip = (string)parametros; // pasamos esta variable a ip
-
-
-            Socket backend_socket = crear_backend_socket(ip);
-
-
-
-            while (backend_socket.IsBound == true)
-            {
-                // ponemos un hilo aqui 
-                Socket backend_service_socket = backend_socket.Accept();
-
-                Console.WriteLine("Conectado");
-
-                // lo mismo pero la idea es que cada cliente tenga su propio backend_service_socket
-                object parametros_cliente = (object)backend_service_socket;
-                ParameterizedThreadStart threadStart = new ParameterizedThreadStart(hilo_cliente);
-                Thread hilo_server_cliente = new Thread(threadStart);
-                hilo_server_cliente.Start(parametros_cliente);
-
-
-            }
-
-
-            backend_socket.Close();
-        }
 
 
 
@@ -113,7 +54,6 @@ namespace clases
 
             while (try_except == 1)
             {
-
 
                 // ip
 
