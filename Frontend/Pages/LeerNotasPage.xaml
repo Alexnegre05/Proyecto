@@ -50,18 +50,18 @@
                     <Grid ColumnDefinitions="Auto, *" ColumnSpacing="20">
 
 
-                        <VerticalStackLayout Grid.Column="0" WidthRequest="80" Spacing="5">
+                        <VerticalStackLayout Grid.Column="0" WidthRequest="200" Spacing="5">
 
                             <!-- Botón de Flecha -->
                             <Button x:Name="BtnFlecha"
-                                Text="▼" 
+                                Text="Cambiar Linea ▼" 
                                 TextColor="White"
                                 BackgroundColor="Transparent"
                                 FontSize="20"
-                                HeightRequest="40"
+                                
                                 Clicked="OnFlechaClicked" />
 
-                            <!-- La lista de estaciones -->
+                            <!-- La lista de lineas para una estacion -->
                             <!--colection view es para mostrar listas de elementos-->
 
                             <!--selection mode sirve para ver como puede interactuar el usuario con esta lista
@@ -91,7 +91,8 @@
                         </VerticalStackLayout>
 
                         <!-- Estación -->
-                        <Label Grid.Column="1"
+                        <Label Grid.Column="0"
+                           Grid.ColumnSpan="2"
                            x:Name="LabelEstacion"
                            Text="Estacion: " 
                            FontSize="24" 
@@ -104,6 +105,7 @@
                 </Border>
 
 
+                <!--Lista de incidencias-->
                 <CollectionView x:Name="lista_incidencias" SelectionMode="Single" IsVisible="false" Margin="20,0">
                     
                     <!-- Esto añade la separación (espaciado) entre las notas -->

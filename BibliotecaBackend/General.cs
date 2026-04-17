@@ -158,8 +158,9 @@ namespace BibliotecaBackend
 
             Console.WriteLine("Hacemos un bucle donde tendra este menu");
             Console.WriteLine("0. salir");
-            Console.WriteLine("1. enviar estacion cercana");
-            Console.WriteLine("2 enviar notas");
+            Console.WriteLine("1 Listar todas estaciones");
+            Console.WriteLine("2. enviar estacion cercana");
+            Console.WriteLine("3 enviar notas");
 
             // como es un bucle while ponemos las variables afuera para no reservar memoria de mas
             int opcion = -1;
@@ -179,8 +180,11 @@ namespace BibliotecaBackend
                 // leemos la opcion 
                 opcion = recibir_numero(backend_service_socket);
 
+                if(opcion == 1) // dependiendo de la opcion enviamos una cosa u otra
+                {
 
-                if (opcion == 1) // dependiendo de la opcion enviamos una cosa u otra
+                }
+                else if (opcion == 2) 
                 {
                     x = recibir_double(backend_service_socket);
 
@@ -221,7 +225,7 @@ namespace BibliotecaBackend
                         enviar_texto(paradas[i], backend_service_socket);
                     }
                 }
-                else if (opcion == 2)
+                else if (opcion == 3)
                 {
 
 

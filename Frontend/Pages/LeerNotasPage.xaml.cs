@@ -35,6 +35,9 @@ public partial class LeerNotasPage : ContentPage
     {
         base.OnAppearing();
         // esto es para decirle que como estamos sobreescribiendo una pagina que primero ejecute lo que hacia antes la funcion original(con el base)
+        
+        // ejecutamos primero una funcion que coja de el backend las estaciones disponibles, solo los nombres
+        todas_estaciones();
 
         EstacionCercana();
     }
@@ -60,7 +63,7 @@ public partial class LeerNotasPage : ContentPage
     {
         MainThread.BeginInvokeOnMainThread(() =>
         {
-            LabelEstacion.Text = "Estacion: " + estacion;
+            LabelEstacion.Text = "Estación: " + estacion;
             LineasView.ItemsSource = paradas;
             // lineas view es como el id de collectionview y sirve para poder tenerlo en el backend y
             // modificar sus atributos igual a label estación que es el nombre de la estacion 
@@ -95,20 +98,20 @@ public partial class LeerNotasPage : ContentPage
                     Titulo.TextColor = Colors.White;
 
                     LineasView.IsVisible = false;
-                    BtnFlecha.Text = "▼";
+                    BtnFlecha.Text = "Cambiar Lineas ▼";
 
                     LineasView.SelectedItem = null;
                     
 
-                    // cada vez que cambie de linea aqui le pedimos la opcion 2 al backend en leer notas para que nos pase las notas
-                    // ahora ponemos la opcion 2 a el backend 
-                    send_num(2, frontend_socket);
+                    // cada vez que cambie de linea aqui le pedimos la opcion 3 al backend en leer notas para que nos pase las notas
+                    // ahora ponemos la opcion 3 a el backend 
+                    send_num(3, frontend_socket);
                     enviar_texto(LabelEstacion.Text, frontend_socket);
                     int num_incidencias = recibir_numero(frontend_socket);
 
 
 
-                    if (num_incidencias >= 0)
+                    if (num_incidencias > 0)
                     {
                         // hacemos que el contenedor sea visible
                         lista_incidencias.IsVisible = true;
@@ -147,6 +150,8 @@ public partial class LeerNotasPage : ContentPage
                     }
                     else
                     {
+
+                        lista_incidencias.ItemsSource = null; // borramos por si las moscas el item source poniendolo a null
                         Shell.Current.DisplayAlert("No hay notas que mostrar", "", "cerrar");
                     }
 
@@ -171,7 +176,7 @@ public partial class LeerNotasPage : ContentPage
         }
 
         // Cambia la flecha según el estado 
-        BtnFlecha.Text = LineasView.IsVisible ? "▲" : "▼";
+        BtnFlecha.Text = LineasView.IsVisible ? "Cambiar Lineas ▲" : "Cambiar Lineas ▼";
 
 
     }
@@ -181,6 +186,10 @@ public partial class LeerNotasPage : ContentPage
 
     // repetimos la funcion de estacion cercana para que te salga por defecto la estacion mas cercana 
 
+    private void todas_estaciones()
+    {
+
+    }
     private async void EstacionCercana()
     {
 
@@ -193,8 +202,8 @@ public partial class LeerNotasPage : ContentPage
 
             send_num(2, frontend_socket);
 
-            // enviamos otro 1 para decirle que queremos que nos de la opcion de la estacion mas cercana en el backend
-            send_num(1, frontend_socket);
+            // enviamos otro 2 para decirle que queremos que nos de la opcion de la estacion mas cercana en el backend
+            send_num(2, frontend_socket);
 
 
             // enviamos el xyz a el servidor
