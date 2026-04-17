@@ -114,7 +114,7 @@
                     <CollectionView.ItemTemplate>
                             <DataTemplate>
 
-                            <Border x:Name="Bordenotas" Padding="10" Margin="5" Stroke="{Binding ColorLinea}"  StrokeThickness="2" StrokeShape="RoundRectangle 15">
+                            <Border x:Name="Bordenotas" Padding="10" Stroke="{Binding ColorTexto}"  StrokeThickness="4" StrokeShape="RoundRectangle 15">
                                     <VerticalStackLayout Spacing="5">
                                     <Label x:Name="LabelTitulo" Text="{Binding titulo}" FontSize="24" TextColor="{Binding ColorTexto}" HorizontalTextAlignment="Center" ></Label>
 
