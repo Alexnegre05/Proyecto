@@ -21,6 +21,7 @@ using static BibliotecaBackend.SQL;
 using static BibliotecaBackend.Sockets;
 using static BibliotecaBackend.IP;
 using static BibliotecaBackend.General;
+using Microsoft.Win32;
 
 
 
@@ -79,19 +80,19 @@ namespace clases
 
                     while (backend_socket.IsBound == true)
                     {
-                       
+                       // ponemos un hilo aqui 
                         Socket backend_service_socket = backend_socket.Accept();
 
                         Console.WriteLine("Conectado");
 
                         int codigo = recibir_numero(backend_service_socket);
 
-                        if (codigo == 1)
-                        {
-                            
-                            poner_notas(backend_service_socket, context);
+                    if (codigo == 1)
+                    {
 
-                        }
+                        poner_notas(backend_service_socket, context);
+
+                    }
                     else if (codigo == 2)
                     {
                         leer_notas(backend_service_socket, context);
