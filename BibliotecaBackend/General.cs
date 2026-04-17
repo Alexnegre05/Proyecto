@@ -231,8 +231,14 @@ namespace BibliotecaBackend
                     if (parada_actual != null)
                     {
 
-                        List<Incidencias> listaIncidencias = context.Incidencias.Where(i => i.ParadaId == parada_actual.Id).ToList();
+                        DateTime inicioDia = DateTime.UtcNow.Date;
+                        DateTime finDia = inicioDia.AddDays(1);
+
+                        List<Incidencias> listaIncidencias = context.Incidencias.Where(i => i.ParadaId == parada_actual.Id && i.fecha >= inicioDia && i.fecha < finDia).ToList();
                         // sacamos la lista de incidencias de esta estacion y enviamos un numero con cuantas incidencias hay 
+                        // se coje solo las de el dia actual no las de dias antiguos, necesitamos usar el UTCNow, comparamos que la fecha este entre el dia actual y el siguiente
+                        // para saber el dia siguiente se tiene que llamar a AddDays(numero de dias a sumar) si por ejemplo es 3 /4/26 0:0:0 y hacemos adddays llegamos a 4/4/26 0:0:0
+                        // copmo acaba en 0:0:0 de el dia siguente y queremos las 23:59 en vez de <= usamos <
 
                         Console.WriteLine("Incidencias: " + listaIncidencias.Count);
                         enviar_numero(listaIncidencias.Count, backend_service_socket);
