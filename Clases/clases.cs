@@ -29,9 +29,6 @@ namespace clases
 {
 
 
-
-
-
     internal class Program
     {
         
@@ -39,11 +36,11 @@ namespace clases
 
         static public void hilo_cliente(object list)
         {
-            object[] parametros = (object[])list;
+            object parametros = (object)list;
             
             DBProyectoContext context = new DBProyectoContext(); // los hilos no pueden compartir contextos, hay que crear uno por cada usuario 
 
-            Socket backend_service_socket = (Socket)parametros[0]; // pasamos esta variable a ip
+            Socket backend_service_socket = (Socket)parametros; // pasamos esta variable a ip
 
             int codigo = recibir_numero(backend_service_socket);
 
@@ -67,10 +64,10 @@ namespace clases
         static public void bucle_principal(object list)
         {
 
-            object[] parametros = (object[])list;
+            object parametros = (object)list;
             
             
-            string ip = (string)parametros[0]; // pasamos esta variable a ip
+            string ip = (string)parametros; // pasamos esta variable a ip
 
 
             Socket backend_socket = crear_backend_socket(ip);
@@ -84,8 +81,8 @@ namespace clases
 
                 Console.WriteLine("Conectado");
 
-
-                object[] parametros_cliente = new object[] {  backend_service_socket };
+                // lo mismo pero la idea es que cada cliente tenga su propio backend_service_socket
+                object parametros_cliente = (object)backend_service_socket;
                 ParameterizedThreadStart threadStart = new ParameterizedThreadStart(hilo_cliente);
                 Thread hilo_server_cliente = new Thread(threadStart);
                 hilo_server_cliente.Start(parametros_cliente);
@@ -135,11 +132,11 @@ namespace clases
 
                 }
 
-                object[] parametros = new object[] { ip };
-
+                object parametros = (object)ip; // como tenemos que pasar la variable ip a la funcion hay que usar paramethized en la funcion
+                // los objetos se pasan como (object)
                 ParameterizedThreadStart threadStart = new ParameterizedThreadStart(bucle_principal);
                 Thread hilo_server_bucle = new Thread(threadStart);
-                hilo_server_bucle.Start(parametros);
+                hilo_server_bucle.Start(parametros); // iniciamos el hilo
 
                 try_except = 0; // salimos de el bucle de try_except
             }
