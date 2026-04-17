@@ -21,6 +21,8 @@ public partial class LeerNotasPage : ContentPage
     {
         public string titulo { get; set; }
         public string descripcion { get; set; }
+
+        public Color ColorTexto { get; set; } // añadimos el color que tendra el texto que depende de la linea
     }
 
 
@@ -113,6 +115,7 @@ public partial class LeerNotasPage : ContentPage
 
                         List<Incidencia> lista_temporal_incidencias = new List<Incidencia>();
 
+                       
                         
                         for (int i = 0; i < num_incidencias; i = i + 1) // vamos incidencia por incidencia
                         {
@@ -122,10 +125,12 @@ public partial class LeerNotasPage : ContentPage
                             string titulo_actual = recibir_texto(frontend_socket);
                             string descripcion_actual = recibir_texto(frontend_socket);
 
+                            
                             Incidencia incidencia = new Incidencia
                             {
-                                titulo = titulo_actual,
-                                descripcion = descripcion_actual
+                                titulo = titulo_actual.ToUpper(),
+                                descripcion =  descripcion_actual,
+                                ColorTexto = (Color)seleccion.Color
                             };
                             lista_temporal_incidencias.Add(incidencia); // añadimos la incidencia a la lista
 
@@ -136,6 +141,8 @@ public partial class LeerNotasPage : ContentPage
                             // le decimos que la lista de objetos de incidencia es lo que tiene que mostrar,
                             // el binding mira si existe la propiedad titulo o descripcion en lo que esta recibiendo de el collectionview
                             // solo puede leer si tiene {get;set}
+
+                            
                         }
                     }
                     else

@@ -283,7 +283,7 @@ namespace BibliotecaBackend
         public static void sql(DBProyectoContext context)
         {
 
-            context.Database.EnsureDeleted();
+            
             context.Database.EnsureCreated();
 
             Console.WriteLine("BD + tablas creadas");

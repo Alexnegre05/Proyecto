@@ -102,17 +102,23 @@
                            HorizontalTextAlignment="Center" />
                     </Grid>
                 </Border>
-                
-               
-                <CollectionView x:Name="lista_incidencias" SelectionMode="Single" IsVisible="false">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                
-                                <Border Padding="10" Margin="5" BackgroundColor="Black">
-                                    <VerticalStackLayout Spacing="5">
-                                    <Label x:Name="{Binding Titulo}" Text="" TextColor="White" HorizontalTextAlignment="Center"></Label>
 
-                                    <Label x:Name="{Binding Descripcion}" Text="" TextColor="White" HorizontalTextAlignment="Center"></Label>
+
+                <CollectionView x:Name="lista_incidencias" SelectionMode="Single" IsVisible="false" Margin="20,0">
+                    
+                    <!-- Esto añade la separación (espaciado) entre las notas -->
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="15" />
+                    </CollectionView.ItemsLayout>
+
+                    <CollectionView.ItemTemplate>
+                            <DataTemplate>
+
+                            <Border x:Name="Bordenotas" Padding="10" Margin="5" Stroke="{Binding ColorLinea}"  StrokeThickness="2" StrokeShape="RoundRectangle 15">
+                                    <VerticalStackLayout Spacing="5">
+                                    <Label x:Name="LabelTitulo" Text="{Binding titulo}" FontSize="24" TextColor="{Binding ColorTexto}" HorizontalTextAlignment="Center" ></Label>
+
+                                    <Label x:Name="LabelDescripción" Text="{Binding descripcion}" FontSize="15" TextColor="White" HorizontalTextAlignment="Center"></Label>
                                     </VerticalStackLayout>
                                 </Border>
                                 
