@@ -21,6 +21,7 @@ using static BibliotecaBackend.SQL;
 using static BibliotecaBackend.Sockets;
 using static BibliotecaBackend.IP;
 using static BibliotecaBackend.General;
+using static BibliotecaBackend.Hilos;
 using Microsoft.Win32;
 
 
@@ -32,7 +33,6 @@ namespace clases
     internal class Program
     {
         
-
 
 
 
@@ -72,11 +72,7 @@ namespace clases
 
                 }
 
-                object parametros = (object)ip; // como tenemos que pasar la variable ip a la funcion hay que usar paramethized en la funcion
-                // los objetos se pasan como (object)
-                ParameterizedThreadStart threadStart = new ParameterizedThreadStart(bucle_principal);
-                Thread hilo_server_bucle = new Thread(threadStart);
-                hilo_server_bucle.Start(parametros); // iniciamos el hilo
+                crear_hilo_principal(ip);
 
                 try_except = 0; // salimos de el bucle de try_except
             }
