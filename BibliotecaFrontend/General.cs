@@ -25,6 +25,19 @@ namespace BibliotecaFrontend
         public Button BtnFlecha;
         public Border ContenedorIncidencias;
     }
+    
+    public struct LeerNotasParams
+    {
+        public Socket frontend_socket;
+        public string Estacion;
+        public List<InfoLinea> Paradas;
+        public Label LabelEstacion;
+        public CollectionView LineasView;
+        public Border BordePrincipal;
+        public Label Titulo;
+        public Button BtnFlecha;
+        public CollectionView lista_incidencias;
+    }
 
 
     public class BibliotecaFrontend
@@ -209,7 +222,22 @@ namespace BibliotecaFrontend
                 }
                 else // num == 2
                 {
-                    mainthreadLeerNotas(estacion, paradas, LabelEstacion, LineasView, BordePrincipal, Titulo, BtnFlecha, frontend_socket, lista_incidencias);
+
+                    LeerNotasParams parametros = new LeerNotasParams
+                    {
+                        frontend_socket = frontend_socket,
+                        Estacion = estacion,
+                        Paradas = paradas,
+                        LabelEstacion = LabelEstacion,
+                        LineasView = LineasView,
+                        BordePrincipal = BordePrincipal,
+                        Titulo = Titulo,
+                        BtnFlecha = BtnFlecha,
+                        lista_incidencias = lista_incidencias,
+                    };
+
+
+                    mainthreadLeerNotas(parametros);
                 }
 
 

@@ -41,7 +41,9 @@ public partial class LeerNotasPage : ContentPage
         // ejecutamos primero una funcion que coja de el backend las estaciones disponibles, solo los nombres
         todas_estaciones();
 
-        EstacionCercana(2);
+        frontend_socket = crear_frontend_socket(1000);
+        // como no hay boton de guardar es null
+        EstacionCercana(2, frontend_socket, LabelEstacion, LineasView, BordePrincipal,null, Titulo, BtnFlecha, BordePrincipal, lista_incidencias);
     }
 
     protected override void OnDisappearing()
@@ -92,80 +94,7 @@ public partial class LeerNotasPage : ContentPage
     {
 
     }
-    private async void EstacionCercana(int num_opcion)
-    {
-
-        try
-        {
-
-            frontend_socket = crear_frontend_socket(1000);
-
-            // enviamos un 2 para decir que va a recibir algo de enviar notas, un 1 si es de 
-           
-            send_num(num_opcion, frontend_socket);
-            
-            
-
-            // enviamos otro 2 para decirle que queremos que nos de la opcion de la estacion mas cercana en el backend
-            send_num(2, frontend_socket);
 
 
-            // enviamos el xyz a el servidor
-            await send_xyz(frontend_socket);
-
-            string estacion = recibir_texto(frontend_socket);
-
-
-
-
-            int num = recibir_numero(frontend_socket); // numero que nos dice cuantas paradas hay 
-
-            List<InfoLinea> paradas = new List<InfoLinea>();
-            // Infolinea es una clase donde se guardan los colores y los nombres de las lineas
-
-            // recorremos toda la lista
-            for (int i = 0; i < num; i = i + 1)
-            {
-                string linea = recibir_texto(frontend_socket);
-                // obtenemos una de las lineas de la estacion y lo añadimos a paradas
-
-                //esto es un objeto de la clase InfoLinea que se añade a las paradas
-                InfoLinea linea_actual = new InfoLinea
-                {
-                    Nombre = linea,
-                    Color = colores.GetValueOrDefault(linea, Colors.Gray)
-                };
-
-
-                paradas.Add(linea_actual);
-
-                //new Nombre = linea, Color = colores.GetValueOrDefault(linea, Colors.Gray)
-
-            }
-
-
-            // aqui es donde se cambia el nombre, y todo el tema de el color.
-
-            // El MainThread es el que se encarga de dibujar por pantalla
-            // le decimos a ese hilo que se invoque y que cambie el texto y que las lineas son las paradas que hemos cogido
-            if (num == 1)
-            {
-                //mainthreadPonerNotas(estacion, paradas, LabelEstacion, LineasView, BordePrincipal, guardar, Titulo, BtnFlecha, ContenedorIncidencias);
-            }
-            else if (num == 2)
-            {
-                mainthreadLeerNotas(estacion, paradas, LabelEstacion, LineasView, BordePrincipal, Titulo, BtnFlecha, frontend_socket, lista_incidencias);
-            }
-            
-
-            
-
-
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.ToString());
-        }
-
-    }
+    
 }
