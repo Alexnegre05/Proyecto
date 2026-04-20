@@ -23,6 +23,16 @@ namespace BibliotecaFrontend
                 // modificar sus atributos igual a label estación que es el nombre de la estacion 
 
 
+                parametros.PickerEstaciones.ItemsSource = parametros.estaciones;
+                parametros.PickerEstaciones.SelectedItem = parametros.Estacion;
+
+
+
+
+
+
+
+
                 // el selectionchanges es que cuando se cambie la estacion(el selector) que se cambie el nombre
                 // el += no es un a= a + 1 sino aqui
                 // es un añade también esta función a la lista de cosas por hacer cuando ocurra el evento SelectionChanged
@@ -40,7 +50,7 @@ namespace BibliotecaFrontend
                     if (seleccion != null) // miramos que no sea nulo
                     {
                         // Cambiamos el texto
-                        parametros.LabelEstacion.Text = $"Estación: {parametros.Estacion} ({seleccion.Nombre})";
+                        parametros.LabelEstacion.Text = $"Estación: {parametros.PickerEstaciones.SelectedItem} ({seleccion.Nombre})";
 
 
                         // Usamos el color que viene guardado en el objeto seleccionado

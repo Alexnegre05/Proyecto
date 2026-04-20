@@ -109,7 +109,8 @@
                         <Picker x:Name="PickerEstaciones"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
-                        IsVisible="False"
+                        Opacity="0"
+                        InputTransparent="True"
                         SelectedIndexChanged="OnEstacionSelected" />    
 
 

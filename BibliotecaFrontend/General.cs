@@ -101,6 +101,16 @@ namespace BibliotecaFrontend
         }
 
 
+
+
+        // repetimos la funcion de estacion cercana para que te salga por defecto la estacion mas cercana 
+
+        public static void todas_estaciones(Socket frontend_socket)
+        {
+
+        }
+
+
         public async static void EstacionCercana(int num_opcion,
         Socket frontend_socket,
         Label LabelEstacion,
@@ -110,7 +120,8 @@ namespace BibliotecaFrontend
         Label Titulo,
         Button BtnFlecha,
         Border ContenedorIncidencias,
-        CollectionView lista_incidencias)
+        CollectionView lista_incidencias,
+        Picker PickerEstaciones)
         {
 
             try
@@ -125,13 +136,17 @@ namespace BibliotecaFrontend
 
                 if (num_opcion == 1)
                 {
-                    // enviamos un 1 
+                    // enviamos un 1 dependiendo de la opcion de el menu
                     send_num(1, frontend_socket);
+                    
+
                 }
                 else
                 {
                     // enviamos otro 2 para decirle que queremos que nos de la opcion de la estacion mas cercana en el backend
                     send_num(2, frontend_socket);
+                    
+
                 }
                     
 
@@ -197,7 +212,18 @@ namespace BibliotecaFrontend
                 }
                 else // num == 2
                 {
+                    // queremos la lista de todas las estaciones, por eso le pasamos un 1 aqui, una vez que el backend ya ha enviado todo de la opcion 1
+                    send_num(1, frontend_socket); 
+                    
+                    int num_estaciones = recibir_numero(frontend_socket);
+                    List<string> estaciones = new List<string>();
 
+                    for(int i = 0; i < num_estaciones; i = i + 1)
+                    {
+                        string estacion_actual = recibir_texto(frontend_socket);
+                        estaciones.Add(estacion_actual);
+                    }
+                    
                     LeerNotasParams parametros = new LeerNotasParams
                     {
                         frontend_socket = frontend_socket,
@@ -209,10 +235,12 @@ namespace BibliotecaFrontend
                         Titulo = Titulo,
                         BtnFlecha = BtnFlecha,
                         lista_incidencias = lista_incidencias,
+                        estaciones = estaciones,
+                        PickerEstaciones = PickerEstaciones,
                     };
 
 
-                    mainthreadLeerNotas(parametros);
+                    mainthreadLeerNotas(parametros); // mainthread que va a recibir las notas de esta estacion en concreto
                 }
 
 
@@ -226,7 +254,6 @@ namespace BibliotecaFrontend
             }
 
         }
-
 
 
 

@@ -31,7 +31,8 @@ public partial class PonerNotasPage : ContentPage
         base.OnAppearing();
         // esto es para decirle que como estamos sobreescribiendo una pagina que primero ejecute lo que hacia antes la funcion original(con el base)
         frontend_socket = crear_frontend_socket(1000);
-        EstacionCercana(1,frontend_socket,LabelEstacion,LineasView,BordePrincipal,guardar,Titulo,BtnFlecha,ContenedorIncidencias,null);
+        EstacionCercana(1,frontend_socket,LabelEstacion,LineasView,BordePrincipal,guardar,Titulo,BtnFlecha,ContenedorIncidencias,null,null);
+        // los dos null son para lo que usa leer notas
     }
 
     // es lo mismo que on apearing pero para cuando un usuario cierra la pantalla o cambia de pestaña

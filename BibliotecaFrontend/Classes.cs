@@ -49,6 +49,8 @@ namespace BibliotecaFrontend
             public Label Titulo;
             public Button BtnFlecha;
             public CollectionView lista_incidencias;
+            public List<string> estaciones; // lista de todas las estaciones
+            public Picker PickerEstaciones; // picker para seleccionar estacion
         }
     }
 }
