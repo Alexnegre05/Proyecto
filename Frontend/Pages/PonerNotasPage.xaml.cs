@@ -7,6 +7,7 @@ using static BibliotecaFrontend.BibliotecaFrontend;
 using static BibliotecaFrontend.Sockets;
 using static BibliotecaFrontend.Classes;
 using static BibliotecaFrontend.PonerNota;
+
 namespace Frontend.Pages;
 
 
@@ -27,10 +28,10 @@ public partial class PonerNotasPage : ContentPage
     // la funcion onAppearing sirve para indicarle a la aplicacion que cuando se abra la pagina  se llame a la funcion que quieras
     protected override void OnAppearing()
     {
-        base.OnAppearing(); 
+        base.OnAppearing();
         // esto es para decirle que como estamos sobreescribiendo una pagina que primero ejecute lo que hacia antes la funcion original(con el base)
 
-        EstacionCercana();
+        EstacionCercana(1,frontend_socket,LabelEstacion,LineasView,BordePrincipal,guardar,Titulo,BtnFlecha,ContenedorIncidencias,null);
     }
 
     // es lo mismo que on apearing pero para cuando un usuario cierra la pantalla o cambia de pestaña
@@ -42,11 +43,14 @@ public partial class PonerNotasPage : ContentPage
 
         send_num(0, frontend_socket);
 
-        
+        if(frontend_socket != null)
+        {
+            // y cerramos los sockets
+            frontend_socket.Dispose();
+            frontend_socket.Close();
+        }
 
-        // y cerramos los sockets
-        frontend_socket.Dispose();
-        frontend_socket.Close();
+        
     }
 
 
@@ -128,74 +132,6 @@ public partial class PonerNotasPage : ContentPage
 
 
 
-
-    // funcion para saber el nombre de la estacion mas cercana
-    // usamos de nuevo el async y el await pero esta vez en la conexion de el socket 
-    private async void EstacionCercana()
-    {
-
-        try
-        {
-          
-            frontend_socket = crear_frontend_socket(1000);
-            
-            // enviamos un 1 para decir que va a recibir algo de poner notas 
-
-            send_num(1, frontend_socket);
-
-            // enviamos otro 1 para decirle que queremos que nos de la opcion de la estacion mas cercana en el backend
-            send_num(1, frontend_socket);
-
-
-            // enviamos el xyz a el servidor
-            await send_xyz(frontend_socket);
-
-            string estacion = recibir_texto(frontend_socket);
-
-
-            
-
-            int num = recibir_numero(frontend_socket); // numero que nos dice cuantas paradas hay 
-
-            List<InfoLinea> paradas = new List<InfoLinea>(); 
-            // Infolinea es una clase donde se guardan los colores y los nombres de las lineas
-
-            // recorremos toda la lista
-            for (int i = 0; i < num; i = i + 1)
-            {
-                string linea = recibir_texto(frontend_socket);
-                // obtenemos una de las lineas de la estacion y lo añadimos a paradas
-
-                //esto es un objeto de la clase InfoLinea que se añade a las paradas
-                InfoLinea linea_actual = new InfoLinea
-                {
-                    Nombre = linea,
-                    Color = colores.GetValueOrDefault(linea, Colors.Gray)
-                };
-
-
-                paradas.Add(linea_actual);
-
-                //new Nombre = linea, Color = colores.GetValueOrDefault(linea, Colors.Gray)
-                
-            }
-
-
-            // aqui es donde se cambia el nombre, y todo el tema de el color.
-
-            // El MainThread es el que se encarga de dibujar por pantalla
-            // le decimos a ese hilo que se invoque y que cambie el texto y que las lineas son las paradas que hemos cogido
-
-            mainthreadPonerNotas(estacion, paradas, LabelEstacion, LineasView, BordePrincipal, guardar, Titulo, BtnFlecha, ContenedorIncidencias);
-
-
-
-
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.ToString());
-        }
         
-    }
+    
 }

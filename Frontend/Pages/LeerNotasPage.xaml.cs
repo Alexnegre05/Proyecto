@@ -150,7 +150,7 @@ public partial class LeerNotasPage : ContentPage
             // le decimos a ese hilo que se invoque y que cambie el texto y que las lineas son las paradas que hemos cogido
             if (num == 1)
             {
-                mainthreadPonerNotas(estacion, paradas, LabelEstacion, LineasView, BordePrincipal, guardar, Titulo, BtnFlecha, ContenedorIncidencias);
+                //mainthreadPonerNotas(estacion, paradas, LabelEstacion, LineasView, BordePrincipal, guardar, Titulo, BtnFlecha, ContenedorIncidencias);
             }
             else if (num == 2)
             {

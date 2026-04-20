@@ -14,12 +14,12 @@ namespace BibliotecaFrontend
 {
     public struct PonerNotasParams
     {
-        public string estacion;
-        public List<InfoLinea> paradas;
+        public string Estacion;
+        public List<InfoLinea> Paradas;
         public Label LabelEstacion;
         public CollectionView LineasView;
         public Border BordePrincipal;
-        public Button guardar;
+        public Button Guardar;
         public Label Titulo;
         public Button BtnFlecha;
         public Border ContenedorIncidencias;
@@ -112,7 +112,7 @@ namespace BibliotecaFrontend
         }
 
 
-        private async void EstacionCercana(int num_opcion,
+        public async static void EstacionCercana(int num_opcion,
         Socket frontend_socket,
         Label LabelEstacion,
         CollectionView LineasView,
@@ -129,14 +129,22 @@ namespace BibliotecaFrontend
 
                 frontend_socket = crear_frontend_socket(1000);
 
-                // enviamos un 2 para decir que va a recibir algo de enviar notas, un 1 si es de 
+                // enviamos un 1 para decir que va a recibir algo de enviar notas, un 1 si es de 
 
                 send_num(num_opcion, frontend_socket);
 
 
-
-                // enviamos otro 2 para decirle que queremos que nos de la opcion de la estacion mas cercana en el backend
-                send_num(2, frontend_socket);
+                if (num_opcion == 1)
+                {
+                    // enviamos un 1 
+                    send_num(1, frontend_socket);
+                }
+                else
+                {
+                    // enviamos otro 2 para decirle que queremos que nos de la opcion de la estacion mas cercana en el backend
+                    send_num(2, frontend_socket);
+                }
+                    
 
 
                 // enviamos el xyz a el servidor
@@ -183,12 +191,12 @@ namespace BibliotecaFrontend
 
                     PonerNotasParams parametros = new PonerNotasParams
                     {
-                        estacion = estacion,
-                        paradas = paradas,
+                        Estacion = estacion,
+                        Paradas = paradas,
                         LabelEstacion = LabelEstacion, // Estos nombres deben coincidir con tu XAML
                         LineasView = LineasView,
                         BordePrincipal = BordePrincipal,
-                        guardar = guardar,
+                        Guardar = guardar,
                         Titulo = Titulo,
                         BtnFlecha = BtnFlecha,
                         ContenedorIncidencias = ContenedorIncidencias
