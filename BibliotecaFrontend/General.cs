@@ -14,6 +14,7 @@ namespace BibliotecaFrontend
 {
     public struct PonerNotasParams
     {
+        public Socket frontend_socket;
         public string Estacion;
         public List<InfoLinea> Paradas;
         public Label LabelEstacion;
@@ -127,7 +128,7 @@ namespace BibliotecaFrontend
             try
             {
 
-                frontend_socket = crear_frontend_socket(1000);
+                
 
                 // enviamos un 1 para decir que va a recibir algo de enviar notas, un 1 si es de 
 
@@ -185,12 +186,13 @@ namespace BibliotecaFrontend
 
                 // El MainThread es el que se encarga de dibujar por pantalla
                 // le decimos a ese hilo que se invoque y que cambie el texto y que las lineas son las paradas que hemos cogido
-                if (num == 1)
+                if (num_opcion == 1)
                 {
 
 
                     PonerNotasParams parametros = new PonerNotasParams
                     {
+                        frontend_socket = frontend_socket,
                         Estacion = estacion,
                         Paradas = paradas,
                         LabelEstacion = LabelEstacion, // Estos nombres deben coincidir con tu XAML

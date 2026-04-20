@@ -16,7 +16,7 @@ namespace BibliotecaFrontend
         public static Socket crear_frontend_socket(int puerto)
         {
             // ip que se usa para conectarse en el movil
-            string ip = "192.168.111.24";
+            string ip = "192.168.111.25";
 
             // Creamos el socket 
             IPAddress address = IPAddress.Parse(ip);  // creamos la ip y el endpoint
