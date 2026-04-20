@@ -12,32 +12,7 @@ using static BibliotecaFrontend.LeerNota;
 
 namespace BibliotecaFrontend
 {
-    public struct PonerNotasParams
-    {
-        public Socket frontend_socket;
-        public string Estacion;
-        public List<InfoLinea> Paradas;
-        public Label LabelEstacion;
-        public CollectionView LineasView;
-        public Border BordePrincipal;
-        public Button Guardar;
-        public Label Titulo;
-        public Button BtnFlecha;
-        public Border ContenedorIncidencias;
-    }
     
-    public struct LeerNotasParams
-    {
-        public Socket frontend_socket;
-        public string Estacion;
-        public List<InfoLinea> Paradas;
-        public Label LabelEstacion;
-        public CollectionView LineasView;
-        public Border BordePrincipal;
-        public Label Titulo;
-        public Button BtnFlecha;
-        public CollectionView lista_incidencias;
-    }
 
 
     public class BibliotecaFrontend
