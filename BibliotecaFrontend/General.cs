@@ -187,7 +187,7 @@ namespace BibliotecaFrontend
                         frontend_socket = frontend_socket,
                         Estacion = estacion,
                         Paradas = paradas,
-                        LabelEstacion = LabelEstacion, // Estos nombres deben coincidir con tu XAML
+                        LabelEstacion = LabelEstacion, 
                         LineasView = LineasView,
                         BordePrincipal = BordePrincipal,
                         Guardar = guardar,

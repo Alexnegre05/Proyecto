@@ -6,9 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using static BibliotecaBackend.Clases;
 using static BibliotecaBackend.Sockets;
-using static BibliotecaBackend.General;
 using static BibliotecaBackend.SQL;
-
+using static BibliotecaBackend.Notas;
 
 namespace BibliotecaBackend
 {
