@@ -39,8 +39,12 @@ public partial class LeerNotasPage : ContentPage
         // esto es para decirle que como estamos sobreescribiendo una pagina que primero ejecute lo que hacia antes la funcion original(con el base)
         frontend_socket = crear_frontend_socket(1000);
         
+        // ejecutamos primero una funcion que coja de el backend las estaciones disponibles, solo los nombres
+        todas_estaciones();
+
+        
         // como no hay boton de guardar es null
-        EstacionCercana(2, frontend_socket, LabelEstacion, LineasView, BordePrincipal,null, Titulo, BtnFlecha, BordePrincipal, lista_incidencias, PickerEstaciones);
+        EstacionCercana(2, frontend_socket, LabelEstacion, LineasView, BordePrincipal,null, Titulo, BtnFlecha, BordePrincipal, lista_incidencias);
     }
 
     protected override void OnDisappearing()
@@ -92,19 +96,21 @@ public partial class LeerNotasPage : ContentPage
     {
         if (PickerEstaciones.SelectedIndex != -1)
         {
-
-            // PickerEstaciones.ItemsSource es la lista de cosas que puedes seleccionar en el picker
-            // en nuestro caso son las estaciones, como es una lista PickerEstaciones.SelectedIndex indica el indice si es 0,1...
             string seleccionada = (string)PickerEstaciones.ItemsSource[PickerEstaciones.SelectedIndex];
             LabelEstacion.Text = "Estacion: " + seleccionada;
-            lista_incidencias.ItemsSource = null;
-            LineasView.ItemsSource = null;
+
             // Aquí deberías llamar a la lógica para cargar las incidencias 
             // de esta nueva estación seleccionada
         }
     }
 
 
+    // repetimos la funcion de estacion cercana para que te salga por defecto la estacion mas cercana 
+
+    private void todas_estaciones()
+    {
+        send_num(1, frontend_socket); // opcion de leer todas las estaciones 
+    }
 
 
     
