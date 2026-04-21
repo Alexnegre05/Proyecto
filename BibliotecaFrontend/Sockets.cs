@@ -10,13 +10,35 @@ namespace BibliotecaFrontend
 {
     public class Sockets
     {
+        static public string calcular_ip_automatico()
+        {
+            // calcular la ip de manera automatica 
+            string hostName = Dns.GetHostName();
+            string ip = "";
+
+
+
+            IPAddress[] localIPs = Dns.GetHostAddresses(hostName);
+
+            foreach (IPAddress ipaddress in localIPs)
+            {
+                // Filtra para obtener solo direcciones IPv4
+                if (ipaddress.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    ip = ipaddress.ToString();
+                }
+
+            }
+
+            return ip;
+        }
 
 
         // funcion para crear el socket 
         public static Socket crear_frontend_socket(int puerto)
         {
             // ip que se usa para conectarse en el movil
-            string ip = "192.168.111.25";
+            string ip = calcular_ip_automatico();
 
             // Creamos el socket 
             IPAddress address = IPAddress.Parse(ip);  // creamos la ip y el endpoint

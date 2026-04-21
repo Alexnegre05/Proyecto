@@ -22,11 +22,7 @@ namespace Frontend.Pages
             public Color ColorTexto { get; set; } // añadimos el color que tendra el texto que depende de la linea
         }
 
-
-
         Socket frontend_socket;
-
-
 
         protected override void OnAppearing()
         {
