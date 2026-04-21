@@ -41,5 +41,11 @@ namespace Frontend.Pages
             // Navegación usando Shell
             await Shell.Current.GoToAsync("LeerNotasPage");
         }
+
+        private async void OnModificarIncidenciaClicked(object sender, EventArgs e)
+        {
+            // Navegación a la página de modificar
+            await Shell.Current.GoToAsync("ModificarNotasPage");
+        }
     }
 }

@@ -98,7 +98,8 @@
                     BackgroundColor="White" 
                     FontSize="18"
                     TextColor="Black" 
-                    CornerRadius="50">
+                    CornerRadius="50"
+                    Clicked="OnModificarIncidenciaClicked">
                 <Button.GestureRecognizers>
                     <PointerGestureRecognizer PointerEntered="OnHoverEnter" PointerExited="OnHoverExit" />
                 </Button.GestureRecognizers>
@@ -140,38 +141,52 @@
         </VerticalStackLayout>
 
         <!-- FOOTER: Fondo Negro, Línea Blanca y Texto Blanco -->
+        <!--Iconos sacados de flaticon-->
         <Grid Grid.Row="1" 
-              ColumnDefinitions="*, *, *, *, *" 
-              BackgroundColor="Black"
-            
-              HeightRequest="80" 
-              Padding="0,0">
+          ColumnDefinitions="*, *, *, *, *" 
+          BackgroundColor="Black"
+          HeightRequest="80">
 
             <BoxView Grid.ColumnSpan="5"
-                     HeightRequest="1" 
-                     BackgroundColor="White" 
-                     HorizontalOptions="Fill" 
-                     VerticalOptions="Start" />
+             HeightRequest="1" 
+             BackgroundColor="White" 
+             HorizontalOptions="Fill" 
+             VerticalOptions="Start" />
 
-            <Label Grid.Column="0" Text="icon1" 
-                   HorizontalOptions="Center" VerticalOptions="Center" 
-                   FontSize="12" TextColor="White" FontFamily="Inter" />
+            <!-- 1. Poner Notas -->
+            <ImageButton Grid.Column="0" 
+                 Source="circulo-plus.png"
+                 HorizontalOptions="Center" VerticalOptions="Center"
+                 HeightRequest="30" WidthRequest="30"
+                 Clicked="OnPonerIncidenciaClicked" />
 
-            <Label Grid.Column="1" Text="icon2" 
-                   HorizontalOptions="Center" VerticalOptions="Center" 
-                   FontSize="12" TextColor="White" FontFamily="Inter" />
+            <!-- 2. Leer Notas -->
+            <ImageButton Grid.Column="1" 
+                 Source="libro-abierto.png"
+                 HorizontalOptions="Center" VerticalOptions="Center"
+                 HeightRequest="30" WidthRequest="30"
+                 Clicked="OnLeerIncidenciaClicked" />
 
-            <Label Grid.Column="2" Text="icon3" 
-                   HorizontalOptions="Center" VerticalOptions="Center" 
-                   FontSize="12" TextColor="White" FontFamily="Inter" />
+            <!-- 3. Modificar Notas -->
+            <ImageButton Grid.Column="2" 
+                 Source="boton-editar.png"
+                 HorizontalOptions="Center" VerticalOptions="Center"
+                 HeightRequest="30" WidthRequest="30"
+                 Clicked="OnModificarIncidenciaClicked" />
 
-            <Label Grid.Column="3" Text="icon4" 
-                   HorizontalOptions="Center" VerticalOptions="Center" 
-                   FontSize="12" TextColor="White" FontFamily="Inter" />
+            <!-- 4. Calcular Ruta -->
+            <ImageButton Grid.Column="3" 
+                 Source="punteros-de-ruta.png"
+                 HorizontalOptions="Center" VerticalOptions="Center"
+                 HeightRequest="30" WidthRequest="30"
+                  />
 
-            <Label Grid.Column="4" Text="icon5" 
-                   HorizontalOptions="Center" VerticalOptions="Center" 
-                   FontSize="12" TextColor="White" FontFamily="Inter" />
+            <!-- 5. Estadísticas -->
+            <ImageButton Grid.Column="4" 
+                 Source="data-analytics.png"
+                 HorizontalOptions="Center" VerticalOptions="Center"
+                 HeightRequest="30" WidthRequest="30"
+                  />
         </Grid>
 
     </Grid>

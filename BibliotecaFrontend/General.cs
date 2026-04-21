@@ -9,7 +9,7 @@ using static BibliotecaFrontend.Sockets;
 using static BibliotecaFrontend.Classes;
 using static BibliotecaFrontend.PonerNota;
 using static BibliotecaFrontend.LeerNota;
-
+using static BibliotecaFrontend.ModificarNota;
 namespace BibliotecaFrontend
 {
     
@@ -128,16 +128,20 @@ namespace BibliotecaFrontend
                     // enviamos un 1 
                     send_num(1, frontend_socket);
                 }
-                else
+                else if (num_opcion == 2)
                 {
                     // enviamos otro 2 para decirle que queremos que nos de la opcion de la estacion mas cercana en el backend
                     send_num(2, frontend_socket);
                 }
-                    
+                else if (num_opcion == 3)
+                {
+                    send_num(3, frontend_socket); // enviamos 3 diciendo que estamos en modificar notas
+                }
 
 
-                // enviamos el xyz a el servidor
-                await send_xyz(frontend_socket);
+
+                    // enviamos el xyz a el servidor
+                    await send_xyz(frontend_socket);
 
                 string estacion = recibir_texto(frontend_socket);
 
@@ -195,7 +199,7 @@ namespace BibliotecaFrontend
                     // Llamamos a la función estática que ya tienes en la clase PonerNota
                     mainthreadPonerNotas(parametros);
                 }
-                else // num == 2
+                else if (num_opcion == 2) 
                 {
 
                     LeerNotasParams parametros = new LeerNotasParams
@@ -213,6 +217,23 @@ namespace BibliotecaFrontend
 
 
                     mainthreadLeerNotas(parametros);
+                }
+                else if (num_opcion == 3)
+                {
+                    ModificarNotasParams parametros = new ModificarNotasParams
+                    {
+                        frontend_socket = frontend_socket,
+                        Estacion = estacion,
+                        Paradas = paradas,
+                        LabelEstacion = LabelEstacion,
+                        LineasView = LineasView,
+                        BordePrincipal = BordePrincipal,
+                        Titulo = Titulo,
+                        BtnFlecha = BtnFlecha,
+                        lista_incidencias = lista_incidencias,
+                    };
+
+                    mainthreaModificarNotas(parametros);
                 }
 
 

@@ -2,11 +2,175 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Frontend.Pages.ModificarNotasPage"
-             Title="ModificarNotasPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Title="">
+
+    <Grid RowDefinitions="*, Auto" BackgroundColor="Black">
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout  VerticalOptions="Start" Spacing="20" Padding="0,30,0,20">
+
+                <!--usamos el horizontal layout en esta parte para que se pongan los elementos en el eje x-->
+                <!--con fill el horizontaloptions hacemos que ocupe todo el eje x-->
+
+                <Border x:Name="BordePrincipal"  Margin="20,0"
+                        StrokeShape="RoundRectangle 15"
+                        StrokeThickness="0"
+                        BackgroundColor="White"
+                        >
+
+                    <Grid  
+                          Padding="20"
+                          ColumnDefinitions="*" 
+                          HorizontalOptions="Fill">
+
+                        <StackLayout Orientation="Horizontal" 
+                                     HorizontalOptions="Center" 
+                                     Spacing="10">
+
+                            <!--el texto de arriba de el titulo-->
+                            <Label x:Name="Titulo" VerticalOptions="Center" Text="Modificar Notas" 
+                                   FontSize="28" 
+                                   FontAttributes="Bold" 
+                                   TextColor="#FF6600"
+                                    />
+                        </StackLayout>
+                    </Grid>
+                </Border>
+
+
+                <!--lo ponemos todo en un borde para poder ponerle un radius ya que no hay un solo label -->
+                <Border BackgroundColor="White" 
+                    StrokeShape="RoundRectangle 25" 
+                    StrokeThickness="0"
+                    Margin="20,0"
+                    Padding="20"
+                    HorizontalOptions="Fill">
+
+                    <!--usamos grid + vertical layout para que todo que centrado correctamente...-->
+                    <Grid ColumnDefinitions="Auto, *" ColumnSpacing="20">
+
+
+                        <VerticalStackLayout Grid.Column="0" WidthRequest="200" Spacing="5">
+
+                            <!-- Botón de Flecha -->
+                            <Button x:Name="BtnFlecha"
+                                Text="Cambiar Linea ▼" 
+                                TextColor="White"
+                                BackgroundColor="Transparent"
+                                FontSize="20"
+                                
+                                Clicked="OnFlechaClicked" />
+
+                            <!-- La lista de lineas para una estacion -->
+                            <!--colection view es para mostrar listas de elementos-->
+
+                            <!--selection mode sirve para ver como puede interactuar el usuario con esta lista
+                                        tiene 3 modos 
+                        
+                                        None: La lista es solo para leer. Aunque el usuario toque una opcion, no pasará nada (no se dispara el evento SelectionChanged).
+                                        Single: El usuario solo puede tener un elemento seleccionado a la vez. la selección salta de uno a otro. Es el modo ideal para menús o selectores.
+                                        Multiple: Permite al usuario marcar varias opciones a la vez.-->
+                            <CollectionView x:Name="LineasView"
+                                        SelectionMode="Single"
+                                        IsVisible="false">
+
+
+
+                                <!--Item Template indica como se tiene que ver cada elemento de el colection view(diseño de filas o columnas)
+                                            que se pone dentro de datatemplate que es como se tiene que ver cada elemento-->
+
+                                <!-- binding le dice que coja el color de el c#-->
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Padding="10" Margin="5" BackgroundColor="{Binding Color}">
+                                            <Label Text="{Binding Nombre}" TextColor="White" FontAttributes="Bold" HorizontalTextAlignment="Center"></Label>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+
+                        <!-- Estación -->
+                        <Label Grid.Column="0"
+                           Grid.ColumnSpan="2"
+                           x:Name="LabelEstacion"
+                           Text="Estacion: " 
+                           FontSize="24" 
+                           FontAttributes="Bold" 
+                           TextColor="#FF6600"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center" 
+                           HorizontalTextAlignment="Center" />
+                    </Grid>
+                </Border>
+
+
+                <!--Lista de incidencias-->
+                <CollectionView x:Name="lista_incidencias" SelectionMode="Single" IsVisible="false" Margin="20,0">
+
+                    <!-- Esto añade la separación (espaciado) entre las notas -->
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="15" />
+                    </CollectionView.ItemsLayout>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+
+                            <Border x:Name="Bordenotas" Padding="10" Stroke="{Binding ColorTexto}"  StrokeThickness="4" StrokeShape="RoundRectangle 15">
+                                <VerticalStackLayout Spacing="5">
+                                    <Label x:Name="LabelTitulo" Text="{Binding titulo}" FontSize="24" TextColor="{Binding ColorTexto}" HorizontalTextAlignment="Center" ></Label>
+
+                                    <Label x:Name="LabelDescripción" Text="{Binding descripcion}" FontSize="15" TextColor="White" HorizontalTextAlignment="Center"></Label>
+                                </VerticalStackLayout>
+                            </Border>
+
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+
+
+            </VerticalStackLayout>
+
+
+        </ScrollView>
+
+
+
+
+        <!-- FOOTER: Fondo Negro, Línea Blanca y Texto Blanco -->
+        <Grid Grid.Row="1" 
+          ColumnDefinitions="*, *, *, *, *" 
+          BackgroundColor="Black"
+    
+          HeightRequest="80" 
+          Padding="0,0">
+
+            <BoxView Grid.ColumnSpan="5"
+             HeightRequest="1" 
+             BackgroundColor="White" 
+             HorizontalOptions="Fill" 
+             VerticalOptions="Start" />
+
+            <Label Grid.Column="0" Text="icon1" 
+           HorizontalOptions="Center" VerticalOptions="Center" 
+           FontSize="12" TextColor="White" FontFamily="Inter" />
+
+            <Label Grid.Column="1" Text="icon2" 
+           HorizontalOptions="Center" VerticalOptions="Center" 
+           FontSize="12" TextColor="White" FontFamily="Inter" />
+
+            <Label Grid.Column="2" Text="icon3" 
+           HorizontalOptions="Center" VerticalOptions="Center" 
+           FontSize="12" TextColor="White" FontFamily="Inter" />
+
+            <Label Grid.Column="3" Text="icon4" 
+           HorizontalOptions="Center" VerticalOptions="Center" 
+           FontSize="12" TextColor="White" FontFamily="Inter" />
+
+            <Label Grid.Column="4" Text="icon5" 
+           HorizontalOptions="Center" VerticalOptions="Center" 
+           FontSize="12" TextColor="White" FontFamily="Inter" />
+        </Grid>
+    </Grid>
+
 </ContentPage>

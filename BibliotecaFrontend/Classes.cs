@@ -24,6 +24,8 @@ namespace BibliotecaFrontend
             public Color ColorTexto { get; set; } // añadimos el color que tendra el texto que depende de la linea
         }
 
+
+        // aqui creamos unos structs para que la funcion no reciba muchos parametros sueltos 
         public struct PonerNotasParams
         {
             public Socket frontend_socket;
@@ -39,6 +41,19 @@ namespace BibliotecaFrontend
         }
 
         public struct LeerNotasParams
+        {
+            public Socket frontend_socket;
+            public string Estacion;
+            public List<InfoLinea> Paradas;
+            public Label LabelEstacion;
+            public CollectionView LineasView;
+            public Border BordePrincipal;
+            public Label Titulo;
+            public Button BtnFlecha;
+            public CollectionView lista_incidencias;
+        }
+
+        public struct ModificarNotasParams
         {
             public Socket frontend_socket;
             public string Estacion;

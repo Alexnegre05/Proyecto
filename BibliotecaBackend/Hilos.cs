@@ -56,8 +56,11 @@ namespace BibliotecaBackend
             {
                 leer_notas(backend_service_socket, context);
             }
-
-            backend_service_socket.Close(); // cerramos el socket
+            else if (codigo == 3)
+            {
+                modificar_notas(backend_service_socket, context);
+            }
+                backend_service_socket.Close(); // cerramos el socket
 
             closeconnection(context); // cerramos la conexion 
         }
