@@ -175,23 +175,15 @@ namespace BibliotecaBackend
             List<Paradas> lista_paradas;
             List<string> paradas;
             Paradas parada_actual = null;
-            List<Estacion> todas_estaciones;
+
             while (opcion != 0)
             {
                 // leemos la opcion 
                 opcion = recibir_numero(backend_service_socket);
 
-                if(opcion == 1) // dependiendo de la opcion enviamos una cosa u otra, aqui se envia la lista de estaciones
+                if(opcion == 1) // dependiendo de la opcion enviamos una cosa u otra
                 {
-                    todas_estaciones = context.Estaciones.ToList();
 
-                    // Enviamos primero la cantidad de estaciones que vamos a mandar
-                    enviar_numero(todas_estaciones.Count, backend_service_socket);
-
-                    for(int i = 0; i <  todas_estaciones.Count; i = i + 1)
-                    {
-                        enviar_texto(todas_estaciones[i].nombre, backend_service_socket); // enviamos solo el nombre
-                    }
                 }
                 else if (opcion == 2) 
                 {
