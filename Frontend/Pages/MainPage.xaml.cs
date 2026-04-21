@@ -11,12 +11,15 @@ namespace Frontend.Pages
             BindingContext = model;
         }
 
+        // aqui no es como css aqui el hover se tiene que programar para decirle que quieres que haga al entrar y despues al salir
         private void OnHoverEnter(object sender, PointerEventArgs e)
         {
             if (sender is Button button)
             {
+                // cambiamos tanto el borde como el texto de color
                 button.BorderColor = Color.FromArgb("#FF6600");
                 button.BorderWidth = 2;
+                button.TextColor = Color.FromArgb("#FF6600");
             }
         }
 
@@ -24,8 +27,9 @@ namespace Frontend.Pages
         {
             if (sender is Button button)
             {
-                button.BorderColor = null;
+                button.BorderColor = Colors.Transparent;
                 button.BorderWidth = 0;
+                button.TextColor = Colors.Black;
             }
         }
 

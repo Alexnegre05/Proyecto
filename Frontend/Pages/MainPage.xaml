@@ -23,123 +23,129 @@
     <Grid RowDefinitions="*, Auto" BackgroundColor="Black">
 
         <!-- Contenido principal: Fondo Negro -->
-        <VerticalStackLayout Grid.Row="0" VerticalOptions="Start" Spacing="20" Padding="0,30,0,20">
+        <VerticalStackLayout Grid.Row="0" VerticalOptions="Center" Spacing="20" Padding="0,30,0,20">
 
             <Label Text="Renfe Solutions" 
-                   FontSize="32" 
-                   FontAttributes="Bold" 
-                   TextColor="#FF6600"
-                   FontFamily="Inter"
-                   HorizontalOptions="Center" 
-                   Margin="0,0,0,20" />
+           FontSize="32" 
+           FontAttributes="Bold" 
+           TextColor="#FF6600"
+           FontFamily="Inter"
+           HorizontalOptions="Center" 
+           Margin="0,0,0,25" />
 
             <!--
-            En .NET MAUI, los GestureRecognizers son clases que permiten detectar interacciones del usuario (como toques, deslizamientos o movimientos de puntero) en elementos que normalmente no las tienen
+    En .NET MAUI, los GestureRecognizers son clases que permiten detectar interacciones del usuario (como toques, deslizamientos o movimientos de puntero) en elementos que normalmente no las tienen
 
-            TapGestureRecognizer (Toque/Clic)
-            NumberOfTapsRequired: Cuántos toques activan el gesto (por defecto 1).
-            Buttons: Define si responde al botón primario, secundario o ambos del ratón.
-            Tapped: Evento que se dispara al completar el toque.
-            PointerGestureRecognizer (Puntero/Hover)
-            PointerEntered: Se activa cuando el puntero entra en el área del control.
-            PointerExited: Se activa cuando el puntero sale.
-            PointerMoved: Se activa mientras el puntero se mueve dentro del área.
-            PointerPressed / PointerReleased: Detectan cuando se presiona o suelta un botón del ratón.
-            SwipeGestureRecognizer (Deslizar)
-            Direction: Dirección del deslizamiento (Left, Right, Up, Down).
-            Threshold: Distancia mínima (en unidades independientes del dispositivo) para reconocer el gesto (por defecto 100).
-            PanGestureRecognizer (Desplazamiento)
-            TouchPoints: Número de puntos de contacto necesarios (por defecto 1).
-            PanUpdated: Evento que proporciona TotalX y TotalY, indicando cuánto se ha movido el dedo desde el inicio.
-            PinchGestureRecognizer (Pellizcar/Zoom)
-            PinchUpdated: Proporciona la escala (Scale) y el origen del zoom para manipular imágenes o contenido.
-            -->
+    TapGestureRecognizer (Toque/Clic)
+    NumberOfTapsRequired: Cuántos toques activan el gesto (por defecto 1).
+    Buttons: Define si responde al botón primario, secundario o ambos del ratón.
+    Tapped: Evento que se dispara al completar el toque.
+    PointerGestureRecognizer (Puntero/Hover)
+    PointerEntered: Se activa cuando el puntero entra en el área del control.
+    PointerExited: Se activa cuando el puntero sale.
+    PointerMoved: Se activa mientras el puntero se mueve dentro del área.
+    PointerPressed / PointerReleased: Detectan cuando se presiona o suelta un botón del ratón.
+    SwipeGestureRecognizer (Deslizar)
+    Direction: Dirección del deslizamiento (Left, Right, Up, Down).
+    Threshold: Distancia mínima (en unidades independientes del dispositivo) para reconocer el gesto (por defecto 100).
+    PanGestureRecognizer (Desplazamiento)
+    TouchPoints: Número de puntos de contacto necesarios (por defecto 1).
+    PanUpdated: Evento que proporciona TotalX y TotalY, indicando cuánto se ha movido el dedo desde el inicio.
+    PinchGestureRecognizer (Pellizcar/Zoom)
+    PinchUpdated: Proporciona la escala (Scale) y el origen del zoom para manipular imágenes o contenido.
+    -->
 
             <!-- Botones: Ahora fondo Blanco y texto Negro -->
-            <Button Text="Poner Incidencia" WidthRequest="200" FontFamily="Inter"
-                    HeightRequest="55" 
-                    HorizontalOptions="Center" 
-                    BackgroundColor="White" 
-                    FontSize="18"
-                    TextColor="Black"
-                    Padding="0"
-                    CornerRadius="50"
-                    Clicked="OnPonerIncidenciaClicked">
+            <Button Text="Poner Incidencia" WidthRequest="230" FontFamily="Inter"
+            HeightRequest="55" 
+            HorizontalOptions="Center" 
+            BackgroundColor="White" 
+            FontSize="18"
+            FontAttributes="Bold"
+            TextColor="Black"
+            Padding="0"
+            CornerRadius="27"
+            Clicked="OnPonerIncidenciaClicked">
                 <Button.GestureRecognizers>
                     <!--lo de clicked es para que se active algo cuando cliques-->
                     <PointerGestureRecognizer PointerEntered="OnHoverEnter" PointerExited="OnHoverExit" />
                 </Button.GestureRecognizers>
                 <Button.Shadow>
-                    <!-- Sombra clara para que resalte sobre el fondo negro -->
-                    <Shadow Brush="Gray" Offset="0,5" Radius="15" Opacity="0.3" />
+                    <!-- Sombra oscura para dar profundidad real sobre fondo negro -->
+                    <Shadow Brush="Black" Offset="0,10" Radius="15" Opacity="0.6" />
                 </Button.Shadow>
             </Button>
 
-            
-            <Button Text="Leer Incidencias" WidthRequest="200" FontFamily="Inter"
-                    HeightRequest="55" 
-                    HorizontalOptions="Center" 
-                    BackgroundColor="White" 
-                    FontSize="18"
-                    TextColor="Black" 
-                    CornerRadius="50"
-                    Clicked="OnLeerIncidenciaClicked">
+
+            <Button Text="Leer Incidencias" WidthRequest="230" FontFamily="Inter"
+            HeightRequest="55" 
+            HorizontalOptions="Center" 
+            BackgroundColor="White" 
+            FontSize="18"
+            FontAttributes="Bold"
+            TextColor="Black" 
+            CornerRadius="27"
+            Clicked="OnLeerIncidenciaClicked">
                 <Button.GestureRecognizers>
                     <PointerGestureRecognizer PointerEntered="OnHoverEnter" PointerExited="OnHoverExit" />
                 </Button.GestureRecognizers>
                 <Button.Shadow>
-                    <Shadow Brush="Gray" Offset="0,5" Radius="15" Opacity="0.3" />
+                    <Shadow Brush="Black" Offset="0,10" Radius="15" Opacity="0.6" />
                 </Button.Shadow>
             </Button>
 
-            <Button Text="Modificar Incidencia" WidthRequest="200" FontFamily="Inter"
-                    HeightRequest="55" 
-                    HorizontalOptions="Center" 
-                    BackgroundColor="White" 
-                    FontSize="18"
-                    TextColor="Black" 
-                    CornerRadius="50"
-                    Clicked="OnModificarIncidenciaClicked">
+            <Button Text="Modificar Incidencia" WidthRequest="230" FontFamily="Inter"
+            HeightRequest="55" 
+            HorizontalOptions="Center" 
+            BackgroundColor="White" 
+            FontSize="18"
+            FontAttributes="Bold"
+            TextColor="Black" 
+            CornerRadius="27"
+            Clicked="OnModificarIncidenciaClicked">
                 <Button.GestureRecognizers>
                     <PointerGestureRecognizer PointerEntered="OnHoverEnter" PointerExited="OnHoverExit" />
                 </Button.GestureRecognizers>
                 <Button.Shadow>
-                    <Shadow Brush="Gray" Offset="0,5" Radius="15" Opacity="0.3" />
+                    <Shadow Brush="Black" Offset="0,10" Radius="15" Opacity="0.6" />
                 </Button.Shadow>
             </Button>
 
-            <Button Text="Calcular Ruta" WidthRequest="200" FontFamily="Inter"
-                    HeightRequest="55" 
-                    HorizontalOptions="Center" 
-                    BackgroundColor="White" 
-                    FontSize="18"
-                    TextColor="Black" 
-                    CornerRadius="50">
+            <Button Text="Calcular Ruta" WidthRequest="230" FontFamily="Inter"
+            HeightRequest="55" 
+            HorizontalOptions="Center" 
+            BackgroundColor="White" 
+            FontSize="18"
+            FontAttributes="Bold"
+            TextColor="Black" 
+            CornerRadius="27">
                 <Button.GestureRecognizers>
                     <PointerGestureRecognizer PointerEntered="OnHoverEnter" PointerExited="OnHoverExit" />
                 </Button.GestureRecognizers>
                 <Button.Shadow>
-                    <Shadow Brush="Gray" Offset="0,5" Radius="15" Opacity="0.3" />
+                    <Shadow Brush="Black" Offset="0,10" Radius="15" Opacity="0.6" />
                 </Button.Shadow>
             </Button>
 
-            <Button Text="Estadísticas" WidthRequest="200" FontFamily="Inter"
-                    HeightRequest="55" 
-                    HorizontalOptions="Center" 
-                    BackgroundColor="White" 
-                    FontSize="18"
-                    TextColor="Black" 
-                    CornerRadius="50">
+            <Button Text="Estadísticas" WidthRequest="230" FontFamily="Inter"
+            HeightRequest="55" 
+            HorizontalOptions="Center" 
+            BackgroundColor="White" 
+            FontSize="18"
+            FontAttributes="Bold"
+            TextColor="Black" 
+            CornerRadius="27">
                 <Button.GestureRecognizers>
                     <PointerGestureRecognizer PointerEntered="OnHoverEnter" PointerExited="OnHoverExit" />
                 </Button.GestureRecognizers>
                 <Button.Shadow>
-                    <Shadow Brush="Gray" Offset="0,5" Radius="15" Opacity="0.3" />
+                    <Shadow Brush="Black" Offset="0,10" Radius="15" Opacity="0.6" />
                 </Button.Shadow>
             </Button>
 
         </VerticalStackLayout>
-
+        
+        
         <!-- FOOTER: Fondo Negro, Línea Blanca y Texto Blanco -->
         <!--Iconos sacados de flaticon-->
         <Grid Grid.Row="1" 
