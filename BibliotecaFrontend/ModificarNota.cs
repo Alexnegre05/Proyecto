@@ -54,9 +54,9 @@ namespace BibliotecaFrontend
                         parametros.LineasView.SelectedItem = null;
 
 
-                        // cada vez que cambie de linea aqui le pedimos la opcion 3 al backend en leer notas para que nos pase las notas
-                        // ahora ponemos la opcion 3 a el backend 
-                        send_num(3, parametros.frontend_socket);
+                        // cada vez que cambie de linea aqui le pedimos la opcion 2 al backend en modificar notas para que nos pase las notas
+                        // ahora ponemos la opcion 2 a el backend 
+                        send_num(2, parametros.frontend_socket);
                         enviar_texto(parametros.LabelEstacion.Text, parametros.frontend_socket);
                         int num_incidencias = recibir_numero(parametros.frontend_socket);
 

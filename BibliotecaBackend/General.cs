@@ -281,10 +281,9 @@ namespace BibliotecaBackend
 
             Console.WriteLine("Hacemos un bucle donde tendra este menu");
             Console.WriteLine("0. salir");
-            Console.WriteLine("1 Listar todas estaciones");
-            Console.WriteLine("2 Enviar estacion cercana");
-            Console.WriteLine("3 enviar notas");
-            Console.WriteLine("4 añadir notas");
+            Console.WriteLine("1 Enviar estacion cercana");
+            Console.WriteLine("2 enviar notas");
+            Console.WriteLine("3 añadir notas");
             // como es un bucle while ponemos las variables afuera para no reservar memoria de mas
             int opcion = -1;
 
@@ -304,10 +303,6 @@ namespace BibliotecaBackend
                 opcion = recibir_numero(backend_service_socket);
 
                 if (opcion == 1) // dependiendo de la opcion enviamos una cosa u otra
-                {
-
-                }
-                else if (opcion == 2)
                 {
                     x = recibir_double(backend_service_socket);
 
@@ -340,18 +335,9 @@ namespace BibliotecaBackend
                     //cogemos solo las lineas el nombre que tienen no su id Select(p => p.Linea.nombre)
 
 
-                    // vamos a enviar en este orden las cosas, el numero de paradas y despues todas las paradas con formato R1,R2...
-                    enviar_numero(paradas.Count, backend_service_socket);
-
-                    for (int i = 0; i < paradas.Count; i = i + 1)
-                    {
-                        enviar_texto(paradas[i], backend_service_socket);
-                    }
                 }
-                else if (opcion == 3)
+                else if (opcion == 2)
                 {
-
-
                     // recibimos la estacion(parada) actual
                     parada_actual = saber_parada_seleccionada_frontend(backend_service_socket, context, parada_actual);
 
@@ -392,6 +378,12 @@ namespace BibliotecaBackend
                             }
                         }
                     }
+                }
+                else if (opcion == 3)
+                {
+
+
+                    
                 }
             }
         }

@@ -135,7 +135,7 @@ namespace BibliotecaFrontend
                 }
                 else if (num_opcion == 3)
                 {
-                    send_num(3, frontend_socket); // enviamos 3 diciendo que estamos en modificar notas
+                    send_num(1, frontend_socket); // enviamos 1 diciendo que nos de la opcion de estacion mas cercana
                 }
 
 
@@ -247,6 +247,7 @@ namespace BibliotecaFrontend
             }
 
         }
+
 
 
 

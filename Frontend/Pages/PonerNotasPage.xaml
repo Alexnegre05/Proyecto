@@ -175,12 +175,11 @@
 
 
         <!-- FOOTER: Fondo Negro, Línea Blanca y Texto Blanco -->
+        <!--Iconos sacados de flaticon-->
         <Grid Grid.Row="1" 
           ColumnDefinitions="*, *, *, *, *" 
           BackgroundColor="Black"
-    
-          HeightRequest="80" 
-          Padding="0,0">
+          HeightRequest="80">
 
             <BoxView Grid.ColumnSpan="5"
              HeightRequest="1" 
@@ -188,25 +187,40 @@
              HorizontalOptions="Fill" 
              VerticalOptions="Start" />
 
-            <Label Grid.Column="0" Text="icon1" 
-           HorizontalOptions="Center" VerticalOptions="Center" 
-           FontSize="12" TextColor="White" FontFamily="Inter" />
+            <!-- 1. Menu Principal, lo que hacemos cuando queremos que se mueva a otra pantalla es llamar a OnDisappearing -->
+            <ImageButton Grid.Column="0" 
+                 Source="menu.png"
+                 HorizontalOptions="Center" VerticalOptions="Center"
+                 HeightRequest="30" WidthRequest="30"
+                 Clicked="OnVolverAlMenuClicked" />
 
-            <Label Grid.Column="1" Text="icon2" 
-           HorizontalOptions="Center" VerticalOptions="Center" 
-           FontSize="12" TextColor="White" FontFamily="Inter" />
+            <!-- 2. Leer Notas -->
+            <ImageButton Grid.Column="1" 
+                 Source="libroabierto.png"
+                 HorizontalOptions="Center" VerticalOptions="Center"
+                 HeightRequest="30" WidthRequest="30"
+                 Clicked="OnLeerIncidenciaClicked" />
 
-            <Label Grid.Column="2" Text="icon3" 
-           HorizontalOptions="Center" VerticalOptions="Center" 
-           FontSize="12" TextColor="White" FontFamily="Inter" />
+            <!-- 3. Modificar Notas -->
+            <ImageButton Grid.Column="2" 
+                 Source="botoneditar.png"
+                 HorizontalOptions="Center" VerticalOptions="Center"
+                 HeightRequest="30" WidthRequest="30"
+                 Clicked="OnModificarIncidenciaClicked" />
 
-            <Label Grid.Column="3" Text="icon4" 
-           HorizontalOptions="Center" VerticalOptions="Center" 
-           FontSize="12" TextColor="White" FontFamily="Inter" />
+            <!-- 4. Calcular Ruta -->
+            <ImageButton Grid.Column="3" 
+                 Source="punterosderuta.png"
+                 HorizontalOptions="Center" VerticalOptions="Center"
+                 HeightRequest="30" WidthRequest="30"
+                  />
 
-            <Label Grid.Column="4" Text="icon5" 
-           HorizontalOptions="Center" VerticalOptions="Center" 
-           FontSize="12" TextColor="White" FontFamily="Inter" />
+            <!-- 5. Estadísticas -->
+            <ImageButton Grid.Column="4" 
+                 Source="dataanalytics.png"
+                 HorizontalOptions="Center" VerticalOptions="Center"
+                 HeightRequest="30" WidthRequest="30"
+                  />
         </Grid>
     </Grid>
         

@@ -139,37 +139,50 @@
 
         <!-- FOOTER: Fondo Negro, Línea Blanca y Texto Blanco -->
         <Grid Grid.Row="1" 
-          ColumnDefinitions="*, *, *, *, *" 
-          BackgroundColor="Black"
-    
-          HeightRequest="80" 
-          Padding="0,0">
+           ColumnDefinitions="*, *, *, *, *" 
+           BackgroundColor="Black"
+           HeightRequest="80">
 
-            <BoxView Grid.ColumnSpan="5"
-             HeightRequest="1" 
-             BackgroundColor="White" 
-             HorizontalOptions="Fill" 
-             VerticalOptions="Start" />
+                <BoxView Grid.ColumnSpan="5"
+          HeightRequest="1" 
+          BackgroundColor="White" 
+          HorizontalOptions="Fill" 
+          VerticalOptions="Start" />
 
-            <Label Grid.Column="0" Text="icon1" 
-           HorizontalOptions="Center" VerticalOptions="Center" 
-           FontSize="12" TextColor="White" FontFamily="Inter" />
+                <!-- 1. Poner Notas -->
+                <ImageButton Grid.Column="0" 
+              Source="circuloplus.png"
+              HorizontalOptions="Center" VerticalOptions="Center"
+              HeightRequest="30" WidthRequest="30"
+              Clicked="OnPonerIncidenciaClicked" />
 
-            <Label Grid.Column="1" Text="icon2" 
-           HorizontalOptions="Center" VerticalOptions="Center" 
-           FontSize="12" TextColor="White" FontFamily="Inter" />
+                <!-- 2. Leer Notas -->
+                <ImageButton Grid.Column="1" 
+              Source="libroabierto.png"
+              HorizontalOptions="Center" VerticalOptions="Center"
+              HeightRequest="30" WidthRequest="30"
+              Clicked="OnLeerIncidenciaClicked" />
 
-            <Label Grid.Column="2" Text="icon3" 
-           HorizontalOptions="Center" VerticalOptions="Center" 
-           FontSize="12" TextColor="White" FontFamily="Inter" />
+                <!-- 3. volver atras -->
+                <ImageButton Grid.Column="2" 
+              Source="menu.png"
+              HorizontalOptions="Center" VerticalOptions="Center"
+              HeightRequest="30" WidthRequest="30"
+              Clicked="OnVolverAlMenuClicked" />
 
-            <Label Grid.Column="3" Text="icon4" 
-           HorizontalOptions="Center" VerticalOptions="Center" 
-           FontSize="12" TextColor="White" FontFamily="Inter" />
+                <!-- 4. Calcular Ruta -->
+                <ImageButton Grid.Column="3" 
+              Source="punterosderuta.png"
+              HorizontalOptions="Center" VerticalOptions="Center"
+              HeightRequest="30" WidthRequest="30"
+               />
 
-            <Label Grid.Column="4" Text="icon5" 
-           HorizontalOptions="Center" VerticalOptions="Center" 
-           FontSize="12" TextColor="White" FontFamily="Inter" />
+                <!-- 5. Estadísticas -->
+            <ImageButton Grid.Column="4" 
+              Source="dataanalytics.png"
+              HorizontalOptions="Center" VerticalOptions="Center"
+              HeightRequest="30" WidthRequest="30"
+               />
         </Grid>
     </Grid>
 
