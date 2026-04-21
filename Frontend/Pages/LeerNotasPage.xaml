@@ -26,8 +26,14 @@
                                      HorizontalOptions="Center" 
                                      Spacing="10">
 
-                            <!--el texto de arriba de el titulo-->
-                            <Label VerticalOptions="Center" Text="Icon" x:Name="LabelIcono" />
+                            
+                            <Image x:Name="ImageIcono"
+                               Source="libroabierto.png"
+                               HeightRequest="30"
+                               WidthRequest="30"
+                               VerticalOptions="Center"
+                               HorizontalOptions="Center">  
+                            </Image>
                             <Label x:Name="Titulo" Text="Leer Notas" 
                                    FontSize="28" 
                                    FontAttributes="Bold" 

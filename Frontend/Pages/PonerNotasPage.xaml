@@ -26,8 +26,16 @@
                                      HorizontalOptions="Center" 
                                      Spacing="10">
 
-                            <!--el texto de arriba de el titulo-->
-                            <Label VerticalOptions="Center" Text="Icon" x:Name="LabelIcono" />
+                            <!--La imagen de arriba de el titulo usamos image-->
+                            <Image x:Name="ImageIcono"
+                                   Source="circuloplus.png"
+                                   HeightRequest="30"
+                                   WidthRequest="30"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center">  
+                                
+                            </Image>
+                            
                             <Label x:Name="Titulo" Text="Poner Notas" 
                                    FontSize="28" 
                                    FontAttributes="Bold" 
