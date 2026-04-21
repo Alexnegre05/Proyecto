@@ -100,19 +100,7 @@
                            TextColor="#FF6600"
                            VerticalOptions="Center"
                            HorizontalOptions="Center" 
-                           HorizontalTextAlignment="Center">        
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnEstacionLabelTapped" />
-                            </Label.GestureRecognizers>
-                        </Label>
-
-                        <Picker x:Name="PickerEstaciones"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
-                        IsVisible="False"
-                        SelectedIndexChanged="OnEstacionSelected" />    
-
-
+                           HorizontalTextAlignment="Center" />
                     </Grid>
                 </Border>
 

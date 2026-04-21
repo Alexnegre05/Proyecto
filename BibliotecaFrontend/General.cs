@@ -118,7 +118,7 @@ namespace BibliotecaFrontend
 
                 
 
-                // enviamos un 1 para decir que va a recibir algo de enviar notas, un 2 si es de leer notas
+                // enviamos un 1 para decir que va a recibir algo de enviar notas, un 1 si es de 
 
                 send_num(num_opcion, frontend_socket);
 
