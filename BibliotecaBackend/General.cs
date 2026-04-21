@@ -334,7 +334,13 @@ namespace BibliotecaBackend
                     paradas = lista_paradas.Select(p => p.Linea.nombre).Distinct().ToList();
                     //cogemos solo las lineas el nombre que tienen no su id Select(p => p.Linea.nombre)
 
+                    // vamos a enviar en este orden las cosas, el numero de paradas y despues todas las paradas con formato R1,R2...
+                    enviar_numero(paradas.Count, backend_service_socket);
 
+                    for (int i = 0; i < paradas.Count; i = i + 1)
+                    {
+                        enviar_texto(paradas[i], backend_service_socket);
+                    }
                 }
                 else if (opcion == 2)
                 {

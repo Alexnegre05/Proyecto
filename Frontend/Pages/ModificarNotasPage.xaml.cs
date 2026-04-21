@@ -1,4 +1,4 @@
-using static BibliotecaFrontend.BibliotecaFrontend;
+Ôªøusing static BibliotecaFrontend.BibliotecaFrontend;
 using static BibliotecaFrontend.Sockets;
 using static BibliotecaFrontend.Classes;
 using static BibliotecaFrontend.LeerNota;
@@ -19,7 +19,7 @@ namespace Frontend.Pages
             public string titulo { get; set; }
             public string descripcion { get; set; }
 
-            public Color ColorTexto { get; set; } // aÒadimos el color que tendra el texto que depende de la linea
+            public Color ColorTexto { get; set; } // a√±adimos el color que tendra el texto que depende de la linea
         }
 
 
@@ -50,10 +50,13 @@ namespace Frontend.Pages
             send_num(0, frontend_socket);
 
 
-
-            // y cerramos los sockets
-            frontend_socket.Dispose();
-            frontend_socket.Close();
+            if (frontend_socket != null)
+            {
+                // y cerramos los sockets
+                frontend_socket.Dispose();
+                frontend_socket.Close();
+            }
+            
         }
 
 
@@ -61,7 +64,7 @@ namespace Frontend.Pages
 
         private void OnFlechaClicked(object sender, EventArgs e)
         {
-            // Invierte la visibilidad: si est· abierta se cierra, si est· cerrada se abre,
+            // Invierte la visibilidad: si est√° abierta se cierra, si est√° cerrada se abre,
             // esta propiedad es la que indica si la flecha muestra todas las estaciones o no lo muestra
             // se indica con un booleano 
 
@@ -74,8 +77,8 @@ namespace Frontend.Pages
                 LineasView.IsVisible = true;
             }
 
-            // Cambia la flecha seg˙n el estado 
-            BtnFlecha.Text = LineasView.IsVisible ? "Cambiar Lineas ?" : "Cambiar Lineas ?";
+            // Cambia la flecha seg√∫n el estado, usamos un if else ternario
+            BtnFlecha.Text = LineasView.IsVisible ? "Cambiar Lineas ‚ñ≤" : "Cambiar Lineas ‚ñº";
 
 
         }
@@ -93,26 +96,26 @@ namespace Frontend.Pages
 
         protected async void OnVolverAlMenuClicked(object sender, EventArgs e)
         {
-            // Al navegar a otra p·gina, el evento OnDisappearing se ejecutar· cerrando todo lo de sockets... la pagina principal se denomina internamente main
+            // Al navegar a otra p√°gina, el evento OnDisappearing se ejecutar√° cerrando todo lo de sockets... la pagina principal se denomina internamente main
             await Shell.Current.GoToAsync("///main");
         }
 
         protected async void OnPonerIncidenciaClicked(object sender, EventArgs e)
         {
-            // NavegaciÛn usando Shell
+            // Navegaci√≥n usando Shell
             await Shell.Current.GoToAsync("PonerNotasPage");
         }
 
         protected async void OnModificarIncidenciaClicked(object sender, EventArgs e)
         {
-            // NavegaciÛn a la p·gina de modificar
+            // Navegaci√≥n a la p√°gina de modificar
             await Shell.Current.GoToAsync("ModificarNotasPage");
         }
 
 
         protected async void OnLeerIncidenciaClicked(object sender, EventArgs e)
         {
-            // NavegaciÛn usando Shell
+            // Navegaci√≥n usando Shell
             await Shell.Current.GoToAsync("LeerNotasPage");
         }
     }

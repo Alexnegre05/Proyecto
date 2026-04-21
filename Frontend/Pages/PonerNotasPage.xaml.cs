@@ -43,7 +43,7 @@ public partial class PonerNotasPage : ContentPage
 
         send_num(0, frontend_socket);
 
-        if(frontend_socket != null)
+        if(frontend_socket != null) // comprovamos que el socket no sea null 
         {
             // y cerramos los sockets
             frontend_socket.Dispose();

@@ -55,10 +55,13 @@ public partial class LeerNotasPage : ContentPage
         send_num(0, frontend_socket);
 
 
-
-        // y cerramos los sockets
-        frontend_socket.Dispose();
-        frontend_socket.Close();
+        if (frontend_socket != null)
+        {
+            // y cerramos los sockets
+            frontend_socket.Dispose();
+            frontend_socket.Close();
+        }
+        
     }
 
 

@@ -140,12 +140,12 @@ namespace BibliotecaFrontend
 
 
 
-                    // enviamos el xyz a el servidor
-                    await send_xyz(frontend_socket);
+                // enviamos el xyz a el servidor
+                await send_xyz(frontend_socket);
 
                 string estacion = recibir_texto(frontend_socket);
 
-
+                
 
 
                 int num = recibir_numero(frontend_socket); // numero que nos dice cuantas paradas hay 
