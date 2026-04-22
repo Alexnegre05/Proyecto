@@ -89,7 +89,71 @@ namespace Frontend.Pages
 
         }
 
+        // funciones de guardar y eliminar incidencias
+        private void OnGuardarClicked(object sender, EventArgs e)
+        {
 
+
+            // usamos el puerto 1000
+
+            // comprovamos si el texto no es null 
+
+            string titulo = TituloIncidencia.Text;
+            string descripcion = DescripcionIncidencia.Text;
+
+            if (titulo == null || descripcion == null) // si el titulo o la descripcion es nula entonces no enviar nada
+            {
+                Shell.Current.DisplayAlert("Introduce texto", "", "Cerrar");
+            }
+            else
+            {
+                // le decimos que la opcion es la 3
+                send_num(3, frontend_socket);
+
+
+                // Lógica para enviar los datos al socket o guardarlos localmente
+
+                enviar_texto(LabelEstacion.Text, frontend_socket);
+                enviar_texto(titulo, frontend_socket);
+                enviar_texto(descripcion, frontend_socket);
+
+                Shell.Current.DisplayAlert("Incidencia guardada", "", "Cerrar");
+                // cuando enviamos el numero llamamos a OnEliminarCliked para reiniciar el texto 
+                OnEliminarClicked(sender, e);
+            }
+
+        }
+
+        private void OnIncidenciaSelected(object sender, SelectionChangedEventArgs e)
+        {
+            // 1. Capturamos lo que el usuario ha clicado
+            Incidencia seleccionada = e.CurrentSelection.FirstOrDefault() as Incidencia;
+
+            if (seleccionada != null)
+            {
+                // 2. Rellenamos el editor con los datos de esa incidencia
+                TituloIncidencia.Text = seleccionada.titulo;
+                DescripcionIncidencia.Text = seleccionada.descripcion;
+
+                // 3. CAMBIO DE VISIBILIDAD
+                lista_incidencias.IsVisible = false;      // Ocultamos la lista
+                ContenedorIncidencias.IsVisible = true;    // Mostramos el editor
+
+                // 4. Resetear la selección para que se pueda volver a clicar
+                ((CollectionView)sender).SelectedItem = null;
+            }
+        }
+
+        private void OnEliminarClicked(object sender, EventArgs e)
+        {
+
+            // Lógica para borrar la nota que estabas escribiendo dejamos el placeholder
+
+            TituloIncidencia.Text = TituloIncidencia.Placeholder;
+            DescripcionIncidencia.Text = DescripcionIncidencia.Placeholder;
+        }
+
+        // funciones para moverse por el menu
         protected async void OnVolverAlMenuClicked(object sender, EventArgs e)
         {
             // Al navegar a otra página, el evento OnDisappearing se ejecutará cerrando todo lo de sockets... la pagina principal se denomina internamente main

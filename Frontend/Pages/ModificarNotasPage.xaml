@@ -113,7 +113,7 @@
 
 
                 <!--Lista de incidencias-->
-                <CollectionView x:Name="lista_incidencias" SelectionMode="Single" IsVisible="false" Margin="20,0">
+                <CollectionView x:Name="lista_incidencias" SelectionMode="Single" IsVisible="false" Margin="20,0" SelectionChanged="OnIncidenciaSelected">
 
                     <!-- Esto añade la separación (espaciado) entre las notas -->
                     <CollectionView.ItemsLayout>
@@ -135,9 +135,63 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 
+                <!--Editor de notas añadido-->
+                <Border x:Name="ContenedorIncidencias" 
+                     BackgroundColor="#212025" 
+                     StrokeShape="RoundRectangle 15" 
+                     StrokeThickness="0"
+                     Margin="20,0"
+                     Padding="20"
+                     IsVisible="False" 
+                     HorizontalOptions="Fill">
+                    <!--por defecto no sera visible hasta que cliques en una incidencia-->
+
+                    <VerticalStackLayout Spacing="15">
+                        <!-- Título -->
+                        <Border StrokeShape="RoundRectangle 10" StrokeThickness="1" Stroke="#4A4A4A" Padding="10,5">
+                            <Entry x:Name="TituloIncidencia"
+                            Placeholder="Titulo de la incidencia"
+                            PlaceholderColor="#808080"
+                            TextColor="White"
+                            BackgroundColor="Transparent" />
+                        </Border>
+
+                        <!-- Descripción -->
+                        <Border StrokeShape="RoundRectangle 10" StrokeThickness="1" Stroke="#4A4A4A" Padding="10,5">
+                            <Editor x:Name="DescripcionIncidencia"
+                             Placeholder="Descripción"
+                             PlaceholderColor="#808080"
+                             TextColor="White"
+                             BackgroundColor="Transparent"
+                             HeightRequest="120"
+                             AutoSize="Disabled" />
+                        </Border>
+
+                        <!-- Botones de Acción -->
+                        <Grid ColumnDefinitions="*, *" ColumnSpacing="10">
+                            <Button x:Name="guardar" Grid.Column="0" 
+                             Text="Guardar"
+                             BackgroundColor="#FF6600"
+                             TextColor="White"
+                             FontAttributes="Bold"
+                             CornerRadius="15"
+                             Clicked="OnGuardarClicked" />
+
+                            <Button Grid.Column="1"
+                             Text="Eliminar"
+                             BackgroundColor="Gray"
+                             TextColor="White"
+                             FontAttributes="Bold"
+                             CornerRadius="15"
+                             Clicked="OnEliminarClicked" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
 
 
             </VerticalStackLayout>
+
+           
 
 
         </ScrollView>
