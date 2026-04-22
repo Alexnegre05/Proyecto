@@ -11,7 +11,7 @@
              x:DataType="pageModels:MainPageModel"
              Title=""
              
-             Background="Black">
+             BackgroundImageSource="imagen_estacion.jpg">
              
 
     <!--esto se pone en el content page para quitar la linea Shell.NavBarIsVisible="False"-->
@@ -20,7 +20,7 @@
 
     <!--le metemos scroll-->
 
-    <Grid RowDefinitions="*, Auto" BackgroundColor="Black">
+    <Grid RowDefinitions="*, Auto" >
 
         <!-- Contenido principal: Fondo Negro -->
         <VerticalStackLayout Grid.Row="0" VerticalOptions="Center" Spacing="20" Padding="0,30,0,20">
