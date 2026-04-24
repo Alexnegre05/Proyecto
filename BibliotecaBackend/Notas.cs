@@ -361,7 +361,8 @@ namespace BibliotecaBackend
                         // para saber el dia siguiente se tiene que llamar a AddDays(numero de dias a sumar) si por ejemplo es 3 /4/26 0:0:0 y hacemos adddays llegamos a 4/4/26 0:0:0
                         // copmo acaba en 0:0:0 de el dia siguente y queremos las 23:59 en vez de <= usamos <
 
-                        Console.WriteLine("Incidencias: " + listaIncidencias.Count);
+
+
                         enviar_numero(listaIncidencias.Count, backend_service_socket);
 
 
@@ -369,6 +370,9 @@ namespace BibliotecaBackend
                         // for que recorre las listas de incidencias y mira si hay notas de incidencia
                         for (int i = 0; i < listaIncidencias.Count; i = i + 1)
                         {
+                            // le enviamos primero el id de cada incidencia, sirve para despues a la hora de guardar una incidencia que sepa que incidencia es la que hay que añadir una nota
+
+                            enviar_numero(listaIncidencias[i].Id, backend_service_socket);
 
                             // por cada incidencia vamos a buscar cuantas notas tiene
                             List<Nota_Incidencia> nota_incidencias = context.NotasIncidencias.Where(n => n.IncidenciaId == listaIncidencias[i].Id).ToList();

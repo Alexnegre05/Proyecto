@@ -77,6 +77,8 @@ namespace BibliotecaFrontend
                             for (int i = 0; i < num_incidencias; i = i + 1) // vamos incidencia por incidencia
                             {
 
+                                // recibimos aqui el id
+                                int id = recibir_numero(parametros.frontend_socket);
 
                                 int numero_notas = recibir_numero(parametros.frontend_socket);
 
