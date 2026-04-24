@@ -126,20 +126,20 @@ namespace Frontend.Pages
 
         private void OnIncidenciaSelected(object sender, SelectionChangedEventArgs e)
         {
-            // 1. Capturamos lo que el usuario ha clicado
+            Shell.Current.DisplayAlert("Incidencia seleccionada", "", "Cerrar");
             Incidencia seleccionada = e.CurrentSelection.FirstOrDefault() as Incidencia;
-
+            ContenedorIncidencias.IsVisible = true;
             if (seleccionada != null)
             {
-                // 2. Rellenamos el editor con los datos de esa incidencia
+                
                 TituloIncidencia.Text = seleccionada.titulo;
                 DescripcionIncidencia.Text = seleccionada.descripcion;
 
-                // 3. CAMBIO DE VISIBILIDAD
+                
                 lista_incidencias.IsVisible = false;      // Ocultamos la lista
                 ContenedorIncidencias.IsVisible = true;    // Mostramos el editor
 
-                // 4. Resetear la selección para que se pueda volver a clicar
+               
                 ((CollectionView)sender).SelectedItem = null;
             }
         }

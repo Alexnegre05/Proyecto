@@ -254,6 +254,10 @@ namespace BibliotecaBackend
                             // por cada incidencia vamos a buscar cuantas notas tiene
                             List<Nota_Incidencia> nota_incidencias = context.NotasIncidencias.Where(n => n.IncidenciaId == listaIncidencias[i].Id).ToList();
                             Console.WriteLine("Count: " + nota_incidencias.Count);
+
+
+                            // enviamos cuantas notas hay por cada incidencia
+                            enviar_numero(nota_incidencias.Count, backend_service_socket);
                             // vamos nota a nota en la incidencia 
                             for (int j = 0; j < nota_incidencias.Count; j = j + 1)
                             {
@@ -361,14 +365,19 @@ namespace BibliotecaBackend
                         enviar_numero(listaIncidencias.Count, backend_service_socket);
 
 
+                        
                         // for que recorre las listas de incidencias y mira si hay notas de incidencia
                         for (int i = 0; i < listaIncidencias.Count; i = i + 1)
                         {
 
                             // por cada incidencia vamos a buscar cuantas notas tiene
                             List<Nota_Incidencia> nota_incidencias = context.NotasIncidencias.Where(n => n.IncidenciaId == listaIncidencias[i].Id).ToList();
-                            Console.WriteLine("Count: " + nota_incidencias.Count);
+                           
                             // vamos nota a nota en la incidencia 
+
+                            // enviamos primero cuantas notas de incidencia hay 
+                            enviar_numero(nota_incidencias.Count, backend_service_socket);
+
                             for (int j = 0; j < nota_incidencias.Count; j = j + 1)
                             {
                                 // enviamos el titulo y el contenido de la incidencia
@@ -379,15 +388,47 @@ namespace BibliotecaBackend
                                 enviar_texto(nota_incidencias[j].contenido_incidencia, backend_service_socket);
 
                                 Console.WriteLine("Descripcion: " + nota_incidencias[j].contenido_incidencia);
+
+                                
                             }
                         }
                     }
                 }
                 else if (opcion == 3)
                 {
+                    parada_actual = saber_parada_seleccionada_frontend(backend_service_socket, context, parada_actual);
 
 
+                    // recibimos el titulo y la incidencia
+                    string titulo_incidencia = recibir_texto(backend_service_socket);
+                    string incidencia = recibir_texto(backend_service_socket);
 
+
+                    if (parada_actual != null)
+                    {
+
+
+                        
+
+                        //// guardamos la nota de la incidencia
+                        //Nota_Incidencia nota_incidencia = new Nota_Incidencia
+                        //{
+
+                        //    titulo = titulo_incidencia,
+                        //    contenido_incidencia = incidencia,
+                        //    puntuacion = 0,
+                        //    IncidenciaId = nuevaIncidencia.Id // le pasamos el id de la incidsencia cxreada antes,
+                        //                                      // por esto hacemos el savechanges antes de crear este objeto
+                        //};
+
+
+                        //context.NotasIncidencias.Add(nota_incidencia);
+                        context.SaveChanges();
+
+                        Console.WriteLine("Incidencia registrada");
+
+
+                    }
                 }
             }
         }
