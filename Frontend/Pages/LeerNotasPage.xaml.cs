@@ -38,8 +38,6 @@ public partial class LeerNotasPage : ContentPage
         base.OnAppearing();
         // esto es para decirle que como estamos sobreescribiendo una pagina que primero ejecute lo que hacia antes la funcion original(con el base)
         
-        // ejecutamos primero una funcion que coja de el backend las estaciones disponibles, solo los nombres
-        todas_estaciones();
 
         frontend_socket = crear_frontend_socket(1000);
         // como no hay boton de guardar es null
@@ -91,12 +89,6 @@ public partial class LeerNotasPage : ContentPage
 
 
 
-    // repetimos la funcion de estacion cercana para que te salga por defecto la estacion mas cercana 
-
-    private void todas_estaciones()
-    {
-
-    }
 
 
     protected async void OnVolverAlMenuClicked(object sender, EventArgs e)

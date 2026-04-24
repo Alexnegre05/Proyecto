@@ -30,11 +30,11 @@ namespace Frontend.Pages
             // esto es para decirle que como estamos sobreescribiendo una pagina que primero ejecute lo que hacia antes la funcion original(con el base)
 
             // ejecutamos primero una funcion que coja de el backend las estaciones disponibles, solo los nombres
-            todas_estaciones();
+            
 
             frontend_socket = crear_frontend_socket(1000);
             // como no hay boton de guardar es null
-            EstacionCercana(3, frontend_socket, LabelEstacion, LineasView, BordePrincipal, null, Titulo, BtnFlecha, BordePrincipal, lista_incidencias);
+            EstacionCercana(3, frontend_socket, LabelEstacion, LineasView, BordePrincipal, null, Titulo, BtnFlecha, ContenedorIncidencias, lista_incidencias);
         }
 
         protected override void OnDisappearing()
@@ -82,12 +82,6 @@ namespace Frontend.Pages
 
 
 
-        // repetimos la funcion de estacion cercana para que te salga por defecto la estacion mas cercana 
-
-        private void todas_estaciones()
-        {
-
-        }
 
         // funciones de guardar y eliminar incidencias
         private void OnGuardarClicked(object sender, EventArgs e)
@@ -128,20 +122,25 @@ namespace Frontend.Pages
         {
             Shell.Current.DisplayAlert("Incidencia seleccionada", "", "Cerrar");
             Incidencia seleccionada = e.CurrentSelection.FirstOrDefault() as Incidencia;
+
+            TituloIncidencia.Text = ""; // limpiamos para que al cambiar de incidencia se borre el texto que estabas antes escribiendo
+            DescripcionIncidencia.Text = "";
+
             ContenedorIncidencias.IsVisible = true;
             if (seleccionada != null)
             {
                 
                 TituloIncidencia.Text = seleccionada.titulo;
                 DescripcionIncidencia.Text = seleccionada.descripcion;
+                Shell.Current.DisplayAlert("Entra aqui", "", "Cerrar");
 
-                
                 lista_incidencias.IsVisible = false;      // Ocultamos la lista
                 ContenedorIncidencias.IsVisible = true;    // Mostramos el editor
 
                
                 ((CollectionView)sender).SelectedItem = null;
             }
+           
         }
 
         private void OnEliminarClicked(object sender, EventArgs e)

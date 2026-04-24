@@ -34,6 +34,9 @@ namespace BibliotecaFrontend
                     InfoLinea seleccion = e.CurrentSelection.FirstOrDefault() as InfoLinea;
                     // dynamic salta la comprovacion de a la hora de crear un objeto 
 
+                    parametros.ContenedorIncidencias.IsVisible = false; // Con esto hacemos que lo de poner notas desaparezca tras cambiar de estacion
+
+
                     if (seleccion != null) // miramos que no sea nulo
                     {
                         // Cambiamos el texto
@@ -75,26 +78,33 @@ namespace BibliotecaFrontend
                             {
 
 
-                                // como funciona el binding exactamente 
-                                string titulo_actual = recibir_texto(parametros.frontend_socket);
-                                string descripcion_actual = recibir_texto(parametros.frontend_socket);
+                                int numero_notas = recibir_numero(parametros.frontend_socket);
 
-
-                                Incidencia incidencia = new Incidencia
+                                for (int j = 0; j < numero_notas; j = j + 1)
                                 {
-                                    titulo = titulo_actual.ToUpper(),
-                                    descripcion = descripcion_actual,
-                                    ColorTexto = (Color)seleccion.Color
-                                };
-                                lista_temporal_incidencias.Add(incidencia); // añadimos la incidencia a la lista
+                                    // como funciona el binding exactamente 
+                                    string titulo_actual = recibir_texto(parametros.frontend_socket);
+                                    string descripcion_actual = recibir_texto(parametros.frontend_socket);
 
 
-                                // el binding funciona como que le dices que tienes un objeto y que quieres mostrar las propiedades de ese objeto
+                                    Incidencia incidencia = new Incidencia
+                                    {
+                                        titulo = titulo_actual.ToUpper(),
+                                        descripcion = descripcion_actual,
+                                        ColorTexto = (Color)seleccion.Color
+                                    };
+                                    lista_temporal_incidencias.Add(incidencia); // añadimos la incidencia a la lista
 
-                                parametros.lista_incidencias.ItemsSource = lista_temporal_incidencias;
-                                // le decimos que la lista de objetos de incidencia es lo que tiene que mostrar,
-                                // el binding mira si existe la propiedad titulo o descripcion en lo que esta recibiendo de el collectionview
-                                // solo puede leer si tiene {get;set}
+
+                                    // el binding funciona como que le dices que tienes un objeto y que quieres mostrar las propiedades de ese objeto
+
+                                    parametros.lista_incidencias.ItemsSource = lista_temporal_incidencias;
+                                    // le decimos que la lista de objetos de incidencia es lo que tiene que mostrar,
+                                    // el binding mira si existe la propiedad titulo o descripcion en lo que esta recibiendo de el collectionview
+                                    // solo puede leer si tiene {get;set}
+
+
+                                }
 
 
                             }

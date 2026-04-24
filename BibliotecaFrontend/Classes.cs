@@ -63,6 +63,7 @@ namespace BibliotecaFrontend
             public Border BordePrincipal;
             public Label Titulo;
             public Button BtnFlecha;
+            public Border ContenedorIncidencias;
             public CollectionView lista_incidencias;
         }
     }

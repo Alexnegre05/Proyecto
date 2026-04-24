@@ -230,6 +230,7 @@ namespace BibliotecaFrontend
                         BordePrincipal = BordePrincipal,
                         Titulo = Titulo,
                         BtnFlecha = BtnFlecha,
+                        ContenedorIncidencias = ContenedorIncidencias,
                         lista_incidencias = lista_incidencias,
                     };
 
