@@ -16,6 +16,7 @@ namespace Frontend.Pages
 
         public class Incidencia
         {
+            public int? id { get; set; }
             public string titulo { get; set; }
             public string descripcion { get; set; }
 
@@ -23,7 +24,7 @@ namespace Frontend.Pages
         }
 
         Socket frontend_socket;
-
+        BibliotecaFrontend.Classes.Incidencia incidencia_actual; // variable que sirve para saber la incidencia actual y saber el id mas tarde a la hora de guardar 
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -92,6 +93,9 @@ namespace Frontend.Pages
 
             // comprovamos si el texto no es null 
 
+            int? id = incidencia_actual.Id;
+
+
             string titulo = TituloIncidencia.Text;
             string descripcion = DescripcionIncidencia.Text;
 
@@ -106,41 +110,67 @@ namespace Frontend.Pages
 
 
                 // Lógica para enviar los datos al socket o guardarlos localmente
+                
 
-                enviar_texto(LabelEstacion.Text, frontend_socket);
-                enviar_texto(titulo, frontend_socket);
-                enviar_texto(descripcion, frontend_socket);
 
-                Shell.Current.DisplayAlert("Incidencia guardada", "", "Cerrar");
-                // cuando enviamos el numero llamamos a OnEliminarCliked para reiniciar el texto 
-                OnEliminarClicked(sender, e);
+                if (id != null)
+                {
+                    
+                    enviar_texto(LabelEstacion.Text, frontend_socket);
+
+                    send_num((int)id, frontend_socket); // si o si sabemos que no puede ser null
+                    enviar_texto(titulo, frontend_socket);
+                    enviar_texto(descripcion, frontend_socket);
+
+                    Shell.Current.DisplayAlert("Incidencia guardada", "", "Cerrar");
+                    // cuando enviamos el numero llamamos a OnEliminarCliked para reiniciar el texto 
+                    OnEliminarClicked(sender, e);
+                }
+                else
+                {
+                    Shell.Current.DisplayAlert("Ha habido un error", "", "Cerrar");
+                    
+                    OnEliminarClicked(sender, e);
+                }
+               
             }
 
         }
 
         private void OnIncidenciaSelected(object sender, SelectionChangedEventArgs e)
         {
-            Shell.Current.DisplayAlert("Incidencia seleccionada", "", "Cerrar");
-            Incidencia seleccionada = e.CurrentSelection.FirstOrDefault() as Incidencia;
+            if (e.CurrentSelection == null || e.CurrentSelection.Count == 0)
+            {
+                
+                return;
+            }
 
-            TituloIncidencia.Text = ""; // limpiamos para que al cambiar de incidencia se borre el texto que estabas antes escribiendo
+
+            BibliotecaFrontend.Classes.Incidencia seleccionada = e.CurrentSelection.FirstOrDefault() as BibliotecaFrontend.Classes.Incidencia; // la seleccion no es tipo incidenica es tipo BibliotecaFrontend.Classes.Incidencia
+
+            if (seleccionada == null)
+            {
+                
+                return;
+            }
+                
+
+            TituloIncidencia.Text = "";
             DescripcionIncidencia.Text = "";
 
             ContenedorIncidencias.IsVisible = true;
-            if (seleccionada != null)
-            {
-                
-                TituloIncidencia.Text = seleccionada.titulo;
-                DescripcionIncidencia.Text = seleccionada.descripcion;
-                Shell.Current.DisplayAlert("Entra aqui", "", "Cerrar");
 
-                lista_incidencias.IsVisible = false;      // Ocultamos la lista
-                ContenedorIncidencias.IsVisible = true;    // Mostramos el editor
+            Shell.Current.DisplayAlert(seleccionada.Id?.ToString() ?? "ID null", "", "Cerrar");
 
-               
-                ((CollectionView)sender).SelectedItem = null;
-            }
-           
+            incidencia_actual = seleccionada;
+
+            TituloIncidencia.Text = seleccionada.titulo;
+            DescripcionIncidencia.Text = seleccionada.descripcion;
+
+            lista_incidencias.IsVisible = false;
+            ContenedorIncidencias.IsVisible = true;
+
+            ((CollectionView)sender).SelectedItem = null;
         }
 
         private void OnEliminarClicked(object sender, EventArgs e)

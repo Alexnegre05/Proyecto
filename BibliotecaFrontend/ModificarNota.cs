@@ -91,6 +91,7 @@ namespace BibliotecaFrontend
 
                                     Incidencia incidencia = new Incidencia
                                     {
+                                        Id = id, // guardamos el id 
                                         titulo = titulo_actual.ToUpper(),
                                         descripcion = descripcion_actual,
                                         ColorTexto = (Color)seleccion.Color

@@ -22,6 +22,7 @@
 
     <Grid RowDefinitions="*, Auto" >
 
+        
         <!-- Contenido principal: Fondo Negro -->
         <VerticalStackLayout Grid.Row="0" VerticalOptions="Center" Spacing="20" Padding="0,30,0,20">
 

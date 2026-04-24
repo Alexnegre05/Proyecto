@@ -402,7 +402,7 @@ namespace BibliotecaBackend
                 {
                     parada_actual = saber_parada_seleccionada_frontend(backend_service_socket, context, parada_actual);
 
-
+                    int id = recibir_numero(backend_service_socket);
                     // recibimos el titulo y la incidencia
                     string titulo_incidencia = recibir_texto(backend_service_socket);
                     string incidencia = recibir_texto(backend_service_socket);
@@ -411,22 +411,19 @@ namespace BibliotecaBackend
                     if (parada_actual != null)
                     {
 
-
-                        
-
                         //// guardamos la nota de la incidencia
-                        //Nota_Incidencia nota_incidencia = new Nota_Incidencia
-                        //{
+                        Nota_Incidencia nota_incidencia = new Nota_Incidencia
+                        {
 
-                        //    titulo = titulo_incidencia,
-                        //    contenido_incidencia = incidencia,
-                        //    puntuacion = 0,
-                        //    IncidenciaId = nuevaIncidencia.Id // le pasamos el id de la incidsencia cxreada antes,
-                        //                                      // por esto hacemos el savechanges antes de crear este objeto
-                        //};
+                            titulo = titulo_incidencia,
+                            contenido_incidencia = incidencia,
+                            puntuacion = 0,
+                            IncidenciaId = id, // le pasamos el id de la incidsencia cxreada antes,
+                                              // por esto hacemos el savechanges antes de crear este objeto
+                        };
+                        Console.WriteLine("entra aqui: " + id);
 
-
-                        //context.NotasIncidencias.Add(nota_incidencia);
+                        context.NotasIncidencias.Add(nota_incidencia);
                         context.SaveChanges();
 
                         Console.WriteLine("Incidencia registrada");
