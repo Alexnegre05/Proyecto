@@ -62,38 +62,43 @@ namespace BibliotecaFrontend
         // funciones de sockets
 
 
-
-
-        // funcion para enviar el x,y,z de el movil 
         public static async Task send_xyz(Socket frontend_socket)
         {
-            // con geolocation sacamos el x,y,z de el movil, el await y el async es porque la funcion es asincrona 
-            // esto le dice cuanta precision queremos que haya GeolocationAccuracy.Medium
-            // usamos medium para no consumir muchos datos de el movil 
+            Location location = null;
 
-            // esto es latitud, longitud... hay que pasarlo a x,y,z
-            Location location = await Geolocation.Default.GetLocationAsync(new GeolocationRequest(GeolocationAccuracy.Medium));
+            // Primero intenta la última ubicación conocida (instantáneo)
+            location = await Geolocation.Default.GetLastKnownLocationAsync();
+
+            // Si no hay ninguna guardada, pide una nueva
+            if (location == null)
+            {
+                location = await Geolocation.Default.GetLocationAsync(
+                    new GeolocationRequest(GeolocationAccuracy.Medium,
+                    TimeSpan.FromSeconds(15)));
+            }
+
+            // Ahora sí comprobamos null ANTES de usar location
+            if (location == null)
+            {
+                Console.WriteLine("ERROR: No se pudo obtener ubicación, usando Barcelona por defecto");
+                send_parameter_xyz(4595227.0, frontend_socket);
+                send_parameter_xyz(171864.0, frontend_socket);
+                send_parameter_xyz(4078884.0, frontend_socket);
+                return;
+            }
 
             double x = location.Longitude;
             double y = location.Latitude;
             double z = location.Altitude ?? 0;
-            // la z puede ser 0 y ya esta en metros pero en 2D, se usa para sumarle a el radio ya que es la altura al nivel de el mar 
 
-
-            // radio de la tierra
             float R = 6371.00877f * 1000;
 
-            // lo pasamos a radianes
             x = grados_a_radianes(x);
             y = grados_a_radianes(y);
 
-
-            // lo pasamos a metros, misma formula que el backend pero sumandole la altura de el mar 
             double final_x = (R + z) * Math.Cos(y) * Math.Cos(x);
             double final_y = (R + z) * Math.Cos(y) * Math.Sin(x);
             double final_z = (R + z) * Math.Sin(y);
-
-            // enviamos el x,y,z a el backend
 
             send_parameter_xyz(final_x, frontend_socket);
             send_parameter_xyz(final_y, frontend_socket);
@@ -101,152 +106,137 @@ namespace BibliotecaFrontend
         }
 
 
-        public async static void EstacionCercana(int num_opcion,
-        Socket frontend_socket,
-        Label LabelEstacion,
-        CollectionView LineasView,
-        Border BordePrincipal,
-        Button guardar,
-        Label Titulo,
-        Button BtnFlecha,
-        Border ContenedorIncidencias,
-        CollectionView lista_incidencias)
+    public async static void EstacionCercana(int num_opcion,
+    Socket frontend_socket,
+    Label LabelEstacion,
+    CollectionView LineasView,
+    Border BordePrincipal,
+    Button guardar,
+    Label Titulo,
+    Button BtnFlecha,
+    Border ContenedorIncidencias,
+    CollectionView lista_incidencias)
         {
-
             try
             {
-
                 
+                // 1. Obtenemos la ubicación ANTES del Task.Run (en el hilo de UI)
+                Location location = await Geolocation.Default.GetLastKnownLocationAsync();
 
-                // enviamos un 1 para decir que va a recibir algo de enviar notas, un 1 si es de 
-
-                send_num(num_opcion, frontend_socket);
-
-
-                if (num_opcion == 1)
+                if (location == null)
                 {
-                    // enviamos un 1 
-                    send_num(1, frontend_socket);
-                }
-                else if (num_opcion == 2)
-                {
-                    // enviamos otro 2 para decirle que queremos que nos de la opcion de la estacion mas cercana en el backend
-                    send_num(2, frontend_socket);
-                }
-                else if (num_opcion == 3)
-                {
-                    send_num(1, frontend_socket); // enviamos 1 diciendo que nos de la opcion de estacion mas cercana
+                    location = await Geolocation.Default.GetLocationAsync(
+                        new GeolocationRequest(GeolocationAccuracy.Medium,
+                        TimeSpan.FromSeconds(15)));
                 }
 
+                // 2. Calculamos x,y,z aquí todavía en hilo UI
+                double final_x, final_y, final_z;
 
-
-                // enviamos el xyz a el servidor
-                await send_xyz(frontend_socket);
-
-                string estacion = recibir_texto(frontend_socket);
-
-                
-
-
-                int num = recibir_numero(frontend_socket); // numero que nos dice cuantas paradas hay 
-
-                List<InfoLinea> paradas = new List<InfoLinea>();
-                // Infolinea es una clase donde se guardan los colores y los nombres de las lineas
-
-                // recorremos toda la lista
-                for (int i = 0; i < num; i = i + 1)
+                if (location == null)
                 {
-                    string linea = recibir_texto(frontend_socket);
-                    // obtenemos una de las lineas de la estacion y lo añadimos a paradas
+                    Console.WriteLine("GPS no disponible, usando Barcelona por defecto");
+                    final_x = 4595227.0;
+                    final_y = 171864.0;
+                    final_z = 4078884.0;
+                }
+                else
+                {
+                    float R = 6371.00877f * 1000;
+                    double x = grados_a_radianes(location.Longitude);
+                    double y = grados_a_radianes(location.Latitude);
+                    double z = location.Altitude ?? 0;
 
-                    //esto es un objeto de la clase InfoLinea que se añade a las paradas
-                    InfoLinea linea_actual = new InfoLinea
+                    final_x = (R + z) * Math.Cos(y) * Math.Cos(x);
+                    final_y = (R + z) * Math.Cos(y) * Math.Sin(x);
+                    final_z = (R + z) * Math.Sin(y);
+                }
+
+                // 3. Todo el trabajo de red en hilo de fondo, con las coordenadas ya calculadas
+                await Task.Run(() =>
+                {
+                    send_num(num_opcion, frontend_socket);
+
+                    if (num_opcion == 1) send_num(1, frontend_socket);
+                    else if (num_opcion == 2) send_num(2, frontend_socket);
+                    else if (num_opcion == 3) send_num(1, frontend_socket);
+
+                    // Enviamos las coordenadas ya calculadas
+                    send_parameter_xyz(final_x, frontend_socket);
+                    send_parameter_xyz(final_y, frontend_socket);
+                    send_parameter_xyz(final_z, frontend_socket);
+
+                    string estacion = recibir_texto(frontend_socket);
+                    int num = recibir_numero(frontend_socket);
+
+                    List<InfoLinea> paradas = new List<InfoLinea>();
+                    for (int i = 0; i < num; i++)
                     {
-                        Nombre = linea,
-                        Color = colores.GetValueOrDefault(linea, Colors.Gray)
-                    };
+                        string linea = recibir_texto(frontend_socket);
+                        InfoLinea linea_actual = new InfoLinea
+                        {
+                            Nombre = linea,
+                            Color = colores.GetValueOrDefault(linea, Colors.Gray)
+                        };
+                        paradas.Add(linea_actual);
+                    }
 
-
-                    paradas.Add(linea_actual);
-
-                    //new Nombre = linea, Color = colores.GetValueOrDefault(linea, Colors.Gray)
-
-                }
-
-
-                // aqui es donde se cambia el nombre, y todo el tema de el color.
-
-                // El MainThread es el que se encarga de dibujar por pantalla
-                // le decimos a ese hilo que se invoque y que cambie el texto y que las lineas son las paradas que hemos cogido
-                if (num_opcion == 1)
-                {
-
-
-                    PonerNotasParams parametros = new PonerNotasParams
+                    if (num_opcion == 1)
                     {
-                        frontend_socket = frontend_socket,
-                        Estacion = estacion,
-                        Paradas = paradas,
-                        LabelEstacion = LabelEstacion, 
-                        LineasView = LineasView,
-                        BordePrincipal = BordePrincipal,
-                        Guardar = guardar,
-                        Titulo = Titulo,
-                        BtnFlecha = BtnFlecha,
-                        ContenedorIncidencias = ContenedorIncidencias
-                    };
-
-                    // Llamamos a la función estática que ya tienes en la clase PonerNota
-                    mainthreadPonerNotas(parametros);
-                }
-                else if (num_opcion == 2) 
-                {
-
-                    LeerNotasParams parametros = new LeerNotasParams
+                        PonerNotasParams parametros = new PonerNotasParams
+                        {
+                            frontend_socket = frontend_socket,
+                            Estacion = estacion,
+                            Paradas = paradas,
+                            LabelEstacion = LabelEstacion,
+                            LineasView = LineasView,
+                            BordePrincipal = BordePrincipal,
+                            Guardar = guardar,
+                            Titulo = Titulo,
+                            BtnFlecha = BtnFlecha,
+                            ContenedorIncidencias = ContenedorIncidencias
+                        };
+                        mainthreadPonerNotas(parametros);
+                    }
+                    else if (num_opcion == 2)
                     {
-                        frontend_socket = frontend_socket,
-                        Estacion = estacion,
-                        Paradas = paradas,
-                        LabelEstacion = LabelEstacion,
-                        LineasView = LineasView,
-                        BordePrincipal = BordePrincipal,
-                        Titulo = Titulo,
-                        BtnFlecha = BtnFlecha,
-                        lista_incidencias = lista_incidencias,
-                    };
-
-
-                    mainthreadLeerNotas(parametros);
-                }
-                else if (num_opcion == 3)
-                {
-                    ModificarNotasParams parametros = new ModificarNotasParams
+                        LeerNotasParams parametros = new LeerNotasParams
+                        {
+                            frontend_socket = frontend_socket,
+                            Estacion = estacion,
+                            Paradas = paradas,
+                            LabelEstacion = LabelEstacion,
+                            LineasView = LineasView,
+                            BordePrincipal = BordePrincipal,
+                            Titulo = Titulo,
+                            BtnFlecha = BtnFlecha,
+                            lista_incidencias = lista_incidencias,
+                        };
+                        mainthreadLeerNotas(parametros);
+                    }
+                    else if (num_opcion == 3)
                     {
-                        frontend_socket = frontend_socket,
-                        Estacion = estacion,
-                        Paradas = paradas,
-                        LabelEstacion = LabelEstacion,
-                        LineasView = LineasView,
-                        BordePrincipal = BordePrincipal,
-                        Titulo = Titulo,
-                        BtnFlecha = BtnFlecha,
-                        ContenedorIncidencias = ContenedorIncidencias,
-                        lista_incidencias = lista_incidencias,
-                    };
-
-                    mainthreaModificarNotas(parametros);
-                }
-
-
-
-
-
+                        ModificarNotasParams parametros = new ModificarNotasParams
+                        {
+                            frontend_socket = frontend_socket,
+                            Estacion = estacion,
+                            Paradas = paradas,
+                            LabelEstacion = LabelEstacion,
+                            LineasView = LineasView,
+                            BordePrincipal = BordePrincipal,
+                            Titulo = Titulo,
+                            BtnFlecha = BtnFlecha,
+                            ContenedorIncidencias = ContenedorIncidencias,
+                            lista_incidencias = lista_incidencias,
+                        };
+                        mainthreaModificarNotas(parametros);
+                    }
+                });
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                Console.WriteLine("ERROR: " + e.ToString());
             }
-
         }
 
 

@@ -37,17 +37,22 @@ namespace BibliotecaFrontend
         // funcion para crear el socket 
         public static Socket crear_frontend_socket(int puerto)
         {
-            // ip que se usa para conectarse en el movil
-            string ip = calcular_ip_automatico();
+            string ip;
 
-            // Creamos el socket 
-            IPAddress address = IPAddress.Parse(ip);  // creamos la ip y el endpoint
-            IPEndPoint endpoint = new IPEndPoint(address, puerto); // el puerto es el 1000
-            Socket frontend_socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            frontend_socket.Connect(endpoint); // es lo mimso que connect pero preparada para el async 
+            #if DEBUG
+                // DeviceInfo.DeviceType == Virtual significa emulador
+                ip = DeviceInfo.DeviceType == DeviceType.Virtual
+                ? "10.0.2.2"           // Emulador Android
+                : calcular_ip_automatico(); // Móvil físico
+            #else
+                ip = calcular_ip_automatico();
+#           endif
 
-            return frontend_socket;
-
+                IPAddress address = IPAddress.Parse(ip);
+                IPEndPoint endpoint = new IPEndPoint(address, puerto);
+                Socket frontend_socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                frontend_socket.Connect(endpoint);
+                return frontend_socket;
         }
 
 

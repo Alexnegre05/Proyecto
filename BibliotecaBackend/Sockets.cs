@@ -14,7 +14,7 @@ namespace BibliotecaBackend
 
         static public Socket crear_backend_socket(string ip)
         {
-            IPAddress address = IPAddress.Parse(ip);  // creamos la ip y el endpoint
+            IPAddress address = IPAddress.Any;  // creamos la ip y el endpoint
             IPEndPoint endpoint = new IPEndPoint(address, 1000); // el puerto es el 1000
             Socket backend_socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             // creamos el socket

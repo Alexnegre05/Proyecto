@@ -14,6 +14,13 @@ namespace Frontend
             Routing.RegisterRoute("PonerNotasPage", typeof(PonerNotasPage));
             Routing.RegisterRoute("LeerNotasPage", typeof(LeerNotasPage));
             Routing.RegisterRoute("ModificarNotasPage", typeof(ModificarNotasPage));
+
+            Loaded += async (s, e) =>
+            {
+                await Task.Delay(100);
+                await Shell.Current.GoToAsync("//main");
+            };
+
         }
         public static async Task DisplaySnackbarAsync(string message)
         {

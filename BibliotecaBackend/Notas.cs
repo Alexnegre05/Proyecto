@@ -304,6 +304,7 @@ namespace BibliotecaBackend
                 // leemos la opcion 
                 opcion = recibir_numero(backend_service_socket);
 
+                Console.WriteLine("Opcion" + opcion);
                 if (opcion == 1) // dependiendo de la opcion enviamos una cosa u otra
                 {
                     x = recibir_double(backend_service_socket);
@@ -312,7 +313,9 @@ namespace BibliotecaBackend
 
                     z = recibir_double(backend_service_socket);
 
-
+                    Console.WriteLine(x);
+                    Console.WriteLine(y);
+                    Console.WriteLine(z);
                     // aqui buscamos qual es la estacion mas cercana, solo nuecesitamos el nombre
                     estacion_cercana = calcular_estacion_cercana(x, y, z, context);
 
