@@ -84,6 +84,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Pages\EnlacesPage.xaml.cs">
+	    <DependentUpon>EnlacesPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Pages\LeerNotasPage.xaml.cs">
 	    <DependentUpon>LeerNotasPage.xaml</DependentUpon>
 	  </Compile>
@@ -93,7 +96,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Pages\Enlaces.xaml">
+	  <MauiXaml Update="Pages\EnlacesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\LeerNotasPage.xaml">

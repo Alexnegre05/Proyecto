@@ -207,5 +207,11 @@ namespace Frontend.Pages
             // Navegación usando Shell
             await Shell.Current.GoToAsync("LeerNotasPage");
         }
+
+
+        protected async void OnEnlaceClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("EnlacesPage");
+        }
     }
 }

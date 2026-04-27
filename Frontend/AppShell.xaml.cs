@@ -14,6 +14,7 @@ namespace Frontend
             Routing.RegisterRoute("PonerNotasPage", typeof(PonerNotasPage));
             Routing.RegisterRoute("LeerNotasPage", typeof(LeerNotasPage));
             Routing.RegisterRoute("ModificarNotasPage", typeof(ModificarNotasPage));
+            Routing.RegisterRoute("EnlacesPage", typeof(EnlacesPage));
 
             Loaded += async (s, e) =>
             {

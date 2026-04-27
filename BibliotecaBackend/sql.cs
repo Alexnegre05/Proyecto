@@ -312,7 +312,7 @@ namespace BibliotecaBackend
                     {
                         linea = reader.ReadLine();
                         count = count + 1;
-                        Console.WriteLine($"FALLO PARADA: {estacionOrigen} - {estacionDestino} ({nombreLinea})");
+                        
                         continue;
                     }
 
@@ -323,7 +323,7 @@ namespace BibliotecaBackend
                     {
                         linea = reader.ReadLine();
                         count = count + 1;
-                        Console.WriteLine($"FALLO PARADA: {estacionOrigen} - {estacionDestino} ({nombreLinea})");
+                        
                         continue; // con continue saltamos a la sigueinte linea de el fichero(proxima vuelta de el bucle while)
                     }
 
@@ -338,7 +338,7 @@ namespace BibliotecaBackend
                     {
                         linea = reader.ReadLine();
                         count = count + 1;
-                        Console.WriteLine($"FALLO PARADA: {estacionOrigen} - {estacionDestino} ({nombreLinea})");
+                        
                         continue;
                     }
 
@@ -351,14 +351,11 @@ namespace BibliotecaBackend
                         enlace.SiguienteParadaId = paradaDestinoId;
                         enlace.Costo = costo;
 
-                        Console.WriteLine("Entra aqui");
+                        
                         context.Enlaces.Add(enlace); // añadimos en el contexto los enlaces
                         enlacesExistentes.Add(claveEnlace);
                     }
-                    else
-                    {
-                        Console.WriteLine("No entra aqui");
-                    }
+                    
                 }
 
                 linea = reader.ReadLine();
@@ -383,7 +380,7 @@ namespace BibliotecaBackend
         public static void insert_ensurecreated(DBProyectoContext context)
         {
 
-            context.Database.EnsureDeleted();
+           
             context.Database.EnsureCreated();
 
             Console.WriteLine("BD + tablas creadas");

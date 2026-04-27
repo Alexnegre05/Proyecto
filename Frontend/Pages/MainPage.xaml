@@ -120,7 +120,8 @@
                 FontSize="18"
                 FontAttributes="Bold"
                 TextColor="Black" 
-                CornerRadius="27">
+                CornerRadius="27"
+                Clicked="OnEnlaceClicked">
                     <Button.GestureRecognizers>
                         <PointerGestureRecognizer PointerEntered="OnHoverEnter" PointerExited="OnHoverExit" />
                     </Button.GestureRecognizers>
@@ -189,7 +190,7 @@
                  Source="punterosderuta.png"
                  HorizontalOptions="Center" VerticalOptions="Center"
                  HeightRequest="30" WidthRequest="30"
-                  />
+                 Clicked="OnEnlaceClicked" />
 
             <!-- 5. Estadísticas -->
             <ImageButton Grid.Column="4" 

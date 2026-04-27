@@ -179,10 +179,10 @@
 
             <!-- 4. Calcular Ruta -->
             <ImageButton Grid.Column="3" 
-            Source="punterosderuta.png"
-            HorizontalOptions="Center" VerticalOptions="Center"
-            HeightRequest="30" WidthRequest="30"
-            />
+             Source="punterosderuta.png"
+             HorizontalOptions="Center" VerticalOptions="Center"
+             HeightRequest="30" Clicked="OnEnlaceClicked" WidthRequest="30"
+              />    
 
             <!-- 5. Estadísticas -->
             <ImageButton Grid.Column="4" 
