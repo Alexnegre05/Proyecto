@@ -240,7 +240,7 @@ namespace BibliotecaFrontend
             }
         }
 
-        public async static void enlaces(Socket frontend_socket)
+        public async static void enlaces(Socket frontend_socket, CollectionView coleccion)
         {
             send_num(4, frontend_socket); // enviamos un 4 para decir que estamos en enlaces
 
@@ -261,7 +261,7 @@ namespace BibliotecaFrontend
                 lista_estaciones.Add(estacion);
             }
 
-            mainthreadEnlaces(lista_estaciones);
+            mainthreadEnlaces(lista_estaciones, coleccion);
         }
 
 

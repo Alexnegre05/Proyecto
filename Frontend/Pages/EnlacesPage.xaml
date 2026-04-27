@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:BibliotecaFrontend;assembly=BibliotecaFrontend"
              x:Class="Frontend.Pages.EnlacesPage"
              Title="Enlaces">
     <Grid RowDefinitions="*, Auto" BackgroundColor="Black">
@@ -41,40 +42,33 @@
 
                 <CollectionView ItemsSource="{Binding Enlaces}"
                     SelectionMode="Single"
-                    SelectionChanged="OnEnlaceSelected">
+                    SelectionChanged="OnEnlaceSelected"
+                                x:Name="ColeccionEstaciones" >
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
 
                             <Border BackgroundColor="#1E1E1E" Padding="15" Margin="0,5">
 
-                                <VerticalStackLayout Spacing="5">
+                                <VerticalStackLayout Padding="20" Spacing="15">
 
-                                    <!-- Estación origen -->
-                                    <Label Text="{Binding EstacionOrigen}"
-                               TextColor="White"
-                               FontAttributes="Bold"
-                               FontSize="16"/>
+                                    <Label Text="Seleccione Origen:" TextColor="White" />
+                                    <Picker Title="Selecciona estación de origen"
+                                    ItemsSource="{x:Static local:Enlaces.ListaParaPickers}"
+                                    SelectedItem="{Binding OrigenSeleccionado}"
+                                    TextColor="White"
+                                    BackgroundColor="#1E1E1E" />    
 
-                                    <!-- Flecha -->
-                                    <Label Text="↓"
-                               TextColor="Gray"
-                               HorizontalTextAlignment="Center"/>
+                                    <Label Text="Seleccione Destino:" TextColor="White" />
+                                    <Picker Title="Selecciona estación de destino"
+                                    ItemsSource="{x:Static local:Enlaces.ListaParaPickers}"
+                                    SelectedItem="{Binding DestinoSeleccionado}"
+                                    TextColor="White"
+                                    BackgroundColor="#1E1E1E" />    
 
-                                    <!-- Estación destino -->
-                                    <Label Text="{Binding EstacionDestino}"
-                               TextColor="White"
-                               FontAttributes="Bold"
-                               FontSize="16"/>
-
-                                    <!-- info extra -->
-                                    <Label Text="{Binding Linea}"
-                               TextColor="LightGray"
-                               FontSize="12"/>
-
-                                    <Label Text="{Binding Costo, StringFormat='Costo: {0} min'}"
-                               TextColor="LightGray"
-                               FontSize="12"/>
+                                    <!-- Botón para enviar la selección después -->
+                                    <Button Text="Calcular Ruta" 
+                                    Command="{Binding CalcularRutaCommand}" />
 
                                 </VerticalStackLayout>
 

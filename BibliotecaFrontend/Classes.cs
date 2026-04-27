@@ -16,6 +16,8 @@ namespace BibliotecaFrontend
         }
 
 
+
+
         public class Incidencia
         {
             public int? Id { get; set; } // este id es null y solo sirve para modificar notas para despues saber que incidencia se ha clicado y guardado
