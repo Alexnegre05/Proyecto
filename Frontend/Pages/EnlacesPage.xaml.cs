@@ -7,7 +7,13 @@ public partial class EnlacesPage : ContentPage
 		InitializeComponent();
 	}
 
+    // funcion para poner todas las estaciones
+    private void OnEnlaceSelected(object sender, SelectionChangedEventArgs e)
+    {
 
+    }
+
+    // botones para moverse por las pantallas
     protected async void OnVolverAlMenuClicked(object sender, EventArgs e)
     {
         // Al navegar a otra página, el evento OnDisappearing se ejecutará cerrando todo lo de sockets... la pagina principal se denomina internamente main
@@ -38,4 +44,5 @@ public partial class EnlacesPage : ContentPage
     {
         await Shell.Current.GoToAsync("EnlacesPage");
     }
+
 }
