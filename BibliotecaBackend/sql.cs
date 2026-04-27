@@ -271,6 +271,106 @@ namespace BibliotecaBackend
             fichero.Close();
         }
 
+        public static void inserts_enlaces(DBProyectoContext context)
+        {
+            FileStream fichero = new FileStream("../../../Enlaces.csv", FileMode.Open, FileAccess.Read); // leemos de el fichero
+            StreamReader reader = new StreamReader(fichero, Encoding.UTF8);
+
+            string linea = reader.ReadLine();
+            int count = 0;
+            count = count + 1;// sirve para saber si es la primera linea y quitar lo de parada, linea de arriba
+
+            // Diccionarios para evitar consultas constantes
+            Dictionary<string, int> estacionesDiccionario = context.Estaciones
+                .ToDictionary(e => e.nombre.Trim(), e => e.Id);
+
+            Dictionary<string, int> lineasDiccionario = context.Lineas
+                .ToDictionary(l => l.nombre.Trim(), l => l.Id);
+
+            Dictionary<string, int> paradasDiccionario = context.Paradas
+                .ToDictionary(p => $"{p.EstacionId}-{p.LineaId}", p => p.Id);
+
+            // Para evitar duplicados usamos un hashset
+            HashSet<string> enlacesExistentes = context.Enlaces
+                .Select(e => $"{e.AnteriorParadaId}-{e.SiguienteParadaId}")
+                .ToHashSet();
+
+            while (linea != null) // mientras la linea no sea null leemos el fichero
+            {
+                if (count != 1) // si no es la primera linea
+                {
+                    string[] parts = linea.Split(','); // separamos el fichero por , y sacamos la información
+
+                    string nombreLinea = parts[0].Trim();
+                    string estacionOrigen = parts[1].Trim();
+                    string estacionDestino = parts[2].Trim();
+                    int costo = int.Parse(parts[3]);
+
+                    // miramos si no existe el id de las lineas
+                    bool existe = lineasDiccionario.TryGetValue(nombreLinea, out int lineaId);
+                    if (existe == false)
+                    {
+                        linea = reader.ReadLine();
+                        count = count + 1;
+                        Console.WriteLine($"FALLO PARADA: {estacionOrigen} - {estacionDestino} ({nombreLinea})");
+                        continue;
+                    }
+
+                    bool existeOrigen = estacionesDiccionario.TryGetValue(estacionOrigen, out int estacionOrigenId);
+                    bool existeDestino = estacionesDiccionario.TryGetValue(estacionDestino, out int estacionDestinoId);
+
+                    if (existeOrigen == false || existeDestino == false) // miramos que la estacion sea correcta
+                    {
+                        linea = reader.ReadLine();
+                        count = count + 1;
+                        Console.WriteLine($"FALLO PARADA: {estacionOrigen} - {estacionDestino} ({nombreLinea})");
+                        continue; // con continue saltamos a la sigueinte linea de el fichero(proxima vuelta de el bucle while)
+                    }
+
+                    // Obtener Paradas
+                    string claveOrigen = $"{estacionOrigenId}-{lineaId}";
+                    string claveDestino = $"{estacionDestinoId}-{lineaId}";
+
+                    bool existeParadaOrigen = paradasDiccionario.TryGetValue(claveOrigen, out int paradaOrigenId);
+                    bool existeParadaDestino = paradasDiccionario.TryGetValue(claveDestino, out int paradaDestinoId);
+
+                    if (existeParadaOrigen == false || existeParadaDestino == false) // lo mismo pero para paradas
+                    {
+                        linea = reader.ReadLine();
+                        count = count + 1;
+                        Console.WriteLine($"FALLO PARADA: {estacionOrigen} - {estacionDestino} ({nombreLinea})");
+                        continue;
+                    }
+
+                    // Validar duplicado, tenemos que poner los insert en ambos lados tanto de hospitalet a sants como viceversa
+                    string claveEnlace = $"{paradaOrigenId}-{paradaDestinoId}";
+                    if (enlacesExistentes.Contains(claveEnlace) == false) // con esto miramos si no existe
+                    {
+                        Enlace enlace = new Enlace(); // creamos un nuevo enlace
+                        enlace.AnteriorParadaId = paradaOrigenId;
+                        enlace.SiguienteParadaId = paradaDestinoId;
+                        enlace.Costo = costo;
+
+                        Console.WriteLine("Entra aqui");
+                        context.Enlaces.Add(enlace); // añadimos en el contexto los enlaces
+                        enlacesExistentes.Add(claveEnlace);
+                    }
+                    else
+                    {
+                        Console.WriteLine("No entra aqui");
+                    }
+                }
+
+                linea = reader.ReadLine();
+                count = count + 1;
+            }
+
+            context.SaveChanges();
+            reader.Close();
+            fichero.Close();
+        }
+
+
         // funciones para la BD de conectarse y desconectarse
 
 
@@ -283,7 +383,7 @@ namespace BibliotecaBackend
         public static void insert_ensurecreated(DBProyectoContext context)
         {
 
-            
+            context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
             Console.WriteLine("BD + tablas creadas");
@@ -299,6 +399,10 @@ namespace BibliotecaBackend
             // insertamos paradas
             inserts_paradas(context);
             Console.WriteLine("paradas insertadas en la BD");
+
+            // insertamos enlaces
+            inserts_enlaces(context);
+            Console.WriteLine("Enlaces insertados en la BD");
         }
 
 
