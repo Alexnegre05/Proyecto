@@ -239,6 +239,11 @@ namespace BibliotecaFrontend
             }
         }
 
+        public async static void enlaces(Socket frontend_socket)
+        {
+            send_num(4, frontend_socket); // enviamos un 4 para decir que estamos en enlaces
+        }
+
 
 
 

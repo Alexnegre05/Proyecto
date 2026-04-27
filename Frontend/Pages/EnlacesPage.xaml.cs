@@ -6,6 +6,7 @@ using BibliotecaFrontend;
 using static BibliotecaFrontend.BibliotecaFrontend;
 using static BibliotecaFrontend.Sockets;
 using static BibliotecaFrontend.Classes;
+
 namespace Frontend.Pages;
 
 public partial class EnlacesPage : ContentPage
@@ -24,6 +25,7 @@ public partial class EnlacesPage : ContentPage
         base.OnAppearing();
         // esto es para decirle que como estamos sobreescribiendo una pagina que primero ejecute lo que hacia antes la funcion original(con el base)
         frontend_socket = crear_frontend_socket(1000);
+        enlaces(frontend_socket);
         
     }
 

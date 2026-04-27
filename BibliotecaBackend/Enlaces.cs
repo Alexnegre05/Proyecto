@@ -13,7 +13,7 @@ namespace BibliotecaBackend
     {
         public static void inserts_enlaces(Socket backend_service_socket, DBProyectoContext context)
         {
-
+            Console.WriteLine("Estamos en enlaces");
         }
     }
 }
