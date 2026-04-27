@@ -10,6 +10,7 @@ using static BibliotecaFrontend.Classes;
 using static BibliotecaFrontend.PonerNota;
 using static BibliotecaFrontend.LeerNota;
 using static BibliotecaFrontend.ModificarNota;
+using static BibliotecaFrontend.Enlaces;
 namespace BibliotecaFrontend
 {
     
@@ -242,6 +243,25 @@ namespace BibliotecaFrontend
         public async static void enlaces(Socket frontend_socket)
         {
             send_num(4, frontend_socket); // enviamos un 4 para decir que estamos en enlaces
+
+            // enviamos un 1 diciendo que queremos las listas de estaciones
+
+            send_num(1, frontend_socket);
+
+            // recibimos un numero
+
+            int numero_bucle = recibir_numero(frontend_socket);
+
+            List<string> lista_estaciones = new List<string>(); // lista de strings donde guardaremos todas las estaciones
+
+
+            for(int i = 0; i <  numero_bucle; i = i + 1)
+            {
+                string estacion = recibir_texto(frontend_socket);
+                lista_estaciones.Add(estacion);
+            }
+
+            mainthreadEnlaces(lista_estaciones);
         }
 
 
