@@ -46,14 +46,14 @@
                     <VerticalStackLayout Padding="20" Spacing="15">
 
                             <Label Text="Seleccione Origen:" TextColor="White" />
-                            <Picker Title="Selecciona estación de origen"
+                            <Picker x:Name ="Origen" Title="Selecciona estación de origen"
                             ItemsSource="{x:Static local:Enlaces.ListaParaPickers}"
                             SelectedItem="{Binding OrigenSeleccionado}"
                             TextColor="White"
                             BackgroundColor="#1E1E1E" />    
 
                             <Label Text="Seleccione Destino:" TextColor="White" />
-                            <Picker Title="Selecciona estación de destino"
+                            <Picker x:Name ="Destino" Title="Selecciona estación de destino"
                             ItemsSource="{x:Static local:Enlaces.ListaParaPickers}"
                             SelectedItem="{Binding DestinoSeleccionado}"
                             TextColor="White"
@@ -61,7 +61,7 @@
 
                             <!-- Botón para enviar la selección después -->
                             <Button Text="Calcular Ruta" 
-                            Command="{Binding CalcularRutaCommand}" />
+                            Command="{Binding CalcularRutaCommand}" Clicked="OnButtonClicked" />
 
                     </VerticalStackLayout>
 

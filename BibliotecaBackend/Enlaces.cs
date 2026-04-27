@@ -40,6 +40,14 @@ namespace BibliotecaBackend
                         enviar_texto(nombres[i], backend_service_socket); // enviamos todos los textos de todas las estaciones
                     }
                 }
+                else if (opcion == 2) // recibimos tanto la estacion origen como destino
+                {
+                    string estacion_origen = recibir_texto(backend_service_socket);
+
+                    string estacion_destino = recibir_texto(backend_service_socket);
+
+                    Console.WriteLine("Entra aqui");
+                }
             }
         }
     }

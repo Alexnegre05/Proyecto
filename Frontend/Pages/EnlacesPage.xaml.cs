@@ -82,4 +82,36 @@ public partial class EnlacesPage : ContentPage
         await Shell.Current.GoToAsync("EnlacesPage");
     }
 
+    private void OnButtonClicked(object sender, EventArgs e)
+    {
+        if (Origen.SelectedItem == Destino.SelectedItem)
+        {
+            // si pone la misma estacion dos veces ponemos un mensaje 
+            Shell.Current.DisplayAlert("Has seleccionado dos estaciones que son iguales","","Cerrar");
+        }
+        else if (Origen.SelectedItem == null || Destino.SelectedItem == null)
+        {
+            if (Origen.SelectedItem == null && Origen.SelectedItem == null)
+            {
+                Shell.Current.DisplayAlert("Introduce tanto el origen como el destino", "", "Cerrar");
+            }
+            else if (Origen.SelectedItem == null)
+            {
+                Shell.Current.DisplayAlert("Selecciona la estacion de origen", "", "Cerrar");
+            }
+            else if (Destino.SelectedItem == null)
+            {
+                Shell.Current.DisplayAlert("Selecciona la estacion de destino", "", "Cerrar");
+            }
+        }
+        else // aqui hacemos la logica, enviamos un 2
+        {
+            send_num(2, frontend_socket);
+
+            // enviamos la estacion de origen y de destino
+
+            enviar_texto((string)Origen.SelectedItem, frontend_socket);
+            enviar_texto((string)Destino.SelectedItem, frontend_socket);
+        }
+    }
 }
