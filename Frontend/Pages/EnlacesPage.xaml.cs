@@ -1,12 +1,47 @@
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using BibliotecaFrontend;
+using static BibliotecaFrontend.BibliotecaFrontend;
+using static BibliotecaFrontend.Sockets;
+using static BibliotecaFrontend.Classes;
 namespace Frontend.Pages;
 
 public partial class EnlacesPage : ContentPage
 {
+
+    
 	public EnlacesPage()
 	{
 		InitializeComponent();
 	}
 
+    Socket frontend_socket;
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        // esto es para decirle que como estamos sobreescribiendo una pagina que primero ejecute lo que hacia antes la funcion original(con el base)
+        frontend_socket = crear_frontend_socket(1000);
+        
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        // cuando hace esto le enviamos un 0 en el frontend a el backend
+
+        send_num(0, frontend_socket);
+
+
+        if (frontend_socket != null)
+        {
+            // y cerramos los sockets
+            frontend_socket.Dispose();
+            frontend_socket.Close();
+        }
+    }
     // funcion para poner todas las estaciones
     private void OnEnlaceSelected(object sender, SelectionChangedEventArgs e)
     {
