@@ -40,44 +40,34 @@
                     </Grid>
                 </Border>
 
-                <CollectionView ItemsSource="{Binding Enlaces}"
-                    SelectionMode="Single"
-                    SelectionChanged="OnEnlaceSelected"
-                                x:Name="ColeccionEstaciones" >
+              
+                 <Border BackgroundColor="#1E1E1E" Padding="15" Margin="0,5">
 
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
+                    <VerticalStackLayout Padding="20" Spacing="15">
 
-                            <Border BackgroundColor="#1E1E1E" Padding="15" Margin="0,5">
+                            <Label Text="Seleccione Origen:" TextColor="White" />
+                            <Picker Title="Selecciona estación de origen"
+                            ItemsSource="{x:Static local:Enlaces.ListaParaPickers}"
+                            SelectedItem="{Binding OrigenSeleccionado}"
+                            TextColor="White"
+                            BackgroundColor="#1E1E1E" />    
 
-                                <VerticalStackLayout Padding="20" Spacing="15">
+                            <Label Text="Seleccione Destino:" TextColor="White" />
+                            <Picker Title="Selecciona estación de destino"
+                            ItemsSource="{x:Static local:Enlaces.ListaParaPickers}"
+                            SelectedItem="{Binding DestinoSeleccionado}"
+                            TextColor="White"
+                            BackgroundColor="#1E1E1E" />    
 
-                                    <Label Text="Seleccione Origen:" TextColor="White" />
-                                    <Picker Title="Selecciona estación de origen"
-                                    ItemsSource="{x:Static local:Enlaces.ListaParaPickers}"
-                                    SelectedItem="{Binding OrigenSeleccionado}"
-                                    TextColor="White"
-                                    BackgroundColor="#1E1E1E" />    
+                            <!-- Botón para enviar la selección después -->
+                            <Button Text="Calcular Ruta" 
+                            Command="{Binding CalcularRutaCommand}" />
 
-                                    <Label Text="Seleccione Destino:" TextColor="White" />
-                                    <Picker Title="Selecciona estación de destino"
-                                    ItemsSource="{x:Static local:Enlaces.ListaParaPickers}"
-                                    SelectedItem="{Binding DestinoSeleccionado}"
-                                    TextColor="White"
-                                    BackgroundColor="#1E1E1E" />    
+                    </VerticalStackLayout>
 
-                                    <!-- Botón para enviar la selección después -->
-                                    <Button Text="Calcular Ruta" 
-                                    Command="{Binding CalcularRutaCommand}" />
+                 </Border>
 
-                                </VerticalStackLayout>
-
-                            </Border>
-
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-
-                </CollectionView>
+                
             </VerticalStackLayout>
 
         </ScrollView>
