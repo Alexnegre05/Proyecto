@@ -7,7 +7,56 @@
         <ScrollView Grid.Row="0">
             <VerticalStackLayout  VerticalOptions="Start" Spacing="20" Padding="0,30,0,20">
 
+                <Label Text="Calcular Rutas"
+               TextColor="White"
+               FontSize="20"
+               HorizontalOptions="Center" />
 
+                <CollectionView ItemsSource="{Binding Enlaces}"
+                    SelectionMode="Single"
+                    SelectionChanged="OnEnlaceSelected">
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+
+                            <Border BackgroundColor="#1E1E1E" Padding="15" Margin="0,5">
+
+                                <VerticalStackLayout Spacing="5">
+
+                                    <!-- Estación origen -->
+                                    <Label Text="{Binding EstacionOrigen}"
+                               TextColor="White"
+                               FontAttributes="Bold"
+                               FontSize="16"/>
+
+                                    <!-- Flecha -->
+                                    <Label Text="↓"
+                               TextColor="Gray"
+                               HorizontalTextAlignment="Center"/>
+
+                                    <!-- Estación destino -->
+                                    <Label Text="{Binding EstacionDestino}"
+                               TextColor="White"
+                               FontAttributes="Bold"
+                               FontSize="16"/>
+
+                                    <!-- info extra -->
+                                    <Label Text="{Binding Linea}"
+                               TextColor="LightGray"
+                               FontSize="12"/>
+
+                                    <Label Text="{Binding Costo, StringFormat='Costo: {0} min'}"
+                               TextColor="LightGray"
+                               FontSize="12"/>
+
+                                </VerticalStackLayout>
+
+                            </Border>
+
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                </CollectionView>
             </VerticalStackLayout>
 
         </ScrollView>
