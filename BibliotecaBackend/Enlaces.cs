@@ -64,7 +64,11 @@ namespace BibliotecaBackend
 
 
 
-                        List<Paradas> Todasparadas = context.Paradas.Include(p => p.Estacion).ThenInclude(e => e.Incidencias).ThenInclude(i => i.nota_Incidencias).ToList();
+                        List<Paradas> Todasparadas = context.Paradas
+    .Include(p => p.Estacion)
+    .Include(p => p.Linea)
+    .ThenInclude(l => l.ListaParadas)
+    .ToList();
                         List<Enlace> Todosenlaces = context.Enlaces.ToList(); // sacamos todas las paradas con todos sus enlaces
 
 
@@ -169,7 +173,7 @@ namespace BibliotecaBackend
 
                         for (int i = 0; i < ruta.Count; i = i + 1)
                         {
-                            Console.WriteLine(ruta[i].Estacion.nombre);
+                            Console.WriteLine(ruta[i].Estacion.nombre + ruta[i].Linea.nombre);
                         }
 
 
