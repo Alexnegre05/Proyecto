@@ -112,21 +112,6 @@ public partial class EnlacesPage : ContentPage
 
             enviar_texto((string)Origen.SelectedItem, frontend_socket);
             enviar_texto((string)Destino.SelectedItem, frontend_socket);
-
-            // recibimos el numero de como sera la lista de ruta que recibiremos
-            int numero = recibir_numero(frontend_socket);
-            string ruta_nombre;
-
-            string ruta_linea;
-            for (int i = 0; i < numero; i = i + 1)
-            {
-                // por cada ruta recibiremos el nombre y la ruta
-
-                ruta_nombre =  recibir_texto(frontend_socket);
-                ruta_linea = recibir_texto(frontend_socket);
-
-                Shell.Current.DisplayAlert(ruta_nombre + ruta_linea, "", "Cerrar");
-            }
         }
     }
 }

@@ -64,8 +64,11 @@ namespace BibliotecaBackend
 
 
 
-                        List<Paradas> Todasparadas = context.Paradas.Include(p => p.Estacion).Include(p => p.Linea).ThenInclude(l => l.ListaParadas).ToList();
-                       
+                        List<Paradas> Todasparadas = context.Paradas
+    .Include(p => p.Estacion)
+    .Include(p => p.Linea)
+    .ThenInclude(l => l.ListaParadas)
+    .ToList();
                         List<Enlace> Todosenlaces = context.Enlaces.ToList(); // sacamos todas las paradas con todos sus enlaces
 
 
@@ -116,7 +119,6 @@ namespace BibliotecaBackend
                             .OrderBy(d => d.Value) // ordena por distancia 
                             .First().Key; // extraemos solo el id
 
-                            Console.WriteLine($"ACTUAL: {actual} ({Todasparadas.First(p => p.Id == actual).Estacion.nombre})");
 
                             // sacamos los enlaces de todas las siguentes paradas poniendo como anterior a la actual en el where
                             List<Enlace> vecinos = Todosenlaces.Where(e => e.AnteriorParadaId == actual).ToList();
@@ -155,7 +157,7 @@ namespace BibliotecaBackend
                         }
 
                         // con esto tenemos la parada actual 
-                        Paradas destinoParada = paradasDestino.Where(p => distancia[p.Id] != int.MaxValue).OrderBy(p => distancia[p.Id]).First(); // ordenamos por id 
+                        Paradas destinoParada = paradasDestino.OrderBy(p => distancia[p.Id]).First(); // ordenamos por id 
 
                         int? nodo = destinoParada.Id;
 
@@ -169,13 +171,9 @@ namespace BibliotecaBackend
                             nodo = previo[nodo.Value];
                         }
 
-                        enviar_numero(ruta.Count, backend_service_socket);
-                        for (int i = 0; i < ruta.Count; i = i + 1) 
-                            // recorremos la ruta y vamos enviando al frontend 
+                        for (int i = 0; i < ruta.Count; i = i + 1)
                         {
-                            Console.WriteLine(ruta[i].Estacion.nombre + " " + ruta[i].Linea.nombre);
-                            enviar_texto(ruta[i].Estacion.nombre, backend_service_socket);
-                            enviar_texto(ruta[i].Linea.nombre, backend_service_socket);
+                            Console.WriteLine(ruta[i].Estacion.nombre + ruta[i].Linea.nombre);
                         }
 
 
