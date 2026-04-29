@@ -355,7 +355,20 @@ namespace BibliotecaBackend
                         context.Enlaces.Add(enlace); // añadimos en el contexto los enlaces
                         enlacesExistentes.Add(claveEnlace);
                     }
-                    
+
+                    string claveEnlaceInverso = $"{paradaDestinoId}-{paradaOrigenId}";
+
+                    if (enlacesExistentes.Contains(claveEnlaceInverso) == false)
+                    {
+                        Enlace enlaceInverso = new Enlace();
+                        enlaceInverso.AnteriorParadaId = paradaDestinoId;
+                        enlaceInverso.SiguienteParadaId = paradaOrigenId;
+                        enlaceInverso.Costo = costo;
+
+                        context.Enlaces.Add(enlaceInverso);
+                        enlacesExistentes.Add(claveEnlaceInverso);
+                    }
+
                 }
 
                 linea = reader.ReadLine();
@@ -380,7 +393,7 @@ namespace BibliotecaBackend
         public static void insert_ensurecreated(DBProyectoContext context)
         {
 
-           
+            context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
             Console.WriteLine("BD + tablas creadas");
