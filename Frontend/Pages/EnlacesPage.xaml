@@ -63,6 +63,15 @@
                             <Button Text="Calcular Ruta" 
                             Command="{Binding CalcularRutaCommand}" Clicked="OnButtonClicked" />
 
+                        <Label x:Name="RutaLabel"
+                           Text="Aquí aparecerá la ruta"
+                           TextColor="White"
+                           FontSize="16"
+                           HorizontalTextAlignment="Center"
+                           HorizontalOptions="Fill"
+                           VerticalOptions="Center"
+                           LineBreakMode="WordWrap"/>
+
                     </VerticalStackLayout>
 
                  </Border>

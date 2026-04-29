@@ -117,14 +117,23 @@ public partial class EnlacesPage : ContentPage
 
             int num = recibir_numero(frontend_socket);
 
-            for(int i = 0; i < num; i = i + 1)
+            StringBuilder rutaTexto = new StringBuilder();
+
+            for (int i = 0; i < num; i = i + 1)
             {
                 string estacion = recibir_texto(frontend_socket);
                 string linea = recibir_texto(frontend_socket);
 
-                Shell.Current.DisplayAlert(estacion, "", "Cancel");
-                Shell.Current.DisplayAlert(linea, "", "Cancel");
+                if (i > 0)
+                {
+                    rutaTexto.Append(" -> ");
+                }
+                    
+
+                rutaTexto.Append(estacion);
             }
+
+            RutaLabel.Text = rutaTexto.ToString();
         }
     }
 }
