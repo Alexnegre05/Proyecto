@@ -121,6 +121,9 @@ public partial class EnlacesPage : ContentPage
             {
                 string estacion = recibir_texto(frontend_socket);
                 string linea = recibir_texto(frontend_socket);
+
+                Shell.Current.DisplayAlert(estacion, "", "Cancel");
+                Shell.Current.DisplayAlert(linea, "", "Cancel");
             }
         }
     }
