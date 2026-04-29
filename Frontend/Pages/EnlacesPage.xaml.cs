@@ -112,6 +112,16 @@ public partial class EnlacesPage : ContentPage
 
             enviar_texto((string)Origen.SelectedItem, frontend_socket);
             enviar_texto((string)Destino.SelectedItem, frontend_socket);
+
+            // recibimos el numero de cuantas estaciones vamos a recibir
+
+            int num = recibir_numero(frontend_socket);
+
+            for(int i = 0; i < num; i = i + 1)
+            {
+                string estacion = recibir_texto(frontend_socket);
+                string linea = recibir_texto(frontend_socket);
+            }
         }
     }
 }

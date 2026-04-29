@@ -393,7 +393,7 @@ namespace BibliotecaBackend
         public static void insert_ensurecreated(DBProyectoContext context)
         {
 
-            context.Database.EnsureDeleted();
+            
             context.Database.EnsureCreated();
 
             Console.WriteLine("BD + tablas creadas");

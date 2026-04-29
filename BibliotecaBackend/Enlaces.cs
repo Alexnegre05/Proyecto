@@ -163,13 +163,17 @@ namespace BibliotecaBackend
                             ruta.Insert(0, Todasparadas.First(p => p.Id == nodo));
                             // vamos a por el sigiuente nodo 
 
-                            Console.WriteLine(nodo.Value);
+                            
                             nodo = previo[nodo.Value];
                         }
 
+                        enviar_numero(ruta.Count, backend_service_socket); // enviamos la parada como estacion.nombre y linea por separado
                         for (int i = 0; i < ruta.Count; i = i + 1)
                         {
                             Console.WriteLine(ruta[i].Estacion.nombre + ruta[i].Linea.nombre);
+
+                            enviar_texto(ruta[i].Estacion.nombre, backend_service_socket);
+                            enviar_texto(ruta[i].Linea.nombre, backend_service_socket);
                         }
 
 
