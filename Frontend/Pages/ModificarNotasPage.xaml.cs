@@ -144,7 +144,7 @@ namespace Frontend.Pages
 
         }
 
-        private void OnIncidenciaSelected(object sender, SelectionChangedEventArgs e)
+        private async void OnIncidenciaSelected(object sender, SelectionChangedEventArgs e)
         {
             if (e.CurrentSelection == null || e.CurrentSelection.Count == 0)
             {
@@ -167,7 +167,7 @@ namespace Frontend.Pages
 
             ContenedorIncidencias.IsVisible = true;
 
-            Shell.Current.DisplayAlert(seleccionada.Id?.ToString() ?? "ID null", "", "Cerrar");
+            await Shell.Current.DisplayAlert(seleccionada.Id?.ToString() ?? "ID null", "", "Cerrar");
 
             incidencia_actual = seleccionada;
 

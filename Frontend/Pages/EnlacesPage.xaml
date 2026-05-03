@@ -4,35 +4,35 @@
              xmlns:local="clr-namespace:BibliotecaFrontend;assembly=BibliotecaFrontend"
              x:Class="Frontend.Pages.EnlacesPage"
              Title="Enlaces">
+
     <Grid RowDefinitions="*, Auto" BackgroundColor="Black">
+
         <ScrollView Grid.Row="0">
-            <VerticalStackLayout  VerticalOptions="Start" Spacing="20" Padding="0,30,0,20">
+            <VerticalStackLayout VerticalOptions="Start" Spacing="15" Padding="10,20">
 
-                <Border x:Name="BordePrincipal"  Margin="20,0"
-                    StrokeShape="RoundRectangle 15"
-                    StrokeThickness="0"
-                    BackgroundColor="White"
-                 >
+                <Border x:Name="BordePrincipal" Margin="10,0"
+                        StrokeShape="RoundRectangle 15"
+                        StrokeThickness="0"
+                        BackgroundColor="White">
 
-                    <Grid  
-                      Padding="20"
-                      ColumnDefinitions="*" 
-                      HorizontalOptions="Fill"> 
+                    <Grid Padding="15"
+                          ColumnDefinitions="*"
+                          HorizontalOptions="Fill">
 
                         <StackLayout Orientation="Horizontal" 
-                         HorizontalOptions="Center" 
-                         Spacing="10">
+                                     HorizontalOptions="Center" 
+                                     Spacing="8">
 
+                            <Image x:Name="ImageIcono"
+                                   Source="punterosderuta.png"
+                                   HeightRequest="26"
+                                   WidthRequest="26"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center" />
 
-                                <Image x:Name="ImageIcono"
-                               Source="punterosderuta.png"
-                               HeightRequest="30"
-                               WidthRequest="30"
-                               VerticalOptions="Center"
-                               HorizontalOptions="Center">
-                                </Image>
-                               <Label x:Name="Titulo" Text="Calcular Ruta" 
-                                   FontSize="28" 
+                            <Label x:Name="Titulo"
+                                   Text="Calcular Ruta" 
+                                   FontSize="22"
                                    FontAttributes="Bold" 
                                    TextColor="#FF6600"
                                    VerticalOptions="Center" />
@@ -40,93 +40,105 @@
                     </Grid>
                 </Border>
 
-              
-                 <Border BackgroundColor="#1E1E1E" Padding="15" Margin="0,5">
+                <Border BackgroundColor="#1E1E1E" Padding="10" Margin="0,5">
 
-                    <VerticalStackLayout Padding="20" Spacing="15">
+                    <VerticalStackLayout Padding="10" Spacing="12">
 
-                            <Label Text="Seleccione Origen:" TextColor="White" />
-                            <Picker x:Name ="Origen" Title="Selecciona estación de origen"
-                            ItemsSource="{x:Static local:Enlaces.ListaParaPickers}"
-                            SelectedItem="{Binding OrigenSeleccionado}"
-                            TextColor="White"
-                            BackgroundColor="#1E1E1E" />    
+                        <Label Text="Seleccione Origen:" TextColor="White" />
 
-                            <Label Text="Seleccione Destino:" TextColor="White" />
-                            <Picker x:Name ="Destino" Title="Selecciona estación de destino"
-                            ItemsSource="{x:Static local:Enlaces.ListaParaPickers}"
-                            SelectedItem="{Binding DestinoSeleccionado}"
-                            TextColor="White"
-                            BackgroundColor="#1E1E1E" />    
+                        <Picker x:Name ="Origen"
+                                Title="Selecciona estación de origen"
+                                ItemsSource="{x:Static local:Enlaces.ListaParaPickers}"
+                                SelectedItem="{Binding OrigenSeleccionado}"
+                                TextColor="White"
+                                BackgroundColor="#1E1E1E" />
 
-                            <!-- Botón para enviar la selección después -->
-                            <Button Text="Calcular Ruta" 
-                            Command="{Binding CalcularRutaCommand}" Clicked="OnButtonClicked" />
+                        <Label Text="Seleccione Destino:" TextColor="White" />
+
+                        <Picker x:Name ="Destino"
+                                Title="Selecciona estación de destino"
+                                ItemsSource="{x:Static local:Enlaces.ListaParaPickers}"
+                                SelectedItem="{Binding DestinoSeleccionado}"
+                                TextColor="White"
+                                BackgroundColor="#1E1E1E" />
+
+                        <!-- Botón para enviar la selección después -->
+                        <Button Text="Calcular Ruta" 
+                                Command="{Binding CalcularRutaCommand}"
+                                Clicked="OnButtonClicked" />
 
                         <Label x:Name="RutaLabel"
-                           Text="Aquí aparecerá la ruta"
-                           TextColor="White"
-                           FontSize="16"
-                           HorizontalTextAlignment="Center"
-                           HorizontalOptions="Fill"
-                           VerticalOptions="Center"
-                           LineBreakMode="WordWrap"/>
+                               Text="Aquí aparecerá la ruta"
+                               TextColor="White"
+                               FontSize="14"
+                               HorizontalTextAlignment="Center"
+                               HorizontalOptions="Fill"
+                               VerticalOptions="Center"
+                               LineBreakMode="WordWrap"/>
 
                     </VerticalStackLayout>
 
-                 </Border>
+                </Border>
 
-                
             </VerticalStackLayout>
-
         </ScrollView>
-        
+
         <!-- FOOTER: Fondo Negro, Línea Blanca y Texto Blanco -->
         <Grid Grid.Row="1" 
-       ColumnDefinitions="*, *, *, *, *" 
-       BackgroundColor="Black"
-       HeightRequest="80">
+              ColumnDefinitions="*, *, *, *, *" 
+              BackgroundColor="Black"
+              HeightRequest="70">
 
             <BoxView Grid.ColumnSpan="5"
-      HeightRequest="1" 
-      BackgroundColor="White" 
-      HorizontalOptions="Fill" 
-      VerticalOptions="Start" />
+                     HeightRequest="1" 
+                     BackgroundColor="White" 
+                     HorizontalOptions="Fill" 
+                     VerticalOptions="Start" />
 
             <!-- 1. Poner Notas -->
             <ImageButton Grid.Column="0" 
-          Source="circuloplus.png"
-          HorizontalOptions="Center" VerticalOptions="Center"
-          HeightRequest="30" WidthRequest="30"
-          Clicked="OnPonerIncidenciaClicked" />
+                         Source="circuloplus.png"
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center"
+                         HeightRequest="26"
+                         WidthRequest="26"
+                         Clicked="OnPonerIncidenciaClicked" />
 
             <!-- 2. Leer Notas -->
             <ImageButton Grid.Column="1" 
-          Source="libroabierto.png"
-          HorizontalOptions="Center" VerticalOptions="Center"
-          HeightRequest="30" WidthRequest="30"
-          Clicked="OnLeerIncidenciaClicked" />
-            
-         <!-- 3. Modificar Notas -->
-         <ImageButton Grid.Column="2" 
-             Source="botoneditar.png"
-             HorizontalOptions="Center" VerticalOptions="Center"
-             HeightRequest="30" WidthRequest="30"
-             Clicked="OnModificarIncidenciaClicked" />
+                         Source="libroabierto.png"
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center"
+                         HeightRequest="26"
+                         WidthRequest="26"
+                         Clicked="OnLeerIncidenciaClicked" />
+
+            <!-- 3. Modificar Notas -->
+            <ImageButton Grid.Column="2" 
+                         Source="botoneditar.png"
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center"
+                         HeightRequest="26"
+                         WidthRequest="26"
+                         Clicked="OnModificarIncidenciaClicked" />
 
             <!-- 3. volver atras -->
             <ImageButton Grid.Column="3" 
-            Source="menu.png"
-            HorizontalOptions="Center" VerticalOptions="Center"
-            HeightRequest="30" WidthRequest="30"
-            Clicked="OnVolverAlMenuClicked" />
+                         Source="menu.png"
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center"
+                         HeightRequest="26"
+                         WidthRequest="26"
+                         Clicked="OnVolverAlMenuClicked" />
 
             <!-- 5. Estadísticas -->
             <ImageButton Grid.Column="4" 
-          Source="dataanalytics.png"
-          HorizontalOptions="Center" VerticalOptions="Center"
-          HeightRequest="30" WidthRequest="30"
-           />
+                         Source="dataanalytics.png"
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center"
+                         HeightRequest="26"
+                         WidthRequest="26" />
         </Grid>
+
     </Grid>
 </ContentPage>
