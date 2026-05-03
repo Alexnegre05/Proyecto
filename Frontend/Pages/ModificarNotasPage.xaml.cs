@@ -37,7 +37,7 @@ namespace Frontend.Pages
                 LabelEstacion,
                 LineasView,
                 BordePrincipal,
-                null,
+                guardar,
                 Titulo,
                 BtnFlecha,
                 ContenedorIncidencias,
@@ -171,8 +171,7 @@ namespace Frontend.Pages
 
             incidencia_actual = seleccionada;
 
-            TituloIncidencia.Text = seleccionada.titulo;
-            DescripcionIncidencia.Text = seleccionada.descripcion;
+            
 
             lista_incidencias.IsVisible = false;
             ContenedorIncidencias.IsVisible = true;

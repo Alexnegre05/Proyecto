@@ -48,7 +48,7 @@ namespace BibliotecaFrontend
 
                         parametros.BordePrincipal.Background = (Color)seleccion.Color;
 
-
+                        parametros.Guardar.Background = (Color)seleccion.Color;
                         parametros.Titulo.TextColor = Colors.White;
 
                         parametros.LineasView.IsVisible = false;

@@ -65,6 +65,7 @@ namespace BibliotecaFrontend
             public Label LabelEstacion;
             public CollectionView LineasView;
             public Border BordePrincipal;
+            public Button Guardar;
             public Label Titulo;
             public Button BtnFlecha;
             public Border ContenedorIncidencias;

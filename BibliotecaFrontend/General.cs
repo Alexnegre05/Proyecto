@@ -225,6 +225,7 @@ namespace BibliotecaFrontend
                             LabelEstacion = LabelEstacion,
                             LineasView = LineasView,
                             BordePrincipal = BordePrincipal,
+                            Guardar = guardar,
                             Titulo = Titulo,
                             BtnFlecha = BtnFlecha,
                             ContenedorIncidencias = ContenedorIncidencias,
