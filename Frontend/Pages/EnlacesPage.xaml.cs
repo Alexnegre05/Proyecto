@@ -130,7 +130,7 @@ public partial class EnlacesPage : ContentPage
                 }
                     
 
-                rutaTexto.Append(estacion);
+                rutaTexto.Append(estacion + "(" + linea + ")");
             }
 
             RutaLabel.Text = rutaTexto.ToString();
