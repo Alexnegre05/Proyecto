@@ -25,17 +25,24 @@ namespace Frontend.Pages
 
         Socket frontend_socket;
         BibliotecaFrontend.Classes.Incidencia incidencia_actual; // variable que sirve para saber la incidencia actual y saber el id mas tarde a la hora de guardar 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
-            // esto es para decirle que como estamos sobreescribiendo una pagina que primero ejecute lo que hacia antes la funcion original(con el base)
-
-            // ejecutamos primero una funcion que coja de el backend las estaciones disponibles, solo los nombres
-            
 
             frontend_socket = crear_frontend_socket(1000);
-            // como no hay boton de guardar es null
-            EstacionCercana(3, frontend_socket, LabelEstacion, LineasView, BordePrincipal, null, Titulo, BtnFlecha, ContenedorIncidencias, lista_incidencias);
+
+            await EstacionCercana(
+                3,
+                frontend_socket,
+                LabelEstacion,
+                LineasView,
+                BordePrincipal,
+                null,
+                Titulo,
+                BtnFlecha,
+                ContenedorIncidencias,
+                lista_incidencias
+            );
         }
 
         protected override void OnDisappearing()
@@ -85,7 +92,7 @@ namespace Frontend.Pages
 
 
         // funciones de guardar y eliminar incidencias
-        private void OnGuardarClicked(object sender, EventArgs e)
+        private async void OnGuardarClicked(object sender, EventArgs e)
         {
 
 
@@ -99,9 +106,9 @@ namespace Frontend.Pages
             string titulo = TituloIncidencia.Text;
             string descripcion = DescripcionIncidencia.Text;
 
-            if (titulo == null || descripcion == null) // si el titulo o la descripcion es nula entonces no enviar nada
+            if (string.IsNullOrWhiteSpace(titulo) || string.IsNullOrWhiteSpace(descripcion)) // si el titulo o la descripcion es nula entonces no enviar nada
             {
-                Shell.Current.DisplayAlert("Introduce texto", "", "Cerrar");
+                await Shell.Current.DisplayAlert("Introduce texto", "", "Cerrar");
             }
             else
             {
@@ -110,29 +117,29 @@ namespace Frontend.Pages
 
 
                 // Lógica para enviar los datos al socket o guardarlos localmente
-                
+
 
 
                 if (id != null)
                 {
-                    
+
                     enviar_texto(LabelEstacion.Text, frontend_socket);
 
                     send_num((int)id, frontend_socket); // si o si sabemos que no puede ser null
                     enviar_texto(titulo, frontend_socket);
                     enviar_texto(descripcion, frontend_socket);
 
-                    Shell.Current.DisplayAlert("Incidencia guardada", "", "Cerrar");
+                    await Shell.Current.DisplayAlert("Incidencia guardada", "", "Cerrar");
                     // cuando enviamos el numero llamamos a OnEliminarCliked para reiniciar el texto 
                     OnEliminarClicked(sender, e);
                 }
                 else
                 {
-                    Shell.Current.DisplayAlert("Ha habido un error", "", "Cerrar");
-                    
+                    await Shell.Current.DisplayAlert("Ha habido un error", "", "Cerrar");
+
                     OnEliminarClicked(sender, e);
                 }
-               
+
             }
 
         }
