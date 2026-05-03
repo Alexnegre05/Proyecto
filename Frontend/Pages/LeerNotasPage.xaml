@@ -2,23 +2,24 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Frontend.Pages.LeerNotasPage"
-             Title="">
+             Title=""
+             BackgroundColor="Black">
 
-    <Grid RowDefinitions="*, Auto" BackgroundColor="Black">
+    <Grid RowDefinitions="*, Auto">
         <ScrollView Grid.Row="0">
-            <VerticalStackLayout  VerticalOptions="Start" Spacing="20" Padding="0,30,0,20">
+            <VerticalStackLayout  VerticalOptions="Start" Spacing="15" Padding="10,30,10,20">
 
                 <!--usamos el horizontal layout en esta parte para que se pongan los elementos en el eje x-->
                 <!--con fill el horizontaloptions hacemos que ocupe todo el eje x-->
 
-                <Border x:Name="BordePrincipal"  Margin="20,0"
+                <Border x:Name="BordePrincipal"  Margin="10,0"
                         StrokeShape="RoundRectangle 15"
                         StrokeThickness="0"
                         BackgroundColor="White"
                         >
 
                     <Grid  
-                          Padding="20"
+                          Padding="15"
                           ColumnDefinitions="*" 
                           HorizontalOptions="Fill">
 
@@ -26,16 +27,17 @@
                                      HorizontalOptions="Center" 
                                      Spacing="10">
 
-                            
+
                             <Image x:Name="ImageIcono"
                                Source="libroabierto.png"
-                               HeightRequest="30"
-                               WidthRequest="30"
+                               HeightRequest="24"
+                               WidthRequest="24"
                                VerticalOptions="Center"
-                               HorizontalOptions="Center">  
+                               HorizontalOptions="Center">
                             </Image>
+
                             <Label x:Name="Titulo" Text="Leer Notas" 
-                                   FontSize="28" 
+                                   FontSize="{OnIdiom Phone=22, Tablet=28}" 
                                    FontAttributes="Bold" 
                                    TextColor="#FF6600"
                                    VerticalOptions="Center" />
@@ -48,23 +50,27 @@
                 <Border BackgroundColor="White" 
                     StrokeShape="RoundRectangle 25" 
                     StrokeThickness="0"
-                    Margin="20,0"
-                    Padding="20"
+                    Margin="10,0"
+                    Padding="15"
                     HorizontalOptions="Fill">
 
                     <!--usamos grid + vertical layout para que todo que centrado correctamente...-->
-                    <Grid ColumnDefinitions="Auto, *" ColumnSpacing="20">
+                    <!--usamos grid + vertical layout para que todo que centrado correctamente...-->
+                    <Grid ColumnDefinitions="Auto, *"
+                          RowDefinitions="Auto, Auto"
+                          ColumnSpacing="15"
+                          RowSpacing="10">
 
 
-                        <VerticalStackLayout Grid.Column="0" WidthRequest="200" Spacing="5">
+                        <VerticalStackLayout Grid.Column="0" Grid.Row="0" Spacing="5">
 
                             <!-- Botón de Flecha -->
                             <Button x:Name="BtnFlecha"
                                 Text="Cambiar Linea ▼" 
-                                TextColor="White"
+                                TextColor="#FFFFFF"
                                 BackgroundColor="Transparent"
-                                FontSize="20"
-                                
+                                FontSize="16"
+                                HeightRequest="45"
                                 Clicked="OnFlechaClicked" />
 
                             <!-- La lista de lineas para una estacion -->
@@ -72,13 +78,14 @@
 
                             <!--selection mode sirve para ver como puede interactuar el usuario con esta lista
                                         tiene 3 modos 
-                        
+        
                                         None: La lista es solo para leer. Aunque el usuario toque una opcion, no pasará nada (no se dispara el evento SelectionChanged).
                                         Single: El usuario solo puede tener un elemento seleccionado a la vez. la selección salta de uno a otro. Es el modo ideal para menús o selectores.
                                         Multiple: Permite al usuario marcar varias opciones a la vez.-->
                             <CollectionView x:Name="LineasView"
                                         SelectionMode="Single"
-                                        IsVisible="false">
+                                        IsVisible="false"
+                                        HeightRequest="150">
 
 
 
@@ -88,8 +95,8 @@
                                 <!-- binding le dice que coja el color de el c#-->
                                 <CollectionView.ItemTemplate>
                                     <DataTemplate>
-                                        <Border Padding="10" Margin="5" BackgroundColor="{Binding Color}">
-                                            <Label Text="{Binding Nombre}" TextColor="White" FontAttributes="Bold" HorizontalTextAlignment="Center"></Label>
+                                        <Border Padding="8" Margin="3" BackgroundColor="{Binding Color}">
+                                            <Label Text="{Binding Nombre}" TextColor="White" FontAttributes="Bold" FontSize="14" HorizontalTextAlignment="Center"></Label>
                                         </Border>
                                     </DataTemplate>
                                 </CollectionView.ItemTemplate>
@@ -98,47 +105,68 @@
 
                         <!-- Estación -->
                         <Label Grid.Column="0"
-                           Grid.ColumnSpan="2"
-                           x:Name="LabelEstacion"
-                           Text="Estacion: " 
-                           FontSize="24" 
-                           FontAttributes="Bold" 
-                           TextColor="#FF6600"
-                           VerticalOptions="Center"
-                           HorizontalOptions="Center" 
-                           HorizontalTextAlignment="Center" />
+                               Grid.ColumnSpan="2"
+                               Grid.Row="1"
+                               x:Name="LabelEstacion"
+                               Text="Estacion: " 
+                               FontSize="{OnIdiom Phone=18, Tablet=24}" 
+                               FontAttributes="Bold" 
+                               TextColor="#FF6600"
+                               VerticalOptions="Center"
+                               HorizontalOptions="Center" 
+                               HorizontalTextAlignment="Center"
+                               LineBreakMode="WordWrap"
+                               MaxLines="2" />
                     </Grid>
                 </Border>
 
 
                 <!--Lista de incidencias-->
-                <CollectionView x:Name="lista_incidencias" SelectionMode="Single" IsVisible="false" Margin="20,0">
-                    
+                <CollectionView x:Name="lista_incidencias"
+                                SelectionMode="Single"
+                                IsVisible="false"
+                                Margin="10,0">
+
                     <!-- Esto añade la separación (espaciado) entre las notas -->
                     <CollectionView.ItemsLayout>
-                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="15" />
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="12" />
                     </CollectionView.ItemsLayout>
 
                     <CollectionView.ItemTemplate>
-                            <DataTemplate>
+                        <DataTemplate>
 
-                            <Border x:Name="Bordenotas" Padding="10" Stroke="{Binding ColorTexto}"  StrokeThickness="4" StrokeShape="RoundRectangle 15">
-                                    <VerticalStackLayout Spacing="5">
-                                    <Label x:Name="LabelTitulo" Text="{Binding titulo}" FontSize="24" TextColor="{Binding ColorTexto}" HorizontalTextAlignment="Center" ></Label>
+                            <Border x:Name="Bordenotas"
+                                    Padding="10"
+                                    Stroke="{Binding ColorTexto}"
+                                    StrokeThickness="3"
+                                    StrokeShape="RoundRectangle 15">
 
-                                    <Label x:Name="LabelDescripción" Text="{Binding descripcion}" FontSize="15" TextColor="White" HorizontalTextAlignment="Center"></Label>
-                                    </VerticalStackLayout>
-                                </Border>
-                                
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
+                                <VerticalStackLayout Spacing="5">
+
+                                    <Label x:Name="LabelTitulo"
+                                           Text="{Binding titulo}"
+                                           FontSize="20"
+                                           TextColor="{Binding ColorTexto}"
+                                           HorizontalTextAlignment="Center" />
+
+                                    <Label x:Name="LabelDescripción"
+                                           Text="{Binding descripcion}"
+                                           FontSize="14"
+                                           TextColor="White"
+                                           HorizontalTextAlignment="Center" />
+
+                                </VerticalStackLayout>
+                            </Border>
+
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
                 </CollectionView>
-                
+
 
 
             </VerticalStackLayout>
 
-            
+
         </ScrollView>
 
 
@@ -146,50 +174,60 @@
 
         <!--Iconos sacados de flaticon-->
         <Grid Grid.Row="1" 
-          ColumnDefinitions="*, *, *, *, *" 
-          BackgroundColor="Black"
-          HeightRequest="80">
+              ColumnDefinitions="*, *, *, *, *" 
+              BackgroundColor="Black"
+              HeightRequest="70">
 
-                    <BoxView Grid.ColumnSpan="5"
-             HeightRequest="1" 
-             BackgroundColor="White" 
-             HorizontalOptions="Fill" 
-             VerticalOptions="Start" />
+            <BoxView Grid.ColumnSpan="5"
+                     HeightRequest="1" 
+                     BackgroundColor="White" 
+                     HorizontalOptions="Fill" 
+                     VerticalOptions="Start" />
 
-             <!-- 1. Poner Notas -->
-             <ImageButton Grid.Column="0" 
-             Source="circuloplus.png"
-             HorizontalOptions="Center" VerticalOptions="Center"
-             HeightRequest="30" WidthRequest="30"
-             Clicked="OnPonerIncidenciaClicked" />
+            <!-- 1. Poner Notas -->
+            <ImageButton Grid.Column="0" 
+                         Source="circuloplus.png"
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center"
+                         HeightRequest="30"
+                         WidthRequest="30"
+                         Clicked="OnPonerIncidenciaClicked" />
 
-             <!-- 2. Atras -->
-             <ImageButton Grid.Column="1" 
-             Source="menu.png"
-             HorizontalOptions="Center" VerticalOptions="Center"
-             HeightRequest="30" WidthRequest="30"
-             Clicked="OnVolverAlMenuClicked" />
+            <!-- 2. Atras -->
+            <ImageButton Grid.Column="1" 
+                         Source="menu.png"
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center"
+                         HeightRequest="30"
+                         WidthRequest="30"
+                         Clicked="OnVolverAlMenuClicked" />
 
             <!-- 3. Modificar Notas -->
             <ImageButton Grid.Column="2" 
-            Source="botoneditar.png"
-            HorizontalOptions="Center" VerticalOptions="Center"
-            HeightRequest="30" WidthRequest="30"
-            Clicked="OnModificarIncidenciaClicked" />
+                         Source="botoneditar.png"
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center"
+                         HeightRequest="30"
+                         WidthRequest="30"
+                         Clicked="OnModificarIncidenciaClicked" />
 
             <!-- 4. Calcular Ruta -->
             <ImageButton Grid.Column="3" 
-             Source="punterosderuta.png"
-             HorizontalOptions="Center" VerticalOptions="Center"
-             HeightRequest="30" Clicked="OnEnlaceClicked" WidthRequest="30"
-              />    
+                         Source="punterosderuta.png"
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center"
+                         HeightRequest="30"
+                         WidthRequest="30"
+                         Clicked="OnEnlaceClicked" />
 
             <!-- 5. Estadísticas -->
             <ImageButton Grid.Column="4" 
-            Source="dataanalytics.png"
-            HorizontalOptions="Center" VerticalOptions="Center"
-            HeightRequest="30" WidthRequest="30"
-            />
+                         Source="dataanalytics.png"
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center"
+                         HeightRequest="30"
+                         WidthRequest="30" />
+
         </Grid>
     </Grid>
 

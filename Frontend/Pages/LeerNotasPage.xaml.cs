@@ -37,11 +37,27 @@ public partial class LeerNotasPage : ContentPage
     {
         base.OnAppearing();
         // esto es para decirle que como estamos sobreescribiendo una pagina que primero ejecute lo que hacia antes la funcion original(con el base)
-        
+
 
         frontend_socket = crear_frontend_socket(1000);
+
         // como no hay boton de guardar es null
-        EstacionCercana(2, frontend_socket, LabelEstacion, LineasView, BordePrincipal,null, Titulo, BtnFlecha, BordePrincipal, lista_incidencias);
+
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            EstacionCercana(
+                2,
+                frontend_socket,
+                LabelEstacion,
+                LineasView,
+                BordePrincipal,
+                null,
+                Titulo,
+                BtnFlecha,
+                BordePrincipal,
+                lista_incidencias
+            );
+        });
     }
 
     protected override void OnDisappearing()
