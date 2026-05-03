@@ -178,8 +178,8 @@ namespace Frontend.Pages
 
             // Lógica para borrar la nota que estabas escribiendo dejamos el placeholder
 
-            TituloIncidencia.Text = TituloIncidencia.Placeholder;
-            DescripcionIncidencia.Text = DescripcionIncidencia.Placeholder;
+            TituloIncidencia.Text = "";
+            DescripcionIncidencia.Text = "";
         }
 
         // funciones para moverse por el menu

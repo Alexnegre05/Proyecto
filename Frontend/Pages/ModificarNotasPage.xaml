@@ -6,245 +6,230 @@
 
     <Grid RowDefinitions="*, Auto" BackgroundColor="Black">
         <ScrollView Grid.Row="0">
-            <VerticalStackLayout  VerticalOptions="Start" Spacing="20" Padding="0,30,0,20">
+            <VerticalStackLayout VerticalOptions="Start" Spacing="15" Padding="0,20,0,20">
 
                 <!--usamos el horizontal layout en esta parte para que se pongan los elementos en el eje x-->
                 <!--con fill el horizontaloptions hacemos que ocupe todo el eje x-->
 
-                <Border x:Name="BordePrincipal"  Margin="20,0"
+                <Border x:Name="BordePrincipal" Margin="15,0"
                         StrokeShape="RoundRectangle 15"
                         StrokeThickness="0"
-                        BackgroundColor="White"
-                        >
+                        BackgroundColor="White">
 
-                    <Grid  
-                          Padding="20"
-                          ColumnDefinitions="*" 
+                    <Grid Padding="15"
+                          ColumnDefinitions="*"
                           HorizontalOptions="Fill">
 
                         <StackLayout Orientation="Horizontal" 
                                      HorizontalOptions="Center" 
                                      Spacing="10">
 
-                            
-
                             <Image x:Name="ImageIcono"
-                               Source="botoneditar.png"
-                               HeightRequest="30"
-                               WidthRequest="30"
-                               VerticalOptions="Center"
-                               HorizontalOptions="Center">  
-                            </Image>
-                            <Label x:Name="Titulo" VerticalOptions="Center" Text="Modificar Notas" 
-                                   FontSize="28" 
+                                   Source="botoneditar.png"
+                                   HeightRequest="26"
+                                   WidthRequest="26"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center"/>
+
+                            <Label x:Name="Titulo"
+                                   VerticalOptions="Center"
+                                   Text="Modificar Notas" 
+                                   FontSize="22"
                                    FontAttributes="Bold" 
-                                   TextColor="#FF6600"
-                                    />
+                                   TextColor="#FF6600"/>
                         </StackLayout>
                     </Grid>
                 </Border>
 
-
                 <!--lo ponemos todo en un borde para poder ponerle un radius ya que no hay un solo label -->
                 <Border BackgroundColor="White" 
-                    StrokeShape="RoundRectangle 25" 
-                    StrokeThickness="0"
-                    Margin="20,0"
-                    Padding="20"
-                    HorizontalOptions="Fill">
+                        StrokeShape="RoundRectangle 25" 
+                        StrokeThickness="0"
+                        Margin="15,0"
+                        Padding="15"
+                        HorizontalOptions="Fill">
 
                     <!--usamos grid + vertical layout para que todo que centrado correctamente...-->
-                    <Grid ColumnDefinitions="Auto, *" ColumnSpacing="20">
+                    <Grid RowDefinitions="Auto, Auto, Auto" RowSpacing="12">
 
+                        <!-- Botón arriba del todo -->
+                        <Button Grid.Row="0"
+                        x:Name="BtnFlecha"
+                        Text="Cambiar Linea ▼" 
+                        TextColor="White"
+                        BackgroundColor="transparent"
+                        FontSize="16"
+                        HorizontalOptions="Center"
+                        Clicked="OnFlechaClicked" />
 
-                        <VerticalStackLayout Grid.Column="0" WidthRequest="200" Spacing="5">
+                        <!-- Lista debajo del botón -->
+                        <CollectionView Grid.Row="1"
+                            x:Name="LineasView"
+                            SelectionMode="Single"
+                            IsVisible="false">
 
-                            <!-- Botón de Flecha -->
-                            <Button x:Name="BtnFlecha"
-                                Text="Cambiar Linea ▼" 
-                                TextColor="White"
-                                BackgroundColor="Transparent"
-                                FontSize="20"
-                                
-                                Clicked="OnFlechaClicked" />
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="10" Margin="5" BackgroundColor="{Binding Color}">
+                                        <Label Text="{Binding Nombre}" 
+                                           TextColor="White" 
+                                           FontAttributes="Bold" 
+                                           HorizontalTextAlignment="Center"/>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
 
-                            <!-- La lista de lineas para una estacion -->
-                            <!--colection view es para mostrar listas de elementos-->
-
-                            <!--selection mode sirve para ver como puede interactuar el usuario con esta lista
-                                        tiene 3 modos 
-                        
-                                        None: La lista es solo para leer. Aunque el usuario toque una opcion, no pasará nada (no se dispara el evento SelectionChanged).
-                                        Single: El usuario solo puede tener un elemento seleccionado a la vez. la selección salta de uno a otro. Es el modo ideal para menús o selectores.
-                                        Multiple: Permite al usuario marcar varias opciones a la vez.-->
-                            <CollectionView x:Name="LineasView"
-                                        SelectionMode="Single"
-                                        IsVisible="false">
-
-
-
-                                <!--Item Template indica como se tiene que ver cada elemento de el colection view(diseño de filas o columnas)
-                                            que se pone dentro de datatemplate que es como se tiene que ver cada elemento-->
-
-                                <!-- binding le dice que coja el color de el c#-->
-                                <CollectionView.ItemTemplate>
-                                    <DataTemplate>
-                                        <Border Padding="10" Margin="5" BackgroundColor="{Binding Color}">
-                                            <Label Text="{Binding Nombre}" TextColor="White" FontAttributes="Bold" HorizontalTextAlignment="Center"></Label>
-                                        </Border>
-                                    </DataTemplate>
-                                </CollectionView.ItemTemplate>
-                            </CollectionView>
-                        </VerticalStackLayout>
-
-                        <!-- Estación -->
-                        <Label Grid.Column="0"
-                           Grid.ColumnSpan="2"
-                           x:Name="LabelEstacion"
-                           Text="Estacion: " 
-                           FontSize="24" 
-                           FontAttributes="Bold" 
-                           TextColor="#FF6600"
-                           VerticalOptions="Center"
-                           HorizontalOptions="Center" 
-                           HorizontalTextAlignment="Center" />
+                        <!-- Estación claramente debajo -->
+                        <Label Grid.Row="2"
+                       x:Name="LabelEstacion"
+                       Text="Estacion: " 
+                       FontSize="18"
+                       FontAttributes="Bold" 
+                       TextColor="#FF6600"
+                       Margin="0,5,0,0"
+                       HorizontalOptions="Center" 
+                       HorizontalTextAlignment="Center" />
                     </Grid>
                 </Border>
 
-
                 <!--Lista de incidencias-->
-                <CollectionView x:Name="lista_incidencias" SelectionMode="Single" IsVisible="false" Margin="20,0" SelectionChanged="OnIncidenciaSelected">
+                <CollectionView x:Name="lista_incidencias"
+                                SelectionMode="Single"
+                                IsVisible="false"
+                                Margin="15,0"
+                                SelectionChanged="OnIncidenciaSelected">
 
-                    <!-- Esto añade la separación (espaciado) entre las notas -->
                     <CollectionView.ItemsLayout>
-                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="15" />
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="12" />
                     </CollectionView.ItemsLayout>
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
+                            <Border x:Name="Bordenotas"
+                                    Padding="12"
+                                    Stroke="{Binding ColorTexto}"
+                                    StrokeThickness="3"
+                                    StrokeShape="RoundRectangle 15">
 
-                            <Border x:Name="Bordenotas" Padding="10" Stroke="{Binding ColorTexto}"  StrokeThickness="4" StrokeShape="RoundRectangle 15">
                                 <VerticalStackLayout Spacing="5">
-                                    <Label x:Name="LabelTitulo" Text="{Binding titulo}" FontSize="24" TextColor="{Binding ColorTexto}" HorizontalTextAlignment="Center" ></Label>
+                                    <Label x:Name="LabelTitulo"
+                                           Text="{Binding titulo}"
+                                           FontSize="20"
+                                           TextColor="{Binding ColorTexto}"
+                                           HorizontalTextAlignment="Center"/>
 
-                                    <Label x:Name="LabelDescripción" Text="{Binding descripcion}" FontSize="15" TextColor="White" HorizontalTextAlignment="Center"></Label>
+                                    <Label x:Name="LabelDescripción"
+                                           Text="{Binding descripcion}"
+                                           FontSize="14"
+                                           TextColor="White"
+                                           HorizontalTextAlignment="Center"/>
                                 </VerticalStackLayout>
                             </Border>
-
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 
                 <!--Editor de notas añadido-->
                 <Border x:Name="ContenedorIncidencias" 
-                     BackgroundColor="#212025" 
-                     StrokeShape="RoundRectangle 15" 
-                     StrokeThickness="0"
-                     Margin="20,0"
-                     Padding="20"
-                     IsVisible="False" 
-                     HorizontalOptions="Fill">
-                    <!--por defecto no sera visible hasta que cliques en una incidencia-->
+                        BackgroundColor="#212025" 
+                        StrokeShape="RoundRectangle 15" 
+                        StrokeThickness="0"
+                        Margin="15,0"
+                        Padding="15"
+                        IsVisible="False" 
+                        HorizontalOptions="Fill">
 
-                    <VerticalStackLayout Spacing="15">
+                    <VerticalStackLayout Spacing="12">
+
                         <!-- Título -->
-                        <Border StrokeShape="RoundRectangle 10" StrokeThickness="1" Stroke="#4A4A4A" Padding="10,5">
+                        <Border StrokeShape="RoundRectangle 10"
+                                StrokeThickness="1"
+                                Stroke="#4A4A4A"
+                                Padding="10,5">
+
                             <Entry x:Name="TituloIncidencia"
-                            Placeholder="Titulo de la incidencia"
-                            PlaceholderColor="#808080"
-                            TextColor="White"
-                            BackgroundColor="Transparent" />
+                                   Placeholder="Titulo de la incidencia"
+                                   PlaceholderColor="#808080"
+                                   TextColor="White"
+                                   BackgroundColor="Transparent" />
                         </Border>
 
                         <!-- Descripción -->
-                        <Border StrokeShape="RoundRectangle 10" StrokeThickness="1" Stroke="#4A4A4A" Padding="10,5">
+                        <Border StrokeShape="RoundRectangle 10"
+                                StrokeThickness="1"
+                                Stroke="#4A4A4A"
+                                Padding="10,5">
+
                             <Editor x:Name="DescripcionIncidencia"
-                             Placeholder="Descripción"
-                             PlaceholderColor="#808080"
-                             TextColor="White"
-                             BackgroundColor="Transparent"
-                             HeightRequest="120"
-                             AutoSize="Disabled" />
+                                    Placeholder="Descripción"
+                                    PlaceholderColor="#808080"
+                                    TextColor="White"
+                                    BackgroundColor="Transparent"
+                                    HeightRequest="100"/>
                         </Border>
 
                         <!-- Botones de Acción -->
-                        <Grid ColumnDefinitions="*, *" ColumnSpacing="10">
-                            <Button x:Name="guardar" Grid.Column="0" 
-                             Text="Guardar"
-                             BackgroundColor="#FF6600"
-                             TextColor="White"
-                             FontAttributes="Bold"
-                             CornerRadius="15"
-                             Clicked="OnGuardarClicked" />
+                        <Grid RowDefinitions="Auto, Auto" RowSpacing="10">
 
-                            <Button Grid.Column="1"
-                             Text="Eliminar"
-                             BackgroundColor="Gray"
-                             TextColor="White"
-                             FontAttributes="Bold"
-                             CornerRadius="15"
-                             Clicked="OnEliminarClicked" />
+                            <Button x:Name="guardar"
+                            Grid.Row="0"
+                            Text="Guardar"
+                            BackgroundColor="#FF6600"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            CornerRadius="15"
+                            Clicked="OnGuardarClicked" />
+
+                            <Button Grid.Row="1"
+                            Text="Eliminar"
+                            BackgroundColor="Gray"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            CornerRadius="15"
+                            Clicked="OnEliminarClicked" />
                         </Grid>
                     </VerticalStackLayout>
                 </Border>
 
-
             </VerticalStackLayout>
-
-           
-
-
         </ScrollView>
-
-
-
 
         <!-- FOOTER: Fondo Negro, Línea Blanca y Texto Blanco -->
         <Grid Grid.Row="1" 
-           ColumnDefinitions="*, *, *, *, *" 
-           BackgroundColor="Black"
-           HeightRequest="80">
+              ColumnDefinitions="*, *, *, *, *" 
+              BackgroundColor="Black"
+              HeightRequest="70">
 
-                <BoxView Grid.ColumnSpan="5"
-          HeightRequest="1" 
-          BackgroundColor="White" 
-          HorizontalOptions="Fill" 
-          VerticalOptions="Start" />
+            <BoxView Grid.ColumnSpan="5"
+                     HeightRequest="1" 
+                     BackgroundColor="White" 
+                     HorizontalOptions="Fill" 
+                     VerticalOptions="Start" />
 
-                <!-- 1. Poner Notas -->
-                <ImageButton Grid.Column="0" 
-              Source="circuloplus.png"
-              HorizontalOptions="Center" VerticalOptions="Center"
-              HeightRequest="30" WidthRequest="30"
-              Clicked="OnPonerIncidenciaClicked" />
+            <ImageButton Grid.Column="0" Source="circuloplus.png"
+                         HorizontalOptions="Center" VerticalOptions="Center"
+                         HeightRequest="28" WidthRequest="28"
+                         Clicked="OnPonerIncidenciaClicked" />
 
-                <!-- 2. Leer Notas -->
-                <ImageButton Grid.Column="1" 
-              Source="libroabierto.png"
-              HorizontalOptions="Center" VerticalOptions="Center"
-              HeightRequest="30" WidthRequest="30"
-              Clicked="OnLeerIncidenciaClicked" />
+            <ImageButton Grid.Column="1" Source="libroabierto.png"
+                         HorizontalOptions="Center" VerticalOptions="Center"
+                         HeightRequest="28" WidthRequest="28"
+                         Clicked="OnLeerIncidenciaClicked" />
 
-                <!-- 3. volver atras -->
-                <ImageButton Grid.Column="2" 
-              Source="menu.png"
-              HorizontalOptions="Center" VerticalOptions="Center"
-              HeightRequest="30" WidthRequest="30"
-              Clicked="OnVolverAlMenuClicked" />
+            <ImageButton Grid.Column="2" Source="menu.png"
+                         HorizontalOptions="Center" VerticalOptions="Center"
+                         HeightRequest="28" WidthRequest="28"
+                         Clicked="OnVolverAlMenuClicked" />
 
-                <!-- 4. Calcular Ruta -->
-                <ImageButton Grid.Column="3" 
-              Source="punterosderuta.png"
-              HorizontalOptions="Center" VerticalOptions="Center"
-              HeightRequest="30" Clicked="OnEnlaceClicked" WidthRequest="30"
-               />
+            <ImageButton Grid.Column="3" Source="punterosderuta.png"
+                         HorizontalOptions="Center" VerticalOptions="Center"
+                         HeightRequest="28" WidthRequest="28"
+                         Clicked="OnEnlaceClicked" />
 
-                <!-- 5. Estadísticas -->
-            <ImageButton Grid.Column="4" 
-              Source="dataanalytics.png"
-              HorizontalOptions="Center" VerticalOptions="Center"
-              HeightRequest="30" WidthRequest="30"
-               />
+            <ImageButton Grid.Column="4" Source="dataanalytics.png"
+                         HorizontalOptions="Center" VerticalOptions="Center"
+                         HeightRequest="28" WidthRequest="28"/>
         </Grid>
     </Grid>
 
