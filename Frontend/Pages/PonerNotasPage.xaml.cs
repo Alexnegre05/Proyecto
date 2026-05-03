@@ -26,14 +26,25 @@ public partial class PonerNotasPage : ContentPage
 	}
 
     // la funcion onAppearing sirve para indicarle a la aplicacion que cuando se abra la pagina  se llame a la funcion que quieras
-    protected override void OnAppearing()
+    protected override async void OnAppearing()
     {
         base.OnAppearing();
-        // esto es para decirle que como estamos sobreescribiendo una pagina que primero ejecute lo que hacia antes la funcion original(con el base)
-        frontend_socket = crear_frontend_socket(1000);
-        EstacionCercana(1,frontend_socket,LabelEstacion,LineasView,BordePrincipal,guardar,Titulo,BtnFlecha,ContenedorIncidencias,null);
-    }
 
+        frontend_socket = crear_frontend_socket(1000);
+
+        await EstacionCercana(
+            1,
+            frontend_socket,
+            LabelEstacion,
+            LineasView,
+            BordePrincipal,
+            guardar,
+            Titulo,
+            BtnFlecha,
+            ContenedorIncidencias,
+            null
+        );
+    }
     // es lo mismo que on apearing pero para cuando un usuario cierra la pantalla o cambia de pestaña
     protected override void OnDisappearing()
     {
@@ -124,8 +135,8 @@ public partial class PonerNotasPage : ContentPage
 
         // Lógica para borrar la nota que estabas escribiendo dejamos el placeholder
 
-        TituloIncidencia.Text = TituloIncidencia.Placeholder;
-        DescripcionIncidencia.Text = DescripcionIncidencia.Placeholder;
+        TituloIncidencia.Text = "";
+        DescripcionIncidencia.Text = "";
     }
 
     protected async void OnVolverAlMenuClicked(object sender, EventArgs e)

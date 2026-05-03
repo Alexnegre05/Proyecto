@@ -107,7 +107,7 @@ namespace BibliotecaFrontend
         }
 
 
-    public async static void EstacionCercana(int num_opcion,
+    public async static Task EstacionCercana(int num_opcion,
     Socket frontend_socket,
     Label LabelEstacion,
     CollectionView LineasView,

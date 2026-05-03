@@ -2,23 +2,24 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Frontend.Pages.PonerNotasPage"
-             Title="">
+             Title=""
+             BackgroundColor="Black">
 
-    <Grid RowDefinitions="*, Auto" BackgroundColor="Black">
+    <Grid RowDefinitions="*, Auto">
         <ScrollView Grid.Row="0">
-            <VerticalStackLayout  VerticalOptions="Start" Spacing="20" Padding="0,30,0,20">
+            <VerticalStackLayout  VerticalOptions="Start" Spacing="15" Padding="10,30,10,20">
 
                 <!--usamos el horizontal layout en esta parte para que se pongan los elementos en el eje x-->
                 <!--con fill el horizontaloptions hacemos que ocupe todo el eje x-->
 
-                <Border x:Name="BordePrincipal"  Margin="20,0"
+                <Border x:Name="BordePrincipal"  Margin="10,0"
                         StrokeShape="RoundRectangle 15"
                         StrokeThickness="0"
                         BackgroundColor="White"
                         >
 
                     <Grid  
-                          Padding="20"
+                          Padding="15"
                           ColumnDefinitions="*" 
                           HorizontalOptions="Fill">
 
@@ -29,15 +30,15 @@
                             <!--La imagen de arriba de el titulo usamos image-->
                             <Image x:Name="ImageIcono"
                                    Source="circuloplus.png"
-                                   HeightRequest="30"
-                                   WidthRequest="30"
+                                   HeightRequest="24"
+                                   WidthRequest="24"
                                    VerticalOptions="Center"
-                                   HorizontalOptions="Center">  
-                                
+                                   HorizontalOptions="Center">
+
                             </Image>
-                            
+
                             <Label x:Name="Titulo" Text="Poner Notas" 
-                                   FontSize="28" 
+                                   FontSize="{OnIdiom Phone=22, Tablet=28}" 
                                    FontAttributes="Bold" 
                                    TextColor="#FF6600"
                                    VerticalOptions="Center" />
@@ -50,24 +51,26 @@
                 <Border BackgroundColor="White" 
                     StrokeShape="RoundRectangle 25" 
                     StrokeThickness="0"
-                    Margin="20,0"
-                    Padding="20"
+                    Margin="10,0"
+                    Padding="15"
                     HorizontalOptions="Fill">
 
                     <!--usamos grid + vertical layout para que todo que centrado correctamente...-->
-                    <Grid ColumnDefinitions="Auto, *" ColumnSpacing="20">
+                    <Grid ColumnDefinitions="Auto, *" ColumnSpacing="15">
 
 
-                        <VerticalStackLayout Grid.Column="0" WidthRequest="80" Spacing="5">
+                        <VerticalStackLayout Grid.Column="0" Spacing="5">
 
                             <!-- Botón de Flecha -->
                             <Button x:Name="BtnFlecha"
                                 Text="▼" 
-                                TextColor="White"
+                                TextColor="#FFFFFF"
                                 BackgroundColor="Transparent"
+                                BorderWidth="0"
                                 FontSize="20"
-                                HeightRequest="40"
-                                Clicked="OnFlechaClicked" />
+                                HeightRequest="45"
+                                WidthRequest="45"
+                                Clicked="OnFlechaClicked" />    
 
                             <!-- La lista de estaciones -->
                             <!--colection view es para mostrar listas de elementos-->
@@ -80,7 +83,8 @@
                                         Multiple: Permite al usuario marcar varias opciones a la vez.-->
                             <CollectionView x:Name="LineasView"
                                         SelectionMode="Single"
-                                        IsVisible="false">
+                                        IsVisible="false"
+                                        HeightRequest="150">
 
 
 
@@ -90,8 +94,8 @@
                                 <!-- binding le dice que coja el color de el c#-->
                                 <CollectionView.ItemTemplate>
                                     <DataTemplate>
-                                        <Border Padding="10" Margin="5" BackgroundColor="{Binding Color}">
-                                            <Label Text="{Binding Nombre}" TextColor="White" FontAttributes="Bold" HorizontalTextAlignment="Center"></Label>
+                                        <Border Padding="8" Margin="3" BackgroundColor="{Binding Color}">
+                                            <Label Text="{Binding Nombre}" TextColor="White" FontAttributes="Bold" FontSize="14" HorizontalTextAlignment="Center"></Label>
                                         </Border>
                                     </DataTemplate>
                                 </CollectionView.ItemTemplate>
@@ -102,7 +106,7 @@
                         <Label Grid.Column="1"
                            x:Name="LabelEstacion"
                            Text="Estacion: " 
-                           FontSize="24" 
+                           FontSize="{OnIdiom Phone=18, Tablet=24}" 
                            FontAttributes="Bold" 
                            TextColor="#FF6600"
                            VerticalOptions="Center"
@@ -116,12 +120,12 @@
                 <Border x:Name="ContenedorIncidencias" BackgroundColor="#212025" 
                     StrokeShape="RoundRectangle 15" 
                     StrokeThickness="0"
-                    Margin="20,0"
-                    Padding="20"
+                    Margin="10,0"
+                    Padding="15"
                     IsVisible="False"
                     HorizontalOptions="Fill">
 
-                    <VerticalStackLayout Spacing="15">
+                    <VerticalStackLayout Spacing="10">
 
                         <!-- Título de la incidencia -->
                         <Border StrokeShape="RoundRectangle 10" 
@@ -130,9 +134,9 @@
                         Padding="10,5">
                             <!--entry permite a el usuario poder escribir una sola linea,
                             editor es lo mismo pero para mas de una linea-->
-                            
+
                             <Entry x:Name="TituloIncidencia"
-                           Placeholder="Titulo de la incidencia"
+                           Placeholder="Título"
                            PlaceholderColor="#808080"
                            TextColor="White"
                            BackgroundColor="Transparent" />
@@ -149,28 +153,31 @@
                             PlaceholderColor="#808080"
                             TextColor="White"
                             BackgroundColor="Transparent"
-                            HeightRequest="120"
+                            HeightRequest="100"
                             AutoSize="Disabled" />
                         </Border>
 
-                        <Grid ColumnDefinitions="*, *" ColumnSpacing="10">
-                            <Button x:Name="guardar" Grid.Column="0" 
-                            Text="Guardar"
-                            BackgroundColor="#FF6600"
-                            TextColor="White"
-                            FontAttributes="Bold"
-                            CornerRadius="15"
-                            Clicked="OnGuardarClicked" />
+                        <VerticalStackLayout Spacing="10">
 
-                            <Button Grid.Column="1"
-                            Text="Eliminar"
-                            BackgroundColor="Gray"
-                            TextColor="White"
-                            FontAttributes="Bold"
-                            CornerRadius="15"
-                            Clicked="OnEliminarClicked" />
-                        </Grid>
+                                <Button x:Name="guardar"
+                                Text="Guardar"
+                                BackgroundColor="#FF6600"
+                                TextColor="White"
+                                FontAttributes="Bold"
+                                CornerRadius="15"
+                                HeightRequest="45"
+                                Clicked="OnGuardarClicked" />
 
+                                <Button
+                                Text="Eliminar"
+                                BackgroundColor="Gray"
+                                TextColor="White"
+                                FontAttributes="Bold"
+                                CornerRadius="15"
+                                HeightRequest="45"
+                                Clicked="OnEliminarClicked" />  
+
+                        </VerticalStackLayout>
                     </VerticalStackLayout>
                 </Border>
 
@@ -187,7 +194,7 @@
         <Grid Grid.Row="1" 
           ColumnDefinitions="*, *, *, *, *" 
           BackgroundColor="Black"
-          HeightRequest="80">
+          HeightRequest="70">
 
             <BoxView Grid.ColumnSpan="5"
              HeightRequest="1" 
@@ -231,5 +238,5 @@
                   />
         </Grid>
     </Grid>
-        
+
 </ContentPage>
