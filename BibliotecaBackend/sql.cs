@@ -301,18 +301,32 @@ namespace BibliotecaBackend
                 {
                     string[] parts = linea.Split(','); // separamos el fichero por , y sacamos la información
 
-                    string nombreLinea = parts[0].Trim();
+                    string nombreLineaRaw = parts[0].Trim();
                     string estacionOrigen = parts[1].Trim();
                     string estacionDestino = parts[2].Trim();
                     int costo = int.Parse(parts[3]);
 
+                    // dividir en caso de transbordo (R1-R2)
+                    string[] lineas = nombreLineaRaw.Split('-');
+
+                    List<int> lineasIds = new List<int>();
+
                     // miramos si no existe el id de las lineas
-                    bool existe = lineasDiccionario.TryGetValue(nombreLinea, out int lineaId);
-                    if (existe == false)
+                    foreach (var l in lineas)
+                    {
+                        bool existeLinea = lineasDiccionario.TryGetValue(l.Trim(), out int lId);
+                        if (existeLinea == false)
+                        {
+                            lineasIds.Clear();
+                            break;
+                        }
+                        lineasIds.Add(lId);
+                    }
+
+                    if (lineasIds.Count != lineas.Length)
                     {
                         linea = reader.ReadLine();
                         count = count + 1;
-                        
                         continue;
                     }
 
@@ -323,23 +337,47 @@ namespace BibliotecaBackend
                     {
                         linea = reader.ReadLine();
                         count = count + 1;
-                        
+
                         continue; // con continue saltamos a la sigueinte linea de el fichero(proxima vuelta de el bucle while)
                     }
 
+                    int paradaOrigenId = -1;
+                    int paradaDestinoId = -1;
+
                     // Obtener Paradas
-                    string claveOrigen = $"{estacionOrigenId}-{lineaId}";
-                    string claveDestino = $"{estacionDestinoId}-{lineaId}";
-
-                    bool existeParadaOrigen = paradasDiccionario.TryGetValue(claveOrigen, out int paradaOrigenId);
-                    bool existeParadaDestino = paradasDiccionario.TryGetValue(claveDestino, out int paradaDestinoId);
-
-                    if (existeParadaOrigen == false || existeParadaDestino == false) // lo mismo pero para paradas
+                    if (lineasIds.Count == 1)
                     {
-                        linea = reader.ReadLine();
-                        count = count + 1;
-                        
-                        continue;
+                        // caso normal
+                        string claveOrigen = $"{estacionOrigenId}-{lineasIds[0]}";
+                        string claveDestino = $"{estacionDestinoId}-{lineasIds[0]}";
+
+                        bool existeParadaOrigen = paradasDiccionario.TryGetValue(claveOrigen, out paradaOrigenId);
+                        bool existeParadaDestino = paradasDiccionario.TryGetValue(claveDestino, out paradaDestinoId);
+
+                        if (existeParadaOrigen == false || existeParadaDestino == false) // lo mismo pero para paradas
+                        {
+                            linea = reader.ReadLine();
+                            count = count + 1;
+
+                            continue;
+                        }
+                    }
+                    else if (lineasIds.Count == 2)
+                    {
+                        // transbordo entre dos lineas
+                        string claveOrigen = $"{estacionOrigenId}-{lineasIds[0]}";
+                        string claveDestino = $"{estacionDestinoId}-{lineasIds[1]}";
+
+                        bool existeParadaOrigen = paradasDiccionario.TryGetValue(claveOrigen, out paradaOrigenId);
+                        bool existeParadaDestino = paradasDiccionario.TryGetValue(claveDestino, out paradaDestinoId);
+
+                        if (existeParadaOrigen == false || existeParadaDestino == false) // lo mismo pero para paradas
+                        {
+                            linea = reader.ReadLine();
+                            count = count + 1;
+
+                            continue;
+                        }
                     }
 
                     // Validar duplicado, tenemos que poner los insert en ambos lados tanto de hospitalet a sants como viceversa
@@ -351,7 +389,7 @@ namespace BibliotecaBackend
                         enlace.SiguienteParadaId = paradaDestinoId;
                         enlace.Costo = costo;
 
-                        
+
                         context.Enlaces.Add(enlace); // añadimos en el contexto los enlaces
                         enlacesExistentes.Add(claveEnlace);
                     }
