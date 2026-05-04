@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 
 namespace BibliotecaFrontend
 {
+
+    // aqui estan todas las funciones que envian o reciben datos de el backend
     public class Sockets
     {
         static public string calcular_ip_automatico()

@@ -62,46 +62,51 @@ namespace BibliotecaFrontend
 
         // funciones de sockets
 
+        // Task es como void pero para cuando la funcion es asincrona y sirve para que se pueda esperar a antes de acabar la funcion que se haya enviado todo por los sockets
+        // ya que hay algo asincrono ademas de saber quien llama a esta funcion cuando ha acabado realmente
 
+        // la unica esxcepcion son en los eventos de funciones de maui como lo son en nuestro codigo las funciones para moverse entre pantallas
         public static async Task send_xyz(Socket frontend_socket)
         {
             Location location = null;
 
-            // Primero intenta la última ubicación conocida (instantáneo)
-            location = await Geolocation.Default.GetLastKnownLocationAsync();
+            
 
             // Si no hay ninguna guardada, pide una nueva
+            // Medium es para decir que busque algo con no demasiada precision pero que vaya rapido 
+
+            // Timespan es para que deje de buscar si han pasado 60 segundos y ha fallado
+            // la localizacion es async ya que es un task y lleva await
             if (location == null)
             {
+                // decimos que pedimos el GetLocationAsync y GeolocationRequest son los parametros
                 location = await Geolocation.Default.GetLocationAsync(
                     new GeolocationRequest(GeolocationAccuracy.Medium,
-                    TimeSpan.FromSeconds(15)));
+                    TimeSpan.FromSeconds(60)));
             }
 
             // Ahora sí comprobamos null ANTES de usar location
             if (location == null)
             {
                 Console.WriteLine("ERROR: No se pudo obtener ubicación, usando Barcelona por defecto");
-                send_parameter_xyz(4595227.0, frontend_socket);
-                send_parameter_xyz(171864.0, frontend_socket);
-                send_parameter_xyz(4078884.0, frontend_socket);
+                
                 return;
             }
 
-            double x = location.Longitude;
+            double x = location.Longitude; // cojemos el x y z de la localizacion que lo tenemos en latitud y longitud como angulos
             double y = location.Latitude;
             double z = location.Altitude ?? 0;
 
-            float R = 6371.00877f * 1000;
+            float R = 6371.00877f * 1000; // radio de la tierra(el 1000 es para pasar de Km a m)
 
-            x = grados_a_radianes(x);
+            x = grados_a_radianes(x); // estos angulos hay que pasarlos a radianes
             y = grados_a_radianes(y);
 
-            double final_x = (R + z) * Math.Cos(y) * Math.Cos(x);
+            double final_x = (R + z) * Math.Cos(y) * Math.Cos(x); // formula para pasar de latitud y longitud a x y z 
             double final_y = (R + z) * Math.Cos(y) * Math.Sin(x);
             double final_z = (R + z) * Math.Sin(y);
 
-            send_parameter_xyz(final_x, frontend_socket);
+            send_parameter_xyz(final_x, frontend_socket); // enviamos los parametros
             send_parameter_xyz(final_y, frontend_socket);
             send_parameter_xyz(final_z, frontend_socket);
         }
@@ -120,69 +125,51 @@ namespace BibliotecaFrontend
         {
             try
             {
-                
-                // 1. Obtenemos la ubicación ANTES del Task.Run (en el hilo de UI)
-                Location location = await Geolocation.Default.GetLastKnownLocationAsync();
 
-                if (location == null)
+                // Para entender lo que sigue hay que saber que maui tiene un hilo principal y varios secundarios
+                // el hilo principal es el que se encarga de mostrar los botones ponerles sus atributos y en general de el xaml y solo el lo puede hacer
+                // se llama mainthread
+
+                // y los hilos secundarios son los que se encargan de todo el tema de sockets y calculo de funciones
+                // este await task run crea como un hilo secundario donde vamos a ejecutar todo lo que tiene que ver con sockets
+                // para que no se congele la aplicaicon en el hilo principal
+
+                // Run es para decirle que ejecute el codigo que vera a continuacion en uno de los hilos secundarios
+                await Task.Run(async () =>
                 {
-                    location = await Geolocation.Default.GetLocationAsync(
-                        new GeolocationRequest(GeolocationAccuracy.Medium,
-                        TimeSpan.FromSeconds(15)));
-                }
+                    send_num(num_opcion, frontend_socket); // enviamos si estamos en leer modificar o poner noats
 
-                // 2. Calculamos x,y,z aquí todavía en hilo UI
-                double final_x, final_y, final_z;
+                    // dependiendo de la opcion para saber la estacion cercana enviamos un numero u otro
+                    if (num_opcion == 1 || num_opcion == 3)
+                    {
+                        send_num(1, frontend_socket);
+                    }
+                    else if (num_opcion == 2)
+                    {
+                        send_num(2, frontend_socket);
+                    }
+                    
 
-                if (location == null)
-                {
-                    Console.WriteLine("GPS no disponible, usando Barcelona por defecto");
-                    final_x = 4595227.0;
-                    final_y = 171864.0;
-                    final_z = 4078884.0;
-                }
-                else
-                {
-                    float R = 6371.00877f * 1000;
-                    double x = grados_a_radianes(location.Longitude);
-                    double y = grados_a_radianes(location.Latitude);
-                    double z = location.Altitude ?? 0;
+                    await send_xyz(frontend_socket); // enviamos el xyz
 
-                    final_x = (R + z) * Math.Cos(y) * Math.Cos(x);
-                    final_y = (R + z) * Math.Cos(y) * Math.Sin(x);
-                    final_z = (R + z) * Math.Sin(y);
-                }
-
-                // 3. Todo el trabajo de red en hilo de fondo, con las coordenadas ya calculadas
-                await Task.Run(() =>
-                {
-                    send_num(num_opcion, frontend_socket);
-
-                    if (num_opcion == 1) send_num(1, frontend_socket);
-                    else if (num_opcion == 2) send_num(2, frontend_socket);
-                    else if (num_opcion == 3) send_num(1, frontend_socket);
-
-                    // Enviamos las coordenadas ya calculadas
-                    send_parameter_xyz(final_x, frontend_socket);
-                    send_parameter_xyz(final_y, frontend_socket);
-                    send_parameter_xyz(final_z, frontend_socket);
-
-                    string estacion = recibir_texto(frontend_socket);
+                    string estacion = recibir_texto(frontend_socket); // recibimos como respuesta la estacion y el numerp de paradas
                     int num = recibir_numero(frontend_socket);
 
                     List<InfoLinea> paradas = new List<InfoLinea>();
-                    for (int i = 0; i < num; i++)
+                    for (int i = 0; i < num; i = i + 1)
                     {
-                        string linea = recibir_texto(frontend_socket);
+                        string linea = recibir_texto(frontend_socket); // por cada parada recibimos el texto y lo guardamos en infolinea
+                        // junto con su correspondiente color que nos servira mas tarde en las funciones posteriores
                         InfoLinea linea_actual = new InfoLinea
                         {
                             Nombre = linea,
-                            Color = colores.GetValueOrDefault(linea, Colors.Gray)
+                            Color = colores.GetValueOrDefault(linea, Colors.Gray) // con getvalue sacamos el valor de el diccionario a partir de la key(la linea)
                         };
-                        paradas.Add(linea_actual);
+                        paradas.Add(linea_actual); // añadimos a la lista de paradas la que estamos mirando
                     }
 
-                    if (num_opcion == 1)
+                    if (num_opcion == 1) // dependiendo de que opcion sea si poner o lñeer o modificar habvra que cambiar en el xaml ciertos parametros u otros y llamar a unos u otros hilos
+                    // para eso usamos los structs creados en clases
                     {
                         PonerNotasParams parametros = new PonerNotasParams
                         {
@@ -256,7 +243,7 @@ namespace BibliotecaFrontend
             List<string> lista_estaciones = new List<string>(); // lista de strings donde guardaremos todas las estaciones
 
 
-            for(int i = 0; i <  numero_bucle; i = i + 1)
+            for(int i = 0; i <  numero_bucle; i = i + 1) // por cada estacion la guardamos en la lista y se lo pasamos a el hilo que se encvargara de mostrar la ruta 
             {
                 string estacion = recibir_texto(frontend_socket);
                 lista_estaciones.Add(estacion);
