@@ -197,7 +197,7 @@
                  Source="dataanalytics.png"
                  HorizontalOptions="Center" VerticalOptions="Center"
                  HeightRequest="30" WidthRequest="30"
-                  />
+                 Clicked="OnEstadisticasClicked" />
         </Grid>
 
     </Grid>

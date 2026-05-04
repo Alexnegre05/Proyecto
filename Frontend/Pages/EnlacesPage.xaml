@@ -137,7 +137,8 @@
                          HorizontalOptions="Center"
                          VerticalOptions="Center"
                          HeightRequest="26"
-                         WidthRequest="26" />
+                         WidthRequest="26"
+                         Clicked="OnEstadisticasClicked"/>
         </Grid>
 
     </Grid>

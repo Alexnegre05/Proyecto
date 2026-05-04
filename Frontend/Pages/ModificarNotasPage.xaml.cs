@@ -219,5 +219,11 @@ namespace Frontend.Pages
         {
             await Shell.Current.GoToAsync("EnlacesPage");
         }
+
+        protected async void OnEstadisticasClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("EstadisticasPage");
+        }
+
     }
 }

@@ -82,6 +82,13 @@ public partial class EnlacesPage : ContentPage
         await Shell.Current.GoToAsync("EnlacesPage");
     }
 
+
+    protected async void OnEstadisticasClicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("EstadisticasPage");
+    }
+
+
     private async void OnButtonClicked(object sender, EventArgs e)
     {
         if (Origen.SelectedItem == Destino.SelectedItem)
@@ -136,4 +143,6 @@ public partial class EnlacesPage : ContentPage
             RutaLabel.Text = rutaTexto.ToString();
         }
     }
+
+    
 }

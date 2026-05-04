@@ -229,7 +229,8 @@
 
             <ImageButton Grid.Column="4" Source="dataanalytics.png"
                          HorizontalOptions="Center" VerticalOptions="Center"
-                         HeightRequest="28" WidthRequest="28"/>
+                         HeightRequest="28" WidthRequest="28"
+                         Clicked="OnEstadisticasClicked"/>
         </Grid>
     </Grid>
 

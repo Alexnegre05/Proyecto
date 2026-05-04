@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Frontend.Pages.EstadisticasPage"
+             Title="EstadisticasPage">
+    <Grid RowDefinitions="*, Auto" BackgroundColor="Black">
+
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout VerticalOptions="Start" Spacing="15" Padding="10,20">
+
+                
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- FOOTER: Fondo Negro, Línea Blanca y Texto Blanco -->
+        <Grid Grid.Row="1" 
+          ColumnDefinitions="*, *, *, *, *" 
+          BackgroundColor="Black"
+          HeightRequest="70">
+
+            <BoxView Grid.ColumnSpan="5"
+                 HeightRequest="1" 
+                 BackgroundColor="White" 
+                 HorizontalOptions="Fill" 
+                 VerticalOptions="Start" />
+
+            <!-- 1. Poner Notas -->
+            <ImageButton Grid.Column="0" 
+                     Source="circuloplus.png"
+                     HorizontalOptions="Center"
+                     VerticalOptions="Center"
+                     HeightRequest="26"
+                     WidthRequest="26"
+                     Clicked="OnPonerIncidenciaClicked" />
+
+            <!-- 2. Leer Notas -->
+            <ImageButton Grid.Column="1" 
+                     Source="libroabierto.png"
+                     HorizontalOptions="Center"
+                     VerticalOptions="Center"
+                     HeightRequest="26"
+                     WidthRequest="26"
+                     Clicked="OnLeerIncidenciaClicked" />
+
+            <!-- 3. Modificar Notas -->
+            <ImageButton Grid.Column="2" 
+                     Source="botoneditar.png"
+                     HorizontalOptions="Center"
+                     VerticalOptions="Center"
+                     HeightRequest="26"
+                     WidthRequest="26"
+                     Clicked="OnModificarIncidenciaClicked" />
+
+            <!-- 4. Enlaces atras -->
+            <ImageButton Grid.Column="3" 
+                     Source="menu.png"
+                     HorizontalOptions="Center"
+                     VerticalOptions="Center"
+                     HeightRequest="26"
+                     WidthRequest="26"
+                     Clicked="OnEnlaceClicked" />
+
+            <!-- 5. Atras -->
+            <ImageButton Grid.Column="4" 
+                     Source="dataanalytics.png"
+                     HorizontalOptions="Center"
+                     VerticalOptions="Center"
+                     HeightRequest="26"
+                     WidthRequest="26"
+                     Clicked="OnVolverAlMenuClicked"/>
+        </Grid>
+
+    </Grid>
+</ContentPage>

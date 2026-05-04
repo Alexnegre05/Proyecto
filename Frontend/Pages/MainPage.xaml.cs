@@ -1,4 +1,5 @@
-﻿using Frontend.Models;
+﻿using System.Threading.Tasks;
+using Frontend.Models;
 using Frontend.PageModels;
 using static BibliotecaFrontend.BibliotecaFrontend; // usamos la biblioteca solo para las funciones de cambiar de pantalla
 namespace Frontend.Pages
@@ -66,5 +67,9 @@ namespace Frontend.Pages
             await Shell.Current.GoToAsync("EnlacesPage");
         }
 
+        protected async void OnEstadisticasClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("EstadisticasPage");
+        }
     }
 }
