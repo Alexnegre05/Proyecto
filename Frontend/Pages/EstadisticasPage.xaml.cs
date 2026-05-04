@@ -29,7 +29,8 @@ public partial class EstadisticasPage : ContentPage
 
         // recibimos el top 5 de estaciones con mas incidencias
 
-        for(int i = 0; i < 5;i = i + 1)
+        int num = recibir_numero(frontend_socket);
+        for(int i = 0; i < num;i = i + 1)
         {
             recibir_texto(frontend_socket);
             recibir_numero(frontend_socket);
@@ -37,6 +38,10 @@ public partial class EstadisticasPage : ContentPage
 
         // mostramos la linea con mas incidencias
         recibir_texto(frontend_socket);
+        recibir_numero(frontend_socket);
+
+        // mostramos las inicdencias de todo el año
+
         recibir_numero(frontend_socket);
     }
 

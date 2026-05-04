@@ -56,6 +56,9 @@ namespace BibliotecaBackend
                     // 2. Mostrar resultados
                     Console.WriteLine("--- TOP 5 ESTACIONES CON MÁS INCIDENCIAS ---");
                     int puesto = 1;
+
+                    enviar_numero(topEstaciones.Count, backend_service_socket);
+
                     foreach (var e in topEstaciones)
                     {
                         Console.WriteLine($"{puesto}. {e.nombre}: {e.TotalIncidencias} incidencias");
@@ -101,9 +104,25 @@ namespace BibliotecaBackend
                         enviar_numero(0, backend_service_socket);
                     }
 
+                    // mostrar las incidencias de todo el año 
+                    DateTime inicioAño = new DateTime(DateTime.UtcNow.Year, 1, 1);
+                    DateTime inicioSiguienteAño = inicioAño.AddYears(1);
+
+                    totalIncidenciasHoy = context.Incidencias
+                            .Where(i => i.fecha.Date == inicioAño && i.fecha < inicioSiguienteAño.AddDays(1)) // comprovamos que el dia es el actual
+                            .Count();
+
+                    // Ejemplo de cómo podrías usar el resultado
+                    Console.WriteLine($"Total de incidencias hoy ({inicioAño:dd/MM/yyyy}): {totalIncidenciasHoy}");
+
+                    enviar_numero(totalIncidenciasHoy, backend_service_socket); // enviamos este numero 
+
+                    opcion = recibir_numero(backend_service_socket); // miramos si es un 0
                 }
 
-                opcion = recibir_numero(backend_service_socket); // miramos si es un 0
+                
+
+                
             }
                 
         }
