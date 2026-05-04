@@ -30,9 +30,10 @@ public partial class PonerNotasPage : ContentPage
     {
         base.OnAppearing();
 
-        frontend_socket = crear_frontend_socket(1000);
+        frontend_socket = crear_frontend_socket(1000); // funcion que crea el socket
 
-        await EstacionCercana(
+        await EstacionCercana( // funcion que sirve tanto para poner como leer como modificar incidencias, dependiendo de cada caso habra iertos componentes de la funcion que seran null u otros
+
             1,
             frontend_socket,
             LabelEstacion,
@@ -44,6 +45,7 @@ public partial class PonerNotasPage : ContentPage
             ContenedorIncidencias,
             null
         );
+        // sirve para decirle a el backend que tiene que hacer en este momento, enviara un 1 y por tanto sabra que queremos que nos envien la estacion mas cercana posible
     }
     // es lo mismo que on apearing pero para cuando un usuario cierra la pantalla o cambia de pestaña
     protected override void OnDisappearing()
@@ -89,14 +91,23 @@ public partial class PonerNotasPage : ContentPage
             LineasView.IsVisible = true;
         }
 
-            // Cambia la flecha según el estado 
-            BtnFlecha.Text = LineasView.IsVisible ? "▲" : "▼";
+            // Cambia la flecha según el estado, usamos un condicional if simplificado 
+
+        if (LineasView.IsVisible == true)
+        {
+            BtnFlecha.Text = "▲";
+        }
+        else
+        {
+            BtnFlecha.Text = "▼";
+        }
+            
 
             
     }
 
 
-    private void OnGuardarClicked(object sender, EventArgs e)
+    private async void OnGuardarClicked(object sender, EventArgs e)
     {
 
 
@@ -123,7 +134,7 @@ public partial class PonerNotasPage : ContentPage
             enviar_texto(titulo, frontend_socket);
             enviar_texto(descripcion, frontend_socket);
 
-            Shell.Current.DisplayAlert("Incidencia guardada", "", "Cerrar");
+            await Shell.Current.DisplayAlert("Incidencia guardada", "", "Cerrar");
             // cuando enviamos el numero llamamos a OnEliminarCliked para reiniciar el texto 
             OnEliminarClicked(sender, e);
         }
@@ -133,7 +144,8 @@ public partial class PonerNotasPage : ContentPage
     private void OnEliminarClicked(object sender, EventArgs e)
     {
 
-        // Lógica para borrar la nota que estabas escribiendo dejamos el placeholder
+        // Lógica para borrar la nota que estabas escribiendo dejamos el texto a null
+        // esto ara que salga el placeholder
 
         TituloIncidencia.Text = "";
         DescripcionIncidencia.Text = "";

@@ -27,9 +27,12 @@
         <!--auto se ajusta a el tamaño mientras que * coje todo el tamaño posibles si por ejemplo tengo 3 columnas y defino que se cree una con 1 columna y otra pero la segunda la pongo *
         esa me ocupara 2/3-->
 
+        <!--las unidades dependen de el dispositivo que estes usando en este momento-->
         <ScrollView Grid.Row="0">
 
             <!-- Contenido principal: Fondo Negro -->
+            
+            <!--spacing es exclusivo para stackslayout y le dice que todos los hijos de el stack layout estaran a x espacio -->
             <VerticalStackLayout  VerticalOptions="Start" Spacing="20" Padding="0,30,0,20">
 
                 <Label Text="Renfe Solutions" 
