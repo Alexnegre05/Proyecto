@@ -116,7 +116,18 @@
                                HorizontalOptions="Center" 
                                HorizontalTextAlignment="Center"
                                LineBreakMode="WordWrap"
-                               MaxLines="2" />
+                               MaxLines="2">
+
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnLabelEstacionTapped"/>
+                            </Label.GestureRecognizers>
+                            
+                        </Label>
+
+                        <Picker x:Name="PickerEstaciones"
+                        Title="Cambiar estación"
+                        IsVisible="false"
+                        SelectedIndexChanged="OnEstacionChanged"/>
                     </Grid>
                 </Border>
 

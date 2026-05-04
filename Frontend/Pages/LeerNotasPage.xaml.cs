@@ -27,37 +27,53 @@ public partial class LeerNotasPage : ContentPage
         public Color ColorTexto { get; set; } // añadimos el color que tendra el texto que depende de la linea
     }
 
-
+    List<string> lista_estaciones = new List<string>();
 
     Socket frontend_socket;
 
 
-
+    string estacion_actual = "";
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        // esto es para decirle que como estamos sobreescribiendo una pagina que primero ejecute lo que hacia antes la funcion original(con el base)
-
 
         frontend_socket = crear_frontend_socket(1000);
 
-        // como no hay boton de guardar es null
+        send_num(2, frontend_socket); // entrar en leer_notas
 
-        MainThread.BeginInvokeOnMainThread(() =>
+        // 🔹 LISTA DE ESTACIONES
+        send_num(1, frontend_socket);
+
+        int num = recibir_numero(frontend_socket);
+
+        lista_estaciones.Clear();
+
+        for (int i = 0; i < num; i++)
         {
-            EstacionCercana(
-                2,
-                frontend_socket,
-                LabelEstacion,
-                LineasView,
-                BordePrincipal,
-                null,
-                Titulo,
-                BtnFlecha,
-                BordePrincipal,
-                lista_incidencias
-            );
-        });
+            lista_estaciones.Add(recibir_texto(frontend_socket));
+        }
+
+        PickerEstaciones.ItemsSource = lista_estaciones;
+
+        // 🔹 SOLO AQUÍ usamos EstacionCercana
+        EstacionCercana(
+            2,
+            frontend_socket,
+            LabelEstacion,
+            LineasView,
+            BordePrincipal,
+            null,
+            Titulo,
+            BtnFlecha,
+            BordePrincipal,
+            lista_incidencias
+        );
+
+        // 🔹 guardamos estación inicial
+        if (LabelEstacion.Text != null && LabelEstacion.Text.Contains(": "))
+        {
+            estacion_actual = LabelEstacion.Text.Split(": ")[1];
+        }
     }
 
     protected override void OnDisappearing()
@@ -78,8 +94,52 @@ public partial class LeerNotasPage : ContentPage
         
     }
 
+    // funcion que se llama por cada ve< que alguien clica en una nueva estacion
+    private void OnEstacionChanged(object sender, EventArgs e)
+    {
+        if (PickerEstaciones.SelectedItem == null)
+            return;
+
+        string nueva_estacion = PickerEstaciones.SelectedItem.ToString();
+
+        estacion_actual = nueva_estacion;
+
+        LabelEstacion.Text = "Estación: " + nueva_estacion;
+
+        // 🔥 USAR SOLO OPCIÓN 4
+        send_num(4, frontend_socket);
+        enviar_texto(nueva_estacion, frontend_socket);
+
+        int num_lineas = recibir_numero(frontend_socket);
+
+        List<InfoLinea> lista = new List<InfoLinea>();
+
+        for (int i = 0; i < num_lineas; i++)
+        {
+            string linea = recibir_texto(frontend_socket);
+
+            lista.Add(new InfoLinea
+            {
+                Nombre = linea,
+                Color = colores.GetValueOrDefault(linea, Colors.Gray)
+            });
+        }
+
+        LineasView.ItemsSource = lista;
+
+        // 🔥 RESET VISUAL (IMPORTANTE)
+        lista_incidencias.IsVisible = false;
+        lista_incidencias.ItemsSource = null;
+
+        PickerEstaciones.IsVisible = false;
+    }
 
 
+    // funcion para mostrar o ocultar la lista dependiendo de si se toca o no 
+    private void OnLabelEstacionTapped(object sender, EventArgs e)
+    {
+        PickerEstaciones.IsVisible = !PickerEstaciones.IsVisible;
+    }
 
     private void OnFlechaClicked(object sender, EventArgs e)
     {

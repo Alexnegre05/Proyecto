@@ -178,10 +178,22 @@ namespace BibliotecaBackend
             {
                 // leemos la opcion 
                 opcion = recibir_numero(backend_service_socket);
+                
 
-                if (opcion == 1) // dependiendo de la opcion enviamos una cosa u otra
+                if (opcion == 1)
                 {
 
+                    
+                    List<string> nombres = context.Estaciones
+                        .Select(e => e.nombre)
+                        .ToList(); // mostramos todas las estaciones
+
+                    enviar_numero(nombres.Count, backend_service_socket); // enviamos un numero con todas las estaciones que hay 
+
+                    for (int i = 0; i < nombres.Count; i++)
+                    {
+                        enviar_texto(nombres[i], backend_service_socket); // enviamos cada estacion
+                    }
                 }
                 else if (opcion == 2)
                 {
@@ -271,6 +283,28 @@ namespace BibliotecaBackend
                                 Console.WriteLine("Descripcion: " + nota_incidencias[j].contenido_incidencia);
                             }
                         }
+                    }
+                }
+                else if (opcion == 4) // seleccionar estación manual, aqui es diferente porque recibimos el nombre de la estacion no el xyz de el usuario
+                {
+                    string nombre = recibir_texto(backend_service_socket);
+
+                    lista_paradas = context.Paradas
+                        .Include(p => p.Linea)
+                        .Include(p => p.Estacion)
+                        .Where(p => p.Estacion.nombre == nombre)
+                        .ToList();
+
+                    List<string> lineas = lista_paradas // queremos cada linea de la estacion que haya 
+                        .Select(p => p.Linea.nombre)
+                        .Distinct()
+                        .ToList();
+
+                    enviar_numero(lineas.Count, backend_service_socket); 
+
+                    foreach (var l in lineas)
+                    {
+                        enviar_texto(l, backend_service_socket);
                     }
                 }
             }

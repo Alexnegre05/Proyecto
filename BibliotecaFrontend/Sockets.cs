@@ -48,7 +48,7 @@ namespace BibliotecaFrontend
                 ip = calcular_ip_automatico();
 #           endif
 
-                IPAddress address = IPAddress.Parse("172.26.208.1");
+                IPAddress address = IPAddress.Parse("192.168.111.21");
                 IPEndPoint endpoint = new IPEndPoint(address, puerto);
                 Socket frontend_socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
                 frontend_socket.Connect(endpoint);
