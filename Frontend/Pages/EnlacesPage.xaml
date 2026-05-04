@@ -46,6 +46,9 @@
 
                         <Label Text="Seleccione Origen:" TextColor="White" />
 
+                        <!--x:static es para decirle que busque en una variable que se encuentra en enlaces y se llama lista para pickers-->
+                        <!--sirve para mostrar la lista de todas las estaciones-->
+                        <!--el local lo podemos definir arriba de el todo en el content poage y es la ruta de adonde tiene que ir -->
                         <Picker x:Name ="Origen"
                                 Title="Selecciona estación de origen"
                                 ItemsSource="{x:Static local:Enlaces.ListaParaPickers}"
