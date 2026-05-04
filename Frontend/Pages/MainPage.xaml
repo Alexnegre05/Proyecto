@@ -21,6 +21,11 @@
     <!--le metemos scroll-->
 
     <Grid RowDefinitions="*, Auto" >
+        <!--Grid sirve para definir columas o filas, en este caso 2 que como vemos en el scroll es row
+        las filas y columnas se enumeran y empiezan a partir de 0-->
+        
+        <!--auto se ajusta a el tamaño mientras que * coje todo el tamaño posibles si por ejemplo tengo 3 columnas y defino que se cree una con 1 columna y otra pero la segunda la pongo *
+        esa me ocupara 2/3-->
 
         <ScrollView Grid.Row="0">
 
@@ -69,16 +74,19 @@
                 CornerRadius="27"
                 Clicked="OnPonerIncidenciaClicked">
                     <Button.GestureRecognizers>
-                        <!--lo de clicked es para que se active algo cuando cliques-->
+                        <!--lo de clicked es para que se active algo cuando cliques, en este caso una funcion en c#-->
+                        <!--Pointer entered es para cuando se esta clicando esta parte de la incidencia y exited cuando lo paras-->
                         <PointerGestureRecognizer PointerEntered="OnHoverEnter" PointerExited="OnHoverExit" />
                     </Button.GestureRecognizers>
+                    <!--La sombra se pinta con shadow-->
                     <Button.Shadow>
-                        <!-- Sombra oscura para dar profundidad real sobre fondo negro -->
+                        <!-- Sombra oscura para dar profundidad real sobre fondo negro 
+                        offset posicion de la sombra respecto a el boton -->
                         <Shadow Brush="Black" Offset="0,10" Radius="15" Opacity="0.6" />
                     </Button.Shadow>
                 </Button>
 
-
+                <!--Los otros botones son iguales-->
                 <Button Text="Leer Incidencias" WidthRequest="230" FontFamily="Inter"
                 HeightRequest="55" 
                 HorizontalOptions="Center" 
@@ -154,6 +162,8 @@
 
         <!-- FOOTER: Fondo Negro, Línea Blanca y Texto Blanco -->
         <!--Iconos sacados de flaticon-->
+        
+        <!--los 5 asteriscos es da igual el taamño dividelo siempre en 5 columnas-->
         <Grid Grid.Row="1" 
           ColumnDefinitions="*, *, *, *, *" 
           BackgroundColor="Black"
@@ -165,7 +175,7 @@
              HorizontalOptions="Fill" 
              VerticalOptions="Start" />
 
-            <!-- 1. Poner Notas -->
+            <!-- 1. Poner Notas, source es para buscar donde estan los png, que estan en una carpeta de resources/images -->
             <ImageButton Grid.Column="0" 
                  Source="circuloplus.png"
                  HorizontalOptions="Center" VerticalOptions="Center"
