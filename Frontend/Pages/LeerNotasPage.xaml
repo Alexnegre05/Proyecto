@@ -56,78 +56,64 @@
 
                     <!--usamos grid + vertical layout para que todo que centrado correctamente...-->
                     <!--usamos grid + vertical layout para que todo que centrado correctamente...-->
-                    <Grid ColumnDefinitions="Auto, *"
-                          RowDefinitions="Auto, Auto"
-                          ColumnSpacing="15"
-                          RowSpacing="10">
+                    <Grid RowDefinitions="Auto, Auto, Auto, Auto" RowSpacing="10">
 
+                        <!-- Botón cambiar línea -->
+                        <Button Grid.Row="0"
+                        x:Name="BtnFlecha"
+                        Text="Cambiar Linea ▼" 
+                        TextColor="#FFFFFF"
+                        BackgroundColor="Transparent"
+                        FontSize="16"
+                        HeightRequest="45"
+                        Clicked="OnFlechaClicked" />
 
-                        <VerticalStackLayout Grid.Column="0" Grid.Row="0" Spacing="5">
+                        <!-- Lista de líneas -->
+                        <CollectionView Grid.Row="1"
+                            x:Name="LineasView"
+                            SelectionMode="Single"
+                            IsVisible="false"
+                            HeightRequest="150">
 
-                            <!-- Botón de Flecha -->
-                            <Button x:Name="BtnFlecha"
-                                Text="Cambiar Linea ▼" 
-                                TextColor="#FFFFFF"
-                                BackgroundColor="Transparent"
-                                FontSize="16"
-                                HeightRequest="45"
-                                Clicked="OnFlechaClicked" />
-
-                            <!-- La lista de lineas para una estacion -->
-                            <!--colection view es para mostrar listas de elementos-->
-
-                            <!--selection mode sirve para ver como puede interactuar el usuario con esta lista
-                                        tiene 3 modos 
-        
-                                        None: La lista es solo para leer. Aunque el usuario toque una opcion, no pasará nada (no se dispara el evento SelectionChanged).
-                                        Single: El usuario solo puede tener un elemento seleccionado a la vez. la selección salta de uno a otro. Es el modo ideal para menús o selectores.
-                                        Multiple: Permite al usuario marcar varias opciones a la vez.-->
-                            <CollectionView x:Name="LineasView"
-                                        SelectionMode="Single"
-                                        IsVisible="false"
-                                        HeightRequest="150">
-
-
-
-                                <!--Item Template indica como se tiene que ver cada elemento de el colection view(diseño de filas o columnas)
-                                            que se pone dentro de datatemplate que es como se tiene que ver cada elemento-->
-
-                                <!-- binding le dice que coja el color de el c#-->
-                                <CollectionView.ItemTemplate>
-                                    <DataTemplate>
-                                        <Border Padding="8" Margin="3" BackgroundColor="{Binding Color}">
-                                            <Label Text="{Binding Nombre}" TextColor="White" FontAttributes="Bold" FontSize="14" HorizontalTextAlignment="Center"></Label>
-                                        </Border>
-                                    </DataTemplate>
-                                </CollectionView.ItemTemplate>
-                            </CollectionView>
-                        </VerticalStackLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="8" Margin="3" BackgroundColor="{Binding Color}">
+                                        <Label Text="{Binding Nombre}" 
+                                       TextColor="White" 
+                                       FontAttributes="Bold" 
+                                       FontSize="14" 
+                                       HorizontalTextAlignment="Center"/>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
 
                         <!-- Estación -->
-                        <Label Grid.Column="0"
-                               Grid.ColumnSpan="2"
-                               Grid.Row="1"
-                               x:Name="LabelEstacion"
-                               Text="Estacion: " 
-                               FontSize="{OnIdiom Phone=18, Tablet=24}" 
-                               FontAttributes="Bold" 
-                               TextColor="#FF6600"
-                               VerticalOptions="Center"
-                               HorizontalOptions="Center" 
-                               HorizontalTextAlignment="Center"
-                               LineBreakMode="WordWrap"
-                               MaxLines="2">
+                        <Label Grid.Row="2"
+                           x:Name="LabelEstacion"
+                           Text="Estacion: " 
+                           FontSize="{OnIdiom Phone=18, Tablet=24}" 
+                           FontAttributes="Bold" 
+                           TextColor="#FF6600"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center" 
+                           HorizontalTextAlignment="Center"
+                           LineBreakMode="WordWrap"
+                           MaxLines="2">
 
                             <Label.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="OnLabelEstacionTapped"/>
                             </Label.GestureRecognizers>
-                            
+
                         </Label>
 
-                        <Picker x:Name="PickerEstaciones"
+                        <!-- Picker estaciones -->
+                        <Picker Grid.Row="3"
+                        x:Name="PickerEstaciones"
                         Title="Cambiar estación"
                         IsVisible="false"
                         SelectedIndexChanged="OnEstacionChanged"/>
+
                     </Grid>
                 </Border>
 
