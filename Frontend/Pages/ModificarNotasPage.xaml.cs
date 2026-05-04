@@ -177,7 +177,8 @@ namespace Frontend.Pages
             lista_incidencias.IsVisible = false;
             ContenedorIncidencias.IsVisible = true;
 
-            ((CollectionView)sender).SelectedItem = null; // al final ponemos lo que ha seleccionado como null
+            ((CollectionView)sender).SelectedItem = null; // al final ponemos lo que ha seleccionado como null, recuerda que el sender es un objeto generico
+            // de ahi el (collectionview) si lo ponemos a null el usuario puede poder voler a hacer clic en la inicdencia sino maui bloquea por defecto esto
         }
 
         private void OnEliminarClicked(object sender, EventArgs e)
