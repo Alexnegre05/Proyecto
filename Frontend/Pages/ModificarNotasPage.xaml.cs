@@ -14,6 +14,7 @@ namespace Frontend.Pages
             InitializeComponent();
         }
 
+        // Incidencia es similar a leer notas pero aqui necesitamos el id para saber cual es cual 
         public class Incidencia
         {
             public int? id { get; set; }
@@ -30,7 +31,7 @@ namespace Frontend.Pages
             base.OnAppearing();
 
             frontend_socket = crear_frontend_socket(1000);
-
+            // aqui estacion cercana recibe un 3 para que el backend sepa que estamos en modificar notas
             await EstacionCercana(
                 3,
                 frontend_socket,
@@ -146,7 +147,7 @@ namespace Frontend.Pages
 
         private async void OnIncidenciaSelected(object sender, SelectionChangedEventArgs e)
         {
-            if (e.CurrentSelection == null || e.CurrentSelection.Count == 0)
+            if (e.CurrentSelection == null || e.CurrentSelection.Count == 0) // si es null o no hay seleccion hacemos un return para salir
             {
                 
                 return;
@@ -155,7 +156,7 @@ namespace Frontend.Pages
 
             BibliotecaFrontend.Classes.Incidencia seleccionada = e.CurrentSelection.FirstOrDefault() as BibliotecaFrontend.Classes.Incidencia; // la seleccion no es tipo incidenica es tipo BibliotecaFrontend.Classes.Incidencia
 
-            if (seleccionada == null)
+            if (seleccionada == null) // si no hay nada seleccionado tambien salimos de la funcion
             {
                 
                 return;
@@ -163,11 +164,11 @@ namespace Frontend.Pages
                 
 
             TituloIncidencia.Text = "";
-            DescripcionIncidencia.Text = "";
+            DescripcionIncidencia.Text = ""; // ponemos el textop que queremos que escriban a "" para que salga el placeholder
 
-            ContenedorIncidencias.IsVisible = true;
+            ContenedorIncidencias.IsVisible = true; // mostramos el contenedor para que el usuario pueda escribir
 
-            await Shell.Current.DisplayAlert(seleccionada.Id?.ToString() ?? "ID null", "", "Cerrar");
+            
 
             incidencia_actual = seleccionada;
 
@@ -176,7 +177,7 @@ namespace Frontend.Pages
             lista_incidencias.IsVisible = false;
             ContenedorIncidencias.IsVisible = true;
 
-            ((CollectionView)sender).SelectedItem = null;
+            ((CollectionView)sender).SelectedItem = null; // al final ponemos lo que ha seleccionado como null
         }
 
         private void OnEliminarClicked(object sender, EventArgs e)
