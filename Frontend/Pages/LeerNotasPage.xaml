@@ -7,6 +7,7 @@
 
     <Grid RowDefinitions="*, Auto">
         <ScrollView Grid.Row="0">
+            <!--con start le decimos que el contenido se pegue arriba de el todo-->
             <VerticalStackLayout  VerticalOptions="Start" Spacing="15" Padding="10,30,10,20">
 
                 <!--usamos el horizontal layout en esta parte para que se pongan los elementos en el eje x-->
@@ -54,8 +55,8 @@
                     Padding="15"
                     HorizontalOptions="Fill">
 
-                    <!--usamos grid + vertical layout para que todo que centrado correctamente...-->
-                    <!--usamos grid + vertical layout para que todo que centrado correctamente...-->
+                    
+                    <!--usamos grid + vertical layout para que todo que centrado correctamente-->
                     <Grid RowDefinitions="Auto, Auto, Auto, Auto" RowSpacing="10">
 
                         <!-- Botón cambiar línea -->
@@ -89,6 +90,8 @@
                         </CollectionView>
 
                         <!-- Estación -->
+                        <!--LineBreakDown es para decir que si una linea no cabe que salte aabnjo en la siguiente linea
+                        maxliness es para decir que solo mostrara las 2 primeras lineas-->
                         <Label Grid.Row="2"
                            x:Name="LabelEstacion"
                            Text="Estacion: " 
@@ -107,7 +110,9 @@
 
                         </Label>
 
-                        <!-- Picker estaciones -->
+                        <!-- Picker estaciones, picker es un selector
+                        selectedindexchanged es para llamar a al funcion que se encarge de mostrar toda la lista 
+                        una vez alguien haya clicado, title es el etxto pro defecto-->
                         <Picker Grid.Row="3"
                         x:Name="PickerEstaciones"
                         Title="Cambiar estación"

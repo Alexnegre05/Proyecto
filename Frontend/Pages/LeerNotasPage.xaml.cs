@@ -19,6 +19,7 @@ public partial class LeerNotasPage : ContentPage
 	}
 
 
+    // clase que usamos para guardar las incidencias que nos pasa el backend
     public class Incidencia
     {
         public string titulo { get; set; }
@@ -27,7 +28,7 @@ public partial class LeerNotasPage : ContentPage
         public Color ColorTexto { get; set; } // añadimos el color que tendra el texto que depende de la linea
     }
 
-    List<string> lista_estaciones = new List<string>();
+    List<string> lista_estaciones = new List<string>(); // lista con todas las estaciones posibles
 
     Socket frontend_socket;
 
@@ -41,21 +42,23 @@ public partial class LeerNotasPage : ContentPage
 
         send_num(2, frontend_socket); // entrar en leer_notas
 
-        // 🔹 LISTA DE ESTACIONES
+        //  pedimos la lista de estaciones
         send_num(1, frontend_socket);
 
-        int num = recibir_numero(frontend_socket);
+        int num = recibir_numero(frontend_socket); // recibimos un numero junto con cuantas estaciones hay 
 
-        lista_estaciones.Clear();
+        lista_estaciones.Clear(); // lo limpiamos por si acaso
 
-        for (int i = 0; i < num; i++)
+        for (int i = 0; i < num; i = i + 1) // vamso recibiendo estacion por estacion y guardandolo en la lista
         {
-            lista_estaciones.Add(recibir_texto(frontend_socket));
+
+            string estacion = recibir_texto(frontend_socket);
+            lista_estaciones.Add(estacion);
         }
 
-        PickerEstaciones.ItemsSource = lista_estaciones;
+        PickerEstaciones.ItemsSource = lista_estaciones; // con itemsource le decimos que los datos de el picker vienen de esta lista
 
-        // 🔹 SOLO AQUÍ usamos EstacionCercana
+        // ahora usamos estacion cercana
         EstacionCercana(
             2,
             frontend_socket,
@@ -69,7 +72,7 @@ public partial class LeerNotasPage : ContentPage
             lista_incidencias
         );
 
-        // 🔹 guardamos estación inicial
+        //  guardamos estación inicial, miramos que el texto que ha seleccionado no sea null y quitamos el : que vamos a recibir de el backend
         if (LabelEstacion.Text != null && LabelEstacion.Text.Contains(": "))
         {
             estacion_actual = LabelEstacion.Text.Split(": ")[1];
@@ -106,28 +109,34 @@ public partial class LeerNotasPage : ContentPage
 
         LabelEstacion.Text = "Estación: " + nueva_estacion;
 
-        // 🔥 USAR SOLO OPCIÓN 4
+        //  USAR SOLO OPCIÓN 4 sirve para manualmente cambiar la estacion, no usamos la opciond e antes la 2 ya que esa enviaba x y z
+        //  aqui en cambio enviamos texto con el nombre de la estacion, pero el codigo es muy similar
+
+
         send_num(4, frontend_socket);
         enviar_texto(nueva_estacion, frontend_socket);
 
-        int num_lineas = recibir_numero(frontend_socket);
+        int num_lineas = recibir_numero(frontend_socket); // recibimos cuantas lineas tiene la estación
 
         List<InfoLinea> lista = new List<InfoLinea>();
 
-        for (int i = 0; i < num_lineas; i++)
+        for (int i = 0; i < num_lineas; i = i + 1)
         {
-            string linea = recibir_texto(frontend_socket);
+            string linea = recibir_texto(frontend_socket); // recibimos el nombre de la estacion
 
+            
             lista.Add(new InfoLinea
             {
                 Nombre = linea,
-                Color = colores.GetValueOrDefault(linea, Colors.Gray)
-            });
+                Color = colores.GetValueOrDefault(linea, Colors.Gray) // colores es un diccionario de frontend que tiene asociado una linea a su color correspondiente
+                                                                      // si fallase por cualquier cosa entonces lo pintamos de gray
+            }); 
         }
 
+        // lo guardamos todo en uan lista que es de infolinea
         LineasView.ItemsSource = lista;
 
-        // 🔥 RESET VISUAL (IMPORTANTE)
+        // reseteamos todo 
         lista_incidencias.IsVisible = false;
         lista_incidencias.ItemsSource = null;
 
@@ -135,10 +144,19 @@ public partial class LeerNotasPage : ContentPage
     }
 
 
-    // funcion para mostrar o ocultar la lista dependiendo de si se toca o no 
+    // funcion para mostrar o ocultar la lista dependiendo de si se toca o no, simplemente lo cambia de true a false y viceversa
     private void OnLabelEstacionTapped(object sender, EventArgs e)
     {
-        PickerEstaciones.IsVisible = !PickerEstaciones.IsVisible;
+        
+
+        if(PickerEstaciones.IsVisible == true)
+        {
+            PickerEstaciones.IsVisible = false;
+        }
+        else if (PickerEstaciones.IsVisible == false)
+        {
+            PickerEstaciones.IsVisible = true;
+        }
     }
 
     private void OnFlechaClicked(object sender, EventArgs e)
@@ -150,14 +168,15 @@ public partial class LeerNotasPage : ContentPage
         if (LineasView.IsVisible == true)
         {
             LineasView.IsVisible = false;
+            BtnFlecha.Text = "Cambiar Lineas ▼";
         }
         else
         {
             LineasView.IsVisible = true;
+            BtnFlecha.Text = "Cambiar Lineas ▲";
         }
 
-        // Cambia la flecha según el estado 
-        BtnFlecha.Text = LineasView.IsVisible ? "Cambiar Lineas ▲" : "Cambiar Lineas ▼";
+        
 
 
     }
