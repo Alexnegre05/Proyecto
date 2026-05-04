@@ -94,7 +94,7 @@ public partial class EnlacesPage : ContentPage
         if (Origen.SelectedItem == Destino.SelectedItem)
         {
             // si pone la misma estacion dos veces ponemos un mensaje 
-            Shell.Current.DisplayAlert("Has seleccionado dos estaciones que son iguales","","Cerrar");
+            await Shell.Current.DisplayAlert("Has seleccionado dos estaciones que son iguales","","Cerrar");
         }
         else if (Origen.SelectedItem == null || Destino.SelectedItem == null)// comprovacio de estacions que son null
         {
@@ -125,20 +125,54 @@ public partial class EnlacesPage : ContentPage
             int num = recibir_numero(frontend_socket);
 
             StringBuilder rutaTexto = new StringBuilder();
+            string lineaActual = "";
+            string primeraEstacion = "";
+            string ultimaEstacion = "";
 
-            for (int i = 0; i < num; i = i + 1)
+            for (int i = 0; i < num; i++)
             {
                 string estacion = recibir_texto(frontend_socket);
                 string linea = recibir_texto(frontend_socket);
 
-                if (i > 0)
+                if (i == 0)
                 {
-                    rutaTexto.Append(" -> ");
+                    lineaActual = linea;
+                    primeraEstacion = estacion;
+                    ultimaEstacion = estacion;
+                    continue;
                 }
-                    
 
-                rutaTexto.Append(estacion + "(" + linea + ")");
+                if (linea == lineaActual)
+                {
+                    // seguimos en la misma línea
+                    ultimaEstacion = estacion;
+                }
+                else
+                {
+                    // cambio de línea ? escribir tramo anterior
+                    if (rutaTexto.Length > 0)
+                        rutaTexto.Append(" -> ");
+
+                    if (primeraEstacion == ultimaEstacion)
+                        rutaTexto.Append($"{primeraEstacion}({lineaActual})");
+                    else
+                        rutaTexto.Append($"{primeraEstacion}({lineaActual})...{ultimaEstacion}({lineaActual})");
+
+                    // iniciar nuevo tramo
+                    lineaActual = linea;
+                    primeraEstacion = estacion;
+                    ultimaEstacion = estacion;
+                }
             }
+
+            // escribir el último tramo
+            if (rutaTexto.Length > 0)
+                rutaTexto.Append(" -> ");
+
+            if (primeraEstacion == ultimaEstacion)
+                rutaTexto.Append($"{primeraEstacion}({lineaActual})");
+            else
+                rutaTexto.Append($"{primeraEstacion}({lineaActual})...{ultimaEstacion}({lineaActual})");
 
             RutaLabel.Text = rutaTexto.ToString();
         }

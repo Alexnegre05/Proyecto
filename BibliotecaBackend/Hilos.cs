@@ -9,6 +9,7 @@ using static BibliotecaBackend.Sockets;
 using static BibliotecaBackend.SQL;
 using static BibliotecaBackend.Notas;
 using static BibliotecaBackend.Enlaces;
+using static BibliotecaBackend.Estadisticas;
 
 namespace BibliotecaBackend
 {
@@ -62,9 +63,13 @@ namespace BibliotecaBackend
             }
             else if (codigo == 4)
             {
-                inserts_enlaces(backend_service_socket, context);
+                enlaces(backend_service_socket, context);
             }
-            
+            else if (codigo == 5)
+            {
+                estadisticas(backend_service_socket, context);
+            }
+
             backend_service_socket.Close(); // cerramos el socket
 
             closeconnection(context); // cerramos la conexion 

@@ -137,7 +137,8 @@
                 FontSize="18"
                 FontAttributes="Bold"
                 TextColor="Black" 
-                CornerRadius="27">
+                CornerRadius="27"
+                Clicked="OnEstadisticasClicked">
                     <Button.GestureRecognizers>
                         <PointerGestureRecognizer PointerEntered="OnHoverEnter" PointerExited="OnHoverExit" />
                     </Button.GestureRecognizers>

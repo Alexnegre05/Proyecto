@@ -54,7 +54,7 @@
 
             <!-- 4. Enlaces atras -->
             <ImageButton Grid.Column="3" 
-                     Source="menu.png"
+                     Source="punterosderuta.png"
                      HorizontalOptions="Center"
                      VerticalOptions="Center"
                      HeightRequest="26"
@@ -63,7 +63,7 @@
 
             <!-- 5. Atras -->
             <ImageButton Grid.Column="4" 
-                     Source="dataanalytics.png"
+                     Source="menu.png"
                      HorizontalOptions="Center"
                      VerticalOptions="Center"
                      HeightRequest="26"
