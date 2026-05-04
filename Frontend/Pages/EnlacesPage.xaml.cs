@@ -97,7 +97,7 @@ public partial class EnlacesPage : ContentPage
             }
             else if (Origen.SelectedItem == null)
             {
-                await hell.Current.DisplayAlert("Selecciona la estacion de origen", "", "Cerrar");
+                await Shell.Current.DisplayAlert("Selecciona la estacion de origen", "", "Cerrar");
             }
             else if (Destino.SelectedItem == null)
             {
