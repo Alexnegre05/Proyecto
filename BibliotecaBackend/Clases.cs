@@ -9,7 +9,7 @@ namespace BibliotecaBackend
 
     public class Clases
     {
-
+        // aqui estan todas las clases con la infoermacion que necesitamos
         public class Estacion
         {
             public int Id { get; set; }
@@ -22,10 +22,7 @@ namespace BibliotecaBackend
             public HashSet<Incidencias> Incidencias { get; set; } = new HashSet<Incidencias>();
 
 
-            public void estacion_obras(bool obras)
-            {
-
-            }
+            
 
 
         }
@@ -45,20 +42,7 @@ namespace BibliotecaBackend
             public Paradas Paradas { get; set; }
 
             public HashSet<Nota_Incidencia> nota_Incidencias { get; set; } = new HashSet<Nota_Incidencia>();
-            public void mostrar_listas_incidencias()
-            {
-
-            }
-
-            public void solucionado_nosolucionado(bool solucionado, int id_incidencia)
-            {
-
-            }
-
-            public void poner_nueva_incidencia(string title, string text, DateTime fecha, int gravedad)
-            {
-
-            }
+            
         }
 
         public class Nota_Incidencia
@@ -70,24 +54,8 @@ namespace BibliotecaBackend
 
             public int IncidenciaId { get; set; }
             public Incidencias Incidencia { get; set; }
-            public void mostrar_notas_incidencia(int id_incidencia)
-            {
-
-            }
-            public void leer_notas(int id_notas_incidencia)
-            {
-
-            }
-
-            public void modificar_notas(string title, string text, DateTime fecha, int gravedad, int id_notas_incidencia)
-            {
-
-            }
-            // si puntuacion es true sumamos 1, en caso contrario restamos 1
-            public void introducir_puntuacion(bool puntuacion, int id_notas_incidencia)
-            {
-
-            }
+            
+           
         }
 
 
@@ -104,14 +72,7 @@ namespace BibliotecaBackend
 
             public HashSet<Paradas> ListaParadas { get; set; } = new HashSet<Paradas>();
 
-            public void linea_obras(bool obras)
-            {
-
-            }
-            public void mostrar_paradas_linea(List<int> id_paradas)
-            {
-
-            }
+            
         }
 
         public class Paradas
@@ -131,15 +92,7 @@ namespace BibliotecaBackend
             // Conexión con la Estación (N:1)
             public int EstacionId { get; set; }
             public Estacion Estacion { get; set; }
-            public void parada_obras(bool obras)
-            {
-
-            }
-            // dependiendo de si la estacion/linea esta en iobras tambien lo estara la parada, y si la parada esta en obras no se mostrara
-            public void ocultar_parada(int id_estación, int id_tipo_linea, bool obras)
-            {
-
-            }
+            
         }
 
 
@@ -175,21 +128,7 @@ namespace BibliotecaBackend
             public Paradas ParadaDestino { get; set; }
 
             // devuelve una lista de paradas que forman la ruta
-            public void calcular_ruta_id(int id_parada_inicio, int id_parada_final)
-            {
-
-            }
-
-
-            public void guardar_ruta(List<Paradas> list_paradas, DateTime fecha_guardar)
-            {
-
-            }
-
-            public void sacar_rutas_fecha(DateTime fecha1, DateTime fecha2)
-            {
-
-            }
+            
         }
 
         public class DBProyectoContext : DbContext
