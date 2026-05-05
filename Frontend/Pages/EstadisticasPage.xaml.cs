@@ -33,28 +33,48 @@ public partial class EstadisticasPage : ContentPage
         send_num(5, frontend_socket);
         send_num(1, frontend_socket); // enviamos un 1 para decir que nos pase los datos 
 
-        totalhoy = recibir_numero(frontend_socket).ToString(); // numero para el maximo de inicdencias el dia de hoy 
+        
+       
 
+        // recibimos el total de incidencias de hoy
+        int totalHoy = recibir_numero(frontend_socket);
+
+        
 
         // recibimos el top 5 de estaciones con mas incidencias
-
         int num = recibir_numero(frontend_socket);
-        for(int i = 0; i < num;i = i + 1)
+
+        string top5 = "";
+
+        for (int i = 0; i < num; i = i + 1)
         {
             string nombre = recibir_texto(frontend_socket);
             string valor = recibir_numero(frontend_socket).ToString();
 
-            Top5Texto = Top5Texto + $"{i + 1}. {nombre}: {valor}\n";
+            top5 += $"{i + 1}. {nombre}: {valor}\n";
         }
+
+       
 
         // mostramos la linea con mas incidencias
         string linea = recibir_texto(frontend_socket);
         int posicion = recibir_numero(frontend_socket);
 
-        LineaTop = $"{linea} ({posicion.ToString()})";
-        // mostramos las inicdencias de todo el año
+       
 
-        TotalAño = recibir_numero(frontend_socket).ToString();
+        // mostramos las incidencias de todo el año
+        int totalAño = recibir_numero(frontend_socket);
+
+
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+           
+            LabelTotalHoy.Text = totalHoy.ToString();
+            LabelTop5.Text = top5;
+            LabelLineaTop.Text = $"{linea} ({posicion.ToString()})";
+            LabelTotalAño.Text = totalAño.ToString();
+        });
+
     }
 
     protected override void OnDisappearing()
