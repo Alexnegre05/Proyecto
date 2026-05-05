@@ -13,10 +13,19 @@ public partial class EstadisticasPage : ContentPage
 		InitializeComponent();
     }
 
+
+    // variables que usamos para el binding
+    public string totalhoy { get; set; }
+    public string TotalAño { get; set; }
+    public string LineaTop { get; set; }
+    public string EstacionTop { get; set; }
+    public string Top5Texto { get; set; }
+
+
     public Socket frontend_socket;
     protected override void OnAppearing()
     {
-
+        // como lo mostramos en los labels, los numeros hay que pasarlos a Tostring()
         base.OnAppearing();
 
         frontend_socket = crear_frontend_socket(1000);
@@ -24,7 +33,7 @@ public partial class EstadisticasPage : ContentPage
         send_num(5, frontend_socket);
         send_num(1, frontend_socket); // enviamos un 1 para decir que nos pase los datos 
 
-        recibir_numero(frontend_socket); // numero para el maximo de inicdencias el dia de hoy 
+        totalhoy = recibir_numero(frontend_socket).ToString(); // numero para el maximo de inicdencias el dia de hoy 
 
 
         // recibimos el top 5 de estaciones con mas incidencias
@@ -32,17 +41,20 @@ public partial class EstadisticasPage : ContentPage
         int num = recibir_numero(frontend_socket);
         for(int i = 0; i < num;i = i + 1)
         {
-            recibir_texto(frontend_socket);
-            recibir_numero(frontend_socket);
+            string nombre = recibir_texto(frontend_socket);
+            string valor = recibir_numero(frontend_socket).ToString();
+
+            Top5Texto = Top5Texto + $"{i + 1}. {nombre}: {valor}\n";
         }
 
         // mostramos la linea con mas incidencias
-        recibir_texto(frontend_socket);
-        recibir_numero(frontend_socket);
+        string linea = recibir_texto(frontend_socket);
+        int posicion = recibir_numero(frontend_socket);
 
+        LineaTop = $"{linea} ({posicion.ToString()})";
         // mostramos las inicdencias de todo el año
 
-        recibir_numero(frontend_socket);
+        TotalAño = recibir_numero(frontend_socket).ToString();
     }
 
     protected override void OnDisappearing()

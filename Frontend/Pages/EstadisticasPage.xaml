@@ -8,7 +8,33 @@
         <ScrollView Grid.Row="0">
             <VerticalStackLayout VerticalOptions="Start" Spacing="15" Padding="10,20">
 
-                
+                <Label Text="Incidencias hoy:"
+                    TextColor="White"/>
+
+                <Label Text="{Binding TotalHoy}"
+                    TextColor="White"
+                    FontSize="20"/>
+
+                <Label Text="Incidencias este año:"
+                    TextColor="White"/>
+
+                <Label Text="{Binding TotalAño}"
+                    TextColor="White"
+                    FontSize="20"/>
+
+                <Label Text="Línea con más incidencias:"
+                    TextColor="White"/>
+
+                <Label Text="{Binding LineaTop}"
+                    TextColor="White"
+                    FontSize="18"/>
+
+                <Label Text="Top 5 estaciones:"
+                    TextColor="White"/>
+
+                <Label Text="{Binding Top5Texto}"
+                    TextColor="White"
+                    FontSize="14"/>
 
             </VerticalStackLayout>
         </ScrollView>
@@ -42,6 +68,7 @@
                      VerticalOptions="Center"
                      HeightRequest="26"
                      WidthRequest="26"
+                     BackgroundColor="White"
                      Clicked="OnLeerIncidenciaClicked" />
 
             <!-- 3. Modificar Notas -->
@@ -51,6 +78,7 @@
                      VerticalOptions="Center"
                      HeightRequest="26"
                      WidthRequest="26"
+                     BackgroundColor="White"
                      Clicked="OnModificarIncidenciaClicked" />
 
             <!-- 4. Enlaces atras -->
@@ -60,6 +88,7 @@
                      VerticalOptions="Center"
                      HeightRequest="26"
                      WidthRequest="26"
+                     BackgroundColor="White"
                      Clicked="OnEnlaceClicked" />
 
             <!-- 5. Atras -->
@@ -69,6 +98,7 @@
                      VerticalOptions="Center"
                      HeightRequest="26"
                      WidthRequest="26"
+                     BackgroundColor="White"
                      Clicked="OnVolverAlMenuClicked"/>
         </Grid>
 

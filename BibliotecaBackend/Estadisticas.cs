@@ -109,16 +109,16 @@ namespace BibliotecaBackend
                     }
 
                     // mostrar las incidencias de todo el año 
-                    DateTime inicioAño = new DateTime(DateTime.UtcNow.Year, 1, 1);
-                    DateTime inicioSiguienteAño = inicioAño.AddYears(1);
+                    // todo esto es para que no haya problemas entre datetime distintos DateTime.UtcNow.Year, 1, 1, 0, 0, 0, DateTimeKind.Utc
+                    DateTime inicio = new DateTime(DateTime.UtcNow.Year, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+                    DateTime fin = inicio.AddYears(1);
 
-                    
                     totalIncidenciasAño = context.Incidencias
-                        .Where(i => i.fecha >= inicioAño && i.fecha < inicioSiguienteAño)
+                        .Where(i => i.fecha >= inicio && i.fecha < fin)
                         .Count();
 
                     // Ejemplo de cómo podrías usar el resultado
-                    Console.WriteLine($"Total de incidencias hoy ({inicioAño:dd/MM/yyyy}): {totalIncidenciasAño}");
+                    Console.WriteLine($"Total de incidencias hoy ({inicio:dd/MM/yyyy}): {totalIncidenciasAño}");
 
                     enviar_numero(totalIncidenciasAño, backend_service_socket); // enviamos este numero 
 
