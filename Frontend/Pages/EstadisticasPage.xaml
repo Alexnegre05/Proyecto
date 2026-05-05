@@ -31,6 +31,7 @@
                      HorizontalOptions="Center"
                      VerticalOptions="Center"
                      HeightRequest="26"
+                     BackgroundColor="White"
                      WidthRequest="26"
                      Clicked="OnPonerIncidenciaClicked" />
 

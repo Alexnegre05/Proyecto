@@ -29,6 +29,7 @@
                                    HeightRequest="26"
                                    WidthRequest="26"
                                    VerticalOptions="Center"
+                                   BackgroundColor="White"
                                    HorizontalOptions="Center"/>
 
                             <Label x:Name="Titulo"
@@ -210,26 +211,31 @@
             <ImageButton Grid.Column="0" Source="circuloplus.png"
                          HorizontalOptions="Center" VerticalOptions="Center"
                          HeightRequest="28" WidthRequest="28"
+                         BackgroundColor="White"
                          Clicked="OnPonerIncidenciaClicked" />
 
             <ImageButton Grid.Column="1" Source="libroabierto.png"
                          HorizontalOptions="Center" VerticalOptions="Center"
                          HeightRequest="28" WidthRequest="28"
+                         BackgroundColor="White"
                          Clicked="OnLeerIncidenciaClicked" />
 
             <ImageButton Grid.Column="2" Source="menu.png"
                          HorizontalOptions="Center" VerticalOptions="Center"
                          HeightRequest="28" WidthRequest="28"
+                         BackgroundColor="White"
                          Clicked="OnVolverAlMenuClicked" />
 
             <ImageButton Grid.Column="3" Source="punterosderuta.png"
                          HorizontalOptions="Center" VerticalOptions="Center"
                          HeightRequest="28" WidthRequest="28"
+                         BackgroundColor="White"
                          Clicked="OnEnlaceClicked" />
 
             <ImageButton Grid.Column="4" Source="dataanalytics.png"
                          HorizontalOptions="Center" VerticalOptions="Center"
                          HeightRequest="28" WidthRequest="28"
+                         BackgroundColor="White"
                          Clicked="OnEstadisticasClicked"/>
         </Grid>
     </Grid>

@@ -185,6 +185,7 @@
                  Source="circuloplus.png"
                  HorizontalOptions="Center" VerticalOptions="Center"
                  HeightRequest="30" WidthRequest="30"
+                 BackgroundColor="White"
                  Clicked="OnPonerIncidenciaClicked" />
 
             <!-- 2. Leer Notas -->
@@ -192,6 +193,7 @@
                  Source="libroabierto.png"
                  HorizontalOptions="Center" VerticalOptions="Center"
                  HeightRequest="30" WidthRequest="30"
+                 BackgroundColor="White"
                  Clicked="OnLeerIncidenciaClicked" />
 
             <!-- 3. Modificar Notas -->
@@ -199,6 +201,7 @@
                  Source="botoneditar.png"
                  HorizontalOptions="Center" VerticalOptions="Center"
                  HeightRequest="30" WidthRequest="30"
+                 BackgroundColor="White"
                  Clicked="OnModificarIncidenciaClicked" />
 
             <!-- 4. Calcular Ruta -->
@@ -206,6 +209,7 @@
                  Source="punterosderuta.png"
                  HorizontalOptions="Center" VerticalOptions="Center"
                  HeightRequest="30" WidthRequest="30"
+                 BackgroundColor="White"
                  Clicked="OnEnlaceClicked" />
 
             <!-- 5. Estadísticas -->
@@ -213,6 +217,7 @@
                  Source="dataanalytics.png"
                  HorizontalOptions="Center" VerticalOptions="Center"
                  HeightRequest="30" WidthRequest="30"
+                 BackgroundColor="White"
                  Clicked="OnEstadisticasClicked" />
         </Grid>
 

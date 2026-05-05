@@ -32,6 +32,7 @@
                             <Image x:Name="ImageIcono"
                                Source="libroabierto.png"
                                HeightRequest="24"
+                               BackgroundColor="White"
                                WidthRequest="24"
                                VerticalOptions="Center"
                                HorizontalOptions="Center">
@@ -193,6 +194,7 @@
                          VerticalOptions="Center"
                          HeightRequest="30"
                          WidthRequest="30"
+                         BackgroundColor="White"
                          Clicked="OnPonerIncidenciaClicked" />
 
             <!-- 2. Atras -->
@@ -202,6 +204,7 @@
                          VerticalOptions="Center"
                          HeightRequest="30"
                          WidthRequest="30"
+                         BackgroundColor="White"
                          Clicked="OnVolverAlMenuClicked" />
 
             <!-- 3. Modificar Notas -->
@@ -211,6 +214,7 @@
                          VerticalOptions="Center"
                          HeightRequest="30"
                          WidthRequest="30"
+                         BackgroundColor="White"
                          Clicked="OnModificarIncidenciaClicked" />
 
             <!-- 4. Calcular Ruta -->
@@ -220,6 +224,7 @@
                          VerticalOptions="Center"
                          HeightRequest="30"
                          WidthRequest="30"
+                         BackgroundColor="White"
                          Clicked="OnEnlaceClicked" />
 
             <!-- 5. Estadísticas -->
@@ -229,6 +234,7 @@
                          VerticalOptions="Center"
                          HeightRequest="30"
                          WidthRequest="30"
+                         BackgroundColor="White"
                          Clicked="OnEstadisticasClicked"/>
 
         </Grid>

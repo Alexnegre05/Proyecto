@@ -19,7 +19,11 @@ namespace BibliotecaBackend
 
             int opcion = recibir_numero(backend_service_socket);
 
-            while(opcion != 0)
+            int totalIncidenciasAño;
+            int totalIncidenciasHoy;
+            int puesto = 1;
+
+            while (opcion != 0)
             {
 
                 if (opcion == 1)
@@ -28,7 +32,7 @@ namespace BibliotecaBackend
                     DateTime hoy = DateTime.UtcNow.Date;
 
                     // Realizamos el conteo filtrando por la fecha
-                    int totalIncidenciasHoy = context.Incidencias
+                    totalIncidenciasHoy = context.Incidencias
                         .Where(i => i.fecha.Date == hoy && i.fecha < hoy.AddDays(1)) // comprovamos que el dia es el actual
                         .Count();
 
@@ -55,7 +59,7 @@ namespace BibliotecaBackend
 
                     // 2. Mostrar resultados
                     Console.WriteLine("--- TOP 5 ESTACIONES CON MÁS INCIDENCIAS ---");
-                    int puesto = 1;
+                    
 
                     enviar_numero(topEstaciones.Count, backend_service_socket);
 
@@ -108,14 +112,15 @@ namespace BibliotecaBackend
                     DateTime inicioAño = new DateTime(DateTime.UtcNow.Year, 1, 1);
                     DateTime inicioSiguienteAño = inicioAño.AddYears(1);
 
-                    totalIncidenciasHoy = context.Incidencias
-                            .Where(i => i.fecha.Date == inicioAño && i.fecha < inicioSiguienteAño.AddDays(1)) // comprovamos que el dia es el actual
-                            .Count();
+                    
+                    totalIncidenciasAño = context.Incidencias
+                        .Where(i => i.fecha >= inicioAño && i.fecha < inicioSiguienteAño)
+                        .Count();
 
                     // Ejemplo de cómo podrías usar el resultado
-                    Console.WriteLine($"Total de incidencias hoy ({inicioAño:dd/MM/yyyy}): {totalIncidenciasHoy}");
+                    Console.WriteLine($"Total de incidencias hoy ({inicioAño:dd/MM/yyyy}): {totalIncidenciasAño}");
 
-                    enviar_numero(totalIncidenciasHoy, backend_service_socket); // enviamos este numero 
+                    enviar_numero(totalIncidenciasAño, backend_service_socket); // enviamos este numero 
 
                     opcion = recibir_numero(backend_service_socket); // miramos si es un 0
                 }

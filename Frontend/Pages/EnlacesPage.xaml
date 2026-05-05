@@ -27,6 +27,7 @@
                                    Source="punterosderuta.png"
                                    HeightRequest="26"
                                    WidthRequest="26"
+                                   BackgroundColor="White"
                                    VerticalOptions="Center"
                                    HorizontalOptions="Center" />
 
@@ -105,6 +106,7 @@
                          VerticalOptions="Center"
                          HeightRequest="26"
                          WidthRequest="26"
+                         BackgroundColor="White"
                          Clicked="OnPonerIncidenciaClicked" />
 
             <!-- 2. Leer Notas -->
@@ -114,6 +116,7 @@
                          VerticalOptions="Center"
                          HeightRequest="26"
                          WidthRequest="26"
+                         BackgroundColor="White"
                          Clicked="OnLeerIncidenciaClicked" />
 
             <!-- 3. Modificar Notas -->
@@ -123,6 +126,7 @@
                          VerticalOptions="Center"
                          HeightRequest="26"
                          WidthRequest="26"
+                         BackgroundColor="White"
                          Clicked="OnModificarIncidenciaClicked" />
 
             <!-- 3. volver atras -->
@@ -132,6 +136,7 @@
                          VerticalOptions="Center"
                          HeightRequest="26"
                          WidthRequest="26"
+                         BackgroundColor="White"
                          Clicked="OnVolverAlMenuClicked" />
 
             <!-- 5. Estadísticas -->
@@ -141,6 +146,7 @@
                          VerticalOptions="Center"
                          HeightRequest="26"
                          WidthRequest="26"
+                         BackgroundColor="White"
                          Clicked="OnEstadisticasClicked"/>
         </Grid>
 

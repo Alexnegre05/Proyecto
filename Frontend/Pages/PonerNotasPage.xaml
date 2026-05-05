@@ -42,6 +42,7 @@
                                    HeightRequest="24"
                                    WidthRequest="24"
                                    VerticalOptions="Center"
+                                   BackgroundColor="White"
                                    HorizontalOptions="Center">
 
                             </Image>
@@ -225,27 +226,31 @@
                  Source="menu.png"
                  HorizontalOptions="Center" VerticalOptions="Center"
                  HeightRequest="30" WidthRequest="30"
-                 Clicked="OnVolverAlMenuClicked" />
+                 Clicked="OnVolverAlMenuClicked"
+                 BackgroundColor="White"/>
 
             <!-- 2. Leer Notas -->
             <ImageButton Grid.Column="1" 
                  Source="libroabierto.png"
                  HorizontalOptions="Center" VerticalOptions="Center"
                  HeightRequest="30" WidthRequest="30"
-                 Clicked="OnLeerIncidenciaClicked" />
+                 Clicked="OnLeerIncidenciaClicked"
+                 BackgroundColor="White"/>
 
             <!-- 3. Modificar Notas -->
             <ImageButton Grid.Column="2" 
                  Source="botoneditar.png"
                  HorizontalOptions="Center" VerticalOptions="Center"
                  HeightRequest="30" WidthRequest="30"
-                 Clicked="OnModificarIncidenciaClicked" />
+                 Clicked="OnModificarIncidenciaClicked"
+                 BackgroundColor="White"/>
 
             <!-- 4. Calcular Ruta -->
             <ImageButton Grid.Column="3" 
                  Source="punterosderuta.png"
                  HorizontalOptions="Center" VerticalOptions="Center"
                  HeightRequest="30" Clicked="OnEnlaceClicked" WidthRequest="30"
+                 BackgroundColor="White"
                   />
 
             <!-- 5. Estadísticas -->
@@ -253,6 +258,7 @@
                  Source="dataanalytics.png"
                  HorizontalOptions="Center" VerticalOptions="Center"
                  HeightRequest="30" WidthRequest="30"
+                 BackgroundColor="White"
                   />
         </Grid>
     </Grid>
