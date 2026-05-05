@@ -1,10 +1,5 @@
 ﻿using System.Net.Sockets;
-using System.Net;
-using System.Text;
-using Microsoft.Maui.Devices.Sensors; // para los sensores
-using Microsoft.Maui.ApplicationModel; // para qeu sepa que es de maui 
-using Microsoft.Maui.Graphics; // para Color
-using Microsoft.Maui.Controls; // para label y colectionview
+
 using static BibliotecaFrontend.Sockets;
 using static BibliotecaFrontend.Classes;
 using static BibliotecaFrontend.PonerNota;
@@ -104,8 +99,11 @@ namespace BibliotecaFrontend
             send_parameter_xyz(final_z, frontend_socket);
         }
 
+        // Task es como void pero para cuando la funcion es asincrona y sirve para que se pueda esperar a antes de acabar la funcion que se haya enviado todo por los sockets
+        // ya que hay algo asincrono ademas de saber quien llama a esta funcion cuando ha acabado realmente
 
-    public async static Task EstacionCercana(int num_opcion,
+        // la unica excepcion son en los eventos de funciones de maui como lo son en nuestro codigo las funciones para moverse entre pantallas
+        public async static Task EstacionCercana(int num_opcion,
     Socket frontend_socket,
     Label LabelEstacion,
     CollectionView LineasView,
@@ -129,8 +127,12 @@ namespace BibliotecaFrontend
                     location = null; // ponemos la localizacion a null
                 }
 
-               
 
+                // Si no hay ninguna guardada, pide una nueva
+                // Medium es para decir que busque algo con no demasiada precision pero que vaya rapido 
+
+                // Timespan es para que deje de buscar si han pasado 60 segundos y ha fallado
+                // la localizacion es async ya que es un task y lleva await
                 if (location == null)
                 {
                     location = await Geolocation.Default.GetLocationAsync(

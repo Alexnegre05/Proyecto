@@ -1,10 +1,4 @@
 ﻿
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 using static BibliotecaFrontend.Classes;
 using static BibliotecaFrontend.Sockets;
 
@@ -15,7 +9,7 @@ namespace BibliotecaFrontend
 
 
 
-        // variable para que el += no se este acumulando todo el rato
+       
 
         public static void mainthreadLeerNotas(LeerNotasParams parametros)
         {

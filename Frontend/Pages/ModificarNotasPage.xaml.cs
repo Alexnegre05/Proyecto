@@ -1,10 +1,8 @@
 ﻿using static BibliotecaFrontend.BibliotecaFrontend;
 using static BibliotecaFrontend.Sockets;
-using static BibliotecaFrontend.Classes;
-using static BibliotecaFrontend.LeerNota;
-using System.Net;
+
 using System.Net.Sockets;
-using System.Text;
+
 namespace Frontend.Pages
 {
     public partial class ModificarNotasPage : ContentPage

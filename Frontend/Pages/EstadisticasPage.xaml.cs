@@ -1,9 +1,9 @@
 namespace Frontend.Pages;
-using static BibliotecaFrontend.BibliotecaFrontend;
+
 using static BibliotecaFrontend.Sockets;
-using static BibliotecaFrontend.Classes;
+
 using System.Net.Sockets;
-using System.Text;
+
 public partial class EstadisticasPage : ContentPage
 {
 
@@ -68,7 +68,7 @@ public partial class EstadisticasPage : ContentPage
 
         MainThread.BeginInvokeOnMainThread(() =>
         {
-           
+
             LabelTotalHoy.Text = totalHoy.ToString();
             LabelTop5.Text = top5;
             LabelLineaTop.Text = $"{linea} ({posicion.ToString()})";

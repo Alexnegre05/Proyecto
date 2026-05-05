@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Net;
+﻿
 using System.Net.Sockets;
-using System.Text;
-using BibliotecaFrontend;
+
 using static BibliotecaFrontend.BibliotecaFrontend;
 using static BibliotecaFrontend.Sockets;
 using static BibliotecaFrontend.Classes;
-using static BibliotecaFrontend.LeerNota;
+
 namespace Frontend.Pages;
 
 public partial class LeerNotasPage : ContentPage

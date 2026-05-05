@@ -1,12 +1,8 @@
 ﻿using System.Net.Sockets;
-using System.Net;
-using System.Text;
-using System.Collections.Generic;
-using BibliotecaFrontend;
+
 using static BibliotecaFrontend.BibliotecaFrontend;
 using static BibliotecaFrontend.Sockets;
-using static BibliotecaFrontend.Classes;
-using static BibliotecaFrontend.PonerNota;
+
 
 namespace Frontend.Pages;
 

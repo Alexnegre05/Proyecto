@@ -1,28 +1,14 @@
 ﻿
-using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Xml.Linq;
-using Npgsql;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
-using Npgsql.EntityFrameworkCore;
-using static System.Net.Mime.MediaTypeNames;
-using System.Numerics;
-using System.Text;
-using System.Globalization;
-using System.Net.Sockets;
-using System.Net;
 
 // cosas referentes a las librerias
-using BibliotecaBackend;
+
 using static BibliotecaBackend.Clases;
 using static BibliotecaBackend.SQL;
-using static BibliotecaBackend.Sockets;
+
 using static BibliotecaBackend.IP;
-using static BibliotecaBackend.General;
+
 using static BibliotecaBackend.Hilos;
-using Microsoft.Win32;
+
 
 
 

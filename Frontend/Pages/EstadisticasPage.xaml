@@ -3,53 +3,74 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Frontend.Pages.EstadisticasPage"
              Title="EstadisticasPage">
-    <Grid RowDefinitions="*, Auto" BackgroundColor="Black">
+
+    <!-- IMPORTANTE: binding al propio code-behind -->
+    <ContentPage.BindingContext>
+        <x:Reference Name="ThisPage"/>
+    </ContentPage.BindingContext>
+
+    <Grid x:Name="ThisPage" RowDefinitions="*, Auto" BackgroundColor="Black">
 
         <ScrollView Grid.Row="0">
             <VerticalStackLayout VerticalOptions="Start" Spacing="15" Padding="10,20">
 
-                <Label Text="Incidencias hoy:"
-                    TextColor="White"/>
+                <VerticalStackLayout Spacing="20" Padding="20">
 
-                <Label x:Name="LabelTotalHoy"
-                   TextColor="White"
-                   FontSize="20"/>  
+                    <Label Text="Estadísticas de Red" 
+                       FontSize="24" FontAttributes="Bold" 
+                       TextColor="White" HorizontalOptions="Center" 
+                       Margin="0,0,0,10"/>
 
-                <Label Text="Incidencias este año:"
-                     TextColor="White"/>
+                    <!-- Fila superior de datos -->
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="15">
+                        <Border Grid.Column="0" BackgroundColor="#1E1E1E" Padding="15" StrokeShape="RoundRectangle 10">
+                            <VerticalStackLayout>
+                                <Label Text="Hoy" TextColor="#AAA" FontSize="12" HorizontalOptions="Center"/>
+                                <Label x:Name="LabelTotalHoy" Text="--" FontSize="32" FontAttributes="Bold" HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Border>
 
-                <Label x:Name="LabelTotalAño"
-                   TextColor="White"
-                   FontSize="20"/>  
+                        <Border Grid.Column="1" BackgroundColor="#1E1E1E" Padding="15" StrokeShape="RoundRectangle 10">
+                            <VerticalStackLayout>
+                                <Label Text="Este Año" TextColor="#AAA" FontSize="12" HorizontalOptions="Center"/>
+                                <Label x:Name="LabelTotalAño" FontSize="32" FontAttributes="Bold" HorizontalOptions="Center" Text="0"/>
+                            </VerticalStackLayout>
+                        </Border>
+                    </Grid>
 
-                <Label Text="Línea con más incidencias:"
-                 TextColor="White"/>
+                    <!-- Línea Top -->
+                    <Border BackgroundColor="#1E1E1E" Padding="15" StrokeShape="RoundRectangle 10">
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Línea con más incidencias" TextColor="#AAA" FontSize="14"/>
+                            <Label x:Name="LabelLineaTop" TextColor="White" FontSize="20" FontAttributes="Bold" Text="Cargando..."/>
+                        </VerticalStackLayout>
+                    </Border>
 
-                <Label x:Name="LabelLineaTop"
-                   TextColor="White"
-                   FontSize="18"/>  
+                    <!-- Estaciones -->
+                    <Border BackgroundColor="#1E1E1E" Padding="15" StrokeShape="RoundRectangle 10">
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="Estaciones Top" TextColor="#AAA" FontSize="14"/>
+                            <BoxView HeightRequest="1" Color="#333"/>
+                            <Label x:Name="LabelTop5" TextColor="White" FontSize="16" Text="Cargando lista..."/>
+                        </VerticalStackLayout>
+                    </Border>
 
-                <Label Text="Estaciones con mas incidencias:"
-                TextColor="White"/>
-
-                <Label x:Name="LabelTop5"
-                   TextColor="White"
-                   FontSize="14"/>
+                </VerticalStackLayout>
 
             </VerticalStackLayout>
         </ScrollView>
 
         <!-- FOOTER: Fondo Negro, Línea Blanca y Texto Blanco -->
         <Grid Grid.Row="1" 
-          ColumnDefinitions="*, *, *, *, *" 
-          BackgroundColor="Black"
-          HeightRequest="70">
+              ColumnDefinitions="*, *, *, *, *" 
+              BackgroundColor="Black"
+              HeightRequest="70">
 
             <BoxView Grid.ColumnSpan="5"
-                 HeightRequest="1" 
-                 BackgroundColor="White" 
-                 HorizontalOptions="Fill" 
-                 VerticalOptions="Start" />
+                     HeightRequest="1" 
+                     BackgroundColor="White" 
+                     HorizontalOptions="Fill" 
+                     VerticalOptions="Start" />
 
             <!-- 1. Poner Notas -->
             <ImageButton Grid.Column="0" 
