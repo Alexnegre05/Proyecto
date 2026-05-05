@@ -120,9 +120,16 @@ namespace BibliotecaFrontend
         {
             try
             {
-                
+                Location location;
+                var status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+
+                if (status != PermissionStatus.Granted)
+                {
+                    location = null;
+                }
+
                 // 1. Obtenemos la ubicación ANTES del Task.Run (en el hilo de UI)
-                Location location = await Geolocation.Default.GetLastKnownLocationAsync();
+                 location = await Geolocation.Default.GetLastKnownLocationAsync();
 
                 if (location == null)
                 {

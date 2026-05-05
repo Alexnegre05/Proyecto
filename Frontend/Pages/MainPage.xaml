@@ -11,7 +11,9 @@
              x:DataType="pageModels:MainPageModel"
              Title=""
              
-             BackgroundImageSource="imagen_estacion.jpg">
+             BackgroundImageSource="imagen_estacion.jpg"
+              xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+              ios:Page.UseSafeArea="True">
              
 
     <!--esto se pone en el content page para quitar la linea Shell.NavBarIsVisible="False"-->
