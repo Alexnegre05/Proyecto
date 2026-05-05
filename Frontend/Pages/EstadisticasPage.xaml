@@ -29,7 +29,7 @@
                    TextColor="White"
                    FontSize="18"/>  
 
-                <Label Text="Top 5 estaciones:"
+                <Label Text="Estaciones con mas incidencias:"
                 TextColor="White"/>
 
                 <Label x:Name="LabelTop5"

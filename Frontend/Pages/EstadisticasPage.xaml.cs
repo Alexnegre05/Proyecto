@@ -70,7 +70,7 @@ public partial class EstadisticasPage : ContentPage
         {
            
             LabelTotalHoy.Text = totalHoy.ToString();
-            LabelTop5.Text = top5;
+            LabelTop5.Text = top5 + "Incidencias";
             LabelLineaTop.Text = $"{linea} ({posicion.ToString()})";
             LabelTotalAño.Text = totalAño.ToString();
         });

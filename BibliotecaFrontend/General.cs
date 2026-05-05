@@ -120,16 +120,18 @@ namespace BibliotecaFrontend
         {
             try
             {
-                Location location;
-                var status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+                Location location = null;
+
+                // esto de el status es para poder tener el permiso de el movil para el gps, es obligatorio, sino falla
+                // es un enum que sireve para saber si ha habido permisos o no 
+                PermissionStatus status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
 
                 if (status != PermissionStatus.Granted)
                 {
-                    location = null;
+                    location = null; // ponemos la localizacion a null
                 }
 
-                // 1. Obtenemos la ubicación ANTES del Task.Run (en el hilo de UI)
-                 location = await Geolocation.Default.GetLastKnownLocationAsync();
+               
 
                 if (location == null)
                 {
@@ -141,24 +143,31 @@ namespace BibliotecaFrontend
                 // 2. Calculamos x,y,z aquí todavía en hilo UI
                 double final_x, final_y, final_z;
 
-                if (location == null)
-                {
-                    Console.WriteLine("GPS no disponible, usando Barcelona por defecto");
-                    final_x = 4595227.0;
-                    final_y = 171864.0;
-                    final_z = 4078884.0;
-                }
-                else
-                {
-                    float R = 6371.00877f * 1000;
-                    double x = grados_a_radianes(location.Longitude);
-                    double y = grados_a_radianes(location.Latitude);
-                    double z = location.Altitude ?? 0;
 
-                    final_x = (R + z) * Math.Cos(y) * Math.Cos(x);
-                    final_y = (R + z) * Math.Cos(y) * Math.Sin(x);
-                    final_z = (R + z) * Math.Sin(y);
-                }
+                // La Latitud determina la altura (Z) y la Longitud la posición en el círculo horizontal (X, Y).
+                // En 2D: Vertical = Radio * Seno(ángulo), Horizontal = Radio * Coseno(ángulo).
+                // En 3D :
+                // 1. La Z es la vertical: se usa el Seno de la Latitud.
+                // 2. El "Radio del plano" horizontal es el Coseno de la Latitud.
+                // 3. Ese Radio del plano se reparte en X (Coseno de Longitud) e Y (Seno de Longitud).
+
+                float R = 6371.00877f * 1000; // este 1000 es para pasar a metros
+                double x = grados_a_radianes(location.Longitude);
+                double y = grados_a_radianes(location.Latitude);
+                double z = location.Altitude ?? 0; // a veces puede dar error y entonces ponemos la altura a 0
+
+                final_x = (R + z) * Math.Cos(y) * Math.Cos(x); // esta es la formula para pasar de latitud y longitud a x y z
+                // la latitud y longitud son dos angulos que antes hay que pasar a radianes
+                
+                final_y = (R + z) * Math.Cos(y) * Math.Sin(x);
+                final_z = (R + z) * Math.Sin(y); // la z es calcular el seno que en un circulo es el eje Y 
+                
+
+
+
+
+
+
 
 
                 // Para entender lo que sigue hay que saber que maui tiene un hilo principal y varios secundarios
