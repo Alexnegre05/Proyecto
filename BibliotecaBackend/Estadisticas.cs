@@ -59,7 +59,7 @@ namespace BibliotecaBackend
                       (resultado, estacion) => new RankingEstacion { Nombre = estacion.nombre, TotalIncidencias = resultado.TotalIncidencias }) // hacemos que solo queremos estos dos valores, para ello necesitamos una clase nueva que 
                 .ToList(); // lo ponemos en una lista
 
-                    // 2. Mostrar resultados
+                    //Mostrar resultados
                     Console.WriteLine("--- TOP 5 ESTACIONES CON MÁS INCIDENCIAS ---");
                     
 
@@ -74,25 +74,25 @@ namespace BibliotecaBackend
                         puesto = puesto + 1;
                     }
 
-                    // linea con mas incidencias
-                    var lineaConMasIncidencias = context.Incidencias
-                .GroupBy(i => i.Paradas.LineaId)
-                .Select(grupo => new
-                {
-                    LineaId = grupo.Key,
-                    Total = grupo.Count()
-                })
-                .OrderByDescending(g => g.Total)
-                .Select(res => new
-                {
-                    // Unimos con la tabla Lineas para obtener el nombre
-                    NombreLinea = context.Lineas
-                        .Where(l => l.Id == res.LineaId)
-                        .Select(l => l.nombre)
-                        .FirstOrDefault(),
-                    TotalIncidencias = res.Total
-                })
-                .FirstOrDefault(); // Tomamos solo la primera (la que más tiene)
+                    // linea con mas incidencias, el ? es por si es null
+                    DatosLinea? lineaConMasIncidencias = context.Incidencias
+                    .GroupBy(i => i.Paradas.LineaId) // agrupa igual que antes pero con todas las incidencias dependiendo de la linea
+                    .Select(grupo => new  // por cada linea sacamos en un grupo el id de la linea y el total de inicdencias, replicamos lo de la clase
+                    {
+                        LineaId = grupo.Key,
+                        Total = grupo.Count()
+                    })
+                    .OrderByDescending(grupo => grupo.Total) // ordenamos de mas a menos incidencias
+                    .Select(resultado => new DatosLinea
+                    {
+                        // Unimos con la tabla Lineas para obtener el nombre, similar a lo que hicimos antes en estaciones
+                        NombreLinea = context.Lineas
+                       .Where(linea => linea.Id == resultado.LineaId)
+                       .Select(linea => linea.nombre)
+                       .FirstOrDefault(),
+                                    TotalIncidencias = resultado.Total // guardamos el resultado 
+                                })
+                    .FirstOrDefault(); // Tomamos solo la primera (la que más tiene)
 
                     // 2. Mostrar el resultado
                     if (lineaConMasIncidencias != null)
@@ -105,7 +105,7 @@ namespace BibliotecaBackend
                     }
                     else
                     {
-                        Console.WriteLine("No se registraron incidencias en ninguna línea.");
+                        Console.WriteLine("No se registraron incidencias en ninguna línea."); // en este caso enviamos "" y un 0 para indicar que no reciban nada
                         enviar_texto("", backend_service_socket);
                         enviar_numero(0, backend_service_socket);
                     }

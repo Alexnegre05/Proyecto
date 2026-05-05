@@ -131,10 +131,16 @@ namespace BibliotecaBackend
             
         }
 
-
+        // clases que usamos en el select de estadisticas para guardar los datos
         public class RankingEstacion
         {
-            public string Nombre { get; set; }
+            public string? Nombre { get; set; }
+            public int TotalIncidencias { get; set; }
+        }
+
+        public class DatosLinea
+        {
+            public string? NombreLinea { get; set; }
             public int TotalIncidencias { get; set; }
         }
 

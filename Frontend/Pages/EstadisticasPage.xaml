@@ -2,12 +2,9 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Frontend.Pages.EstadisticasPage"
-             Title="EstadisticasPage">
+             >
 
-    <!-- IMPORTANTE: binding al propio code-behind -->
-    <ContentPage.BindingContext>
-        <x:Reference Name="ThisPage"/>
-    </ContentPage.BindingContext>
+    
 
     <Grid x:Name="ThisPage" RowDefinitions="*, Auto" BackgroundColor="Black">
 
@@ -16,7 +13,7 @@
 
                 <VerticalStackLayout Spacing="20" Padding="20">
 
-                    <Label Text="Estadísticas de Red" 
+                    <Label Text="Estadísticas de RenfeSolutions" 
                        FontSize="24" FontAttributes="Bold" 
                        TextColor="White" HorizontalOptions="Center" 
                        Margin="0,0,0,10"/>
@@ -25,14 +22,14 @@
                     <Grid ColumnDefinitions="*, *" ColumnSpacing="15">
                         <Border Grid.Column="0" BackgroundColor="#1E1E1E" Padding="15" StrokeShape="RoundRectangle 10">
                             <VerticalStackLayout>
-                                <Label Text="Hoy" TextColor="#AAA" FontSize="12" HorizontalOptions="Center"/>
+                                <Label Text="Incidencias Hoy" TextColor="#AAA" FontSize="12" HorizontalOptions="Center"/>
                                 <Label x:Name="LabelTotalHoy" Text="--" FontSize="32" FontAttributes="Bold" HorizontalOptions="Center" />
                             </VerticalStackLayout>
                         </Border>
 
                         <Border Grid.Column="1" BackgroundColor="#1E1E1E" Padding="15" StrokeShape="RoundRectangle 10">
                             <VerticalStackLayout>
-                                <Label Text="Este Año" TextColor="#AAA" FontSize="12" HorizontalOptions="Center"/>
+                                <Label Text="Incidencias Este Año" TextColor="#AAA" FontSize="12" HorizontalOptions="Center"/>
                                 <Label x:Name="LabelTotalAño" FontSize="32" FontAttributes="Bold" HorizontalOptions="Center" Text="0"/>
                             </VerticalStackLayout>
                         </Border>
@@ -49,7 +46,7 @@
                     <!-- Estaciones -->
                     <Border BackgroundColor="#1E1E1E" Padding="15" StrokeShape="RoundRectangle 10">
                         <VerticalStackLayout Spacing="10">
-                            <Label Text="Estaciones Top" TextColor="#AAA" FontSize="14"/>
+                            <Label Text="Estaciones con mas Incidencias" TextColor="#AAA" FontSize="14"/>
                             <BoxView HeightRequest="1" Color="#333"/>
                             <Label x:Name="LabelTop5" TextColor="White" FontSize="16" Text="Cargando lista..."/>
                         </VerticalStackLayout>
