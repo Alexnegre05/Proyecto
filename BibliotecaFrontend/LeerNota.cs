@@ -1,3 +1,4 @@
+﻿
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +13,9 @@ namespace BibliotecaFrontend
     public class LeerNota
     {
 
-        
-        static bool evento_conectado = false;
+
+
+        // variable para que el += no se este acumulando todo el rato
 
         public static void mainthreadLeerNotas(LeerNotasParams parametros)
         {
@@ -22,88 +24,90 @@ namespace BibliotecaFrontend
                 parametros.LabelEstacion.Text = "Estación: " + parametros.Estacion;
                 parametros.LineasView.ItemsSource = parametros.Paradas;
 
-                
+                // Evitamos que el evento se acumule si se vuelve a entrar a la página
+                parametros.LineasView.SelectionChanged -= LineasView_SelectionChanged;
+                parametros.LineasView.SelectionChanged += LineasView_SelectionChanged;
 
-                if (!evento_conectado)
+                async void LineasView_SelectionChanged(object s, SelectionChangedEventArgs e)
                 {
-                    evento_conectado = true;
+                    InfoLinea seleccion = e.CurrentSelection.FirstOrDefault() as InfoLinea;
 
-                    parametros.LineasView.SelectionChanged += async (s, e) =>
+                    if (seleccion == null)
+                        return;
+
+                    parametros.LineasView.SelectedItem = null;
+
+                    string estacion_actual = parametros.LabelEstacion.Text
+                        .Replace("Estación: ", "")
+                        .Split(" (")[0];
+
+                    // aqui queremos solo el nombre de la estacion sin parentesis ni nada, se recibe como estacion(linea)
+
+                    parametros.LabelEstacion.Text = $"Estación: {estacion_actual} ({seleccion.Nombre})";
+                    parametros.LabelEstacion.TextColor = (Color)seleccion.Color;
+                    parametros.BordePrincipal.Background = (Color)seleccion.Color;
+                    parametros.Titulo.TextColor = Colors.White;
+
+                    parametros.LineasView.IsVisible = false;
+                    parametros.BtnFlecha.Text = "Cambiar Lineas ▼";
+
+                    await Task.Run(() => // como vamos a hacer cosas de sockets hay que cambiar a el hilo secundario
                     {
-                        InfoLinea seleccion = e.CurrentSelection.FirstOrDefault() as InfoLinea;
+                        send_num(3, parametros.frontend_socket); // la opcion 3 es la de mostrar notas
 
-                        if (seleccion == null)
-                            return;
+                        string texto_envio = $"Estación: {estacion_actual} ({seleccion.Nombre})";
 
-                        parametros.LineasView.SelectedItem = null;
+                        enviar_texto(texto_envio, parametros.frontend_socket); // enviamos la estacion actual junto a que parada se ha seleccionado
 
-                        
-                        string estacion_actual = parametros.LabelEstacion.Text.Replace("Estación: ", "").Split(" (")[0];
+                        int num_incidencias = recibir_numero(parametros.frontend_socket);
+                        // recibimos el numero de incidencias,
+                        // vamos una por una y recibimos por cada incidencia cuantas notas hay por incidencias
 
-                        
-                        parametros.LabelEstacion.Text = $"Estación: {estacion_actual} ({seleccion.Nombre})";
-                        parametros.LabelEstacion.TextColor = (Color)seleccion.Color;
-                        parametros.BordePrincipal.Background = (Color)seleccion.Color;
-                        parametros.Titulo.TextColor = Colors.White;
+                        List<Incidencia> lista_temporal_incidencias = new List<Incidencia>();
 
-                        parametros.LineasView.IsVisible = false;
-                        parametros.BtnFlecha.Text = "Cambiar Lineas ▼";
-
-                        await Task.Run(() =>
+                        if (num_incidencias > 0)
                         {
-                            send_num(3, parametros.frontend_socket);
-
-                            string texto_envio = $"Estación: {estacion_actual} ({seleccion.Nombre})";
-                            enviar_texto(texto_envio, parametros.frontend_socket);
-
-                            int num_incidencias = recibir_numero(parametros.frontend_socket);
-
-                            List<Incidencia> lista_temporal_incidencias = new List<Incidencia>();
-
-                            if (num_incidencias > 0)
+                            for (int i = 0; i < num_incidencias; i = i + 1)
                             {
-                                for (int i = 0; i < num_incidencias; i++)
+                                int numero_notas = recibir_numero(parametros.frontend_socket);
+
+                                for (int j = 0; j < numero_notas; j = j + 1)
                                 {
-                                    int numero_notas = recibir_numero(parametros.frontend_socket);
+                                    string titulo_actual = recibir_texto(parametros.frontend_socket);
+                                    string descripcion_actual = recibir_texto(parametros.frontend_socket);
 
-                                    for (int j = 0; j < numero_notas; j++)
+                                    lista_temporal_incidencias.Add(new Incidencia
                                     {
-                                        string titulo_actual = recibir_texto(parametros.frontend_socket);
-                                        string descripcion_actual = recibir_texto(parametros.frontend_socket);
-
-                                        lista_temporal_incidencias.Add(new Incidencia
-                                        {
-                                            titulo = titulo_actual.ToUpper(),
-                                            descripcion = descripcion_actual,
-                                            ColorTexto = (Color)seleccion.Color
-                                        });
-                                    }
+                                        titulo = titulo_actual.ToUpper(),
+                                        descripcion = descripcion_actual,
+                                        ColorTexto = (Color)seleccion.Color
+                                    });
                                 }
                             }
-
-                            MainThread.BeginInvokeOnMainThread(async () =>
+                        }
+                        // como volvemos a cambiar cosas de el hilo prioncipal xaml lo cambiamos 
+                        MainThread.BeginInvokeOnMainThread(async () =>
+                        {
+                            if (num_incidencias > 0)
                             {
-                                if (num_incidencias > 0)
-                                {
-                                    parametros.lista_incidencias.IsVisible = true;
-                                    parametros.lista_incidencias.ItemsSource = lista_temporal_incidencias;
-                                }
-                                else
-                                {
-                                    parametros.lista_incidencias.ItemsSource = null;
+                                parametros.lista_incidencias.IsVisible = true;
+                                parametros.lista_incidencias.ItemsSource = lista_temporal_incidencias;
+                            }
+                            else
+                            {
+                                parametros.lista_incidencias.ItemsSource = null;
 
-                                    await Shell.Current.DisplayAlert(
-                                        "No hay notas que mostrar",
-                                        "",
-                                        "Cerrar"
-                                    );
-                                }
-                            });
+                                await Shell.Current.DisplayAlert(
+                                    "No hay notas que mostrar",
+                                    "",
+                                    "Cerrar"
+                                );
+                            }
                         });
-                    };
+                    });
                 }
             });
         }
-    
+
     }
 }
