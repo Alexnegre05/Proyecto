@@ -30,8 +30,6 @@ namespace BibliotecaFrontend
 
 
         // aqui creamos unos structs para que la funcion no reciba muchos parametros sueltos 
-        // cada opcion requiere unos parametros u otros, lo ponemos asi porque cuando llamemos a la funcion es mas facil de modificar 
-        // en caso de que haya que añadir alguna cosa
         public struct PonerNotasParams
         {
             public Socket frontend_socket;

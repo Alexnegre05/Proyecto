@@ -12,7 +12,8 @@ namespace BibliotecaFrontend
     public class LeerNota
     {
 
-        
+        // 🔹 guardamos la estación REAL seleccionada (IMPORTANTE)
+        static string estacion_actual = "";
         static bool evento_conectado = false;
 
         public static void mainthreadLeerNotas(LeerNotasParams parametros)
@@ -22,7 +23,8 @@ namespace BibliotecaFrontend
                 parametros.LabelEstacion.Text = "Estación: " + parametros.Estacion;
                 parametros.LineasView.ItemsSource = parametros.Paradas;
 
-                
+                // ❌ ELIMINADO estado global
+                // usamos SIEMPRE la estación que viene en parámetros
 
                 if (!evento_conectado)
                 {
@@ -37,10 +39,10 @@ namespace BibliotecaFrontend
 
                         parametros.LineasView.SelectedItem = null;
 
-                        
+                        // 🔥 SIEMPRE usamos la estación ACTUAL desde parámetros
                         string estacion_actual = parametros.LabelEstacion.Text.Replace("Estación: ", "").Split(" (")[0];
 
-                        
+                        // UI inmediata
                         parametros.LabelEstacion.Text = $"Estación: {estacion_actual} ({seleccion.Nombre})";
                         parametros.LabelEstacion.TextColor = (Color)seleccion.Color;
                         parametros.BordePrincipal.Background = (Color)seleccion.Color;

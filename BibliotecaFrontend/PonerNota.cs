@@ -12,10 +12,12 @@ namespace BibliotecaFrontend
 {
     public class PonerNota
     {
-        
+        // Eliminamos las líneas de variables sueltas que daban error, 
+        // ya que ahora todo viaja dentro del struct 'parametros'
+
         public static void mainthreadPonerNotas(PonerNotasParams parametros)
         {
-            // aqui invopcamos el main therad que es el unico que es capaz de cambiar variables de maui 
+
             MainThread.BeginInvokeOnMainThread(() =>
             {
                 // Usamos parametros. para acceder a los datos del struct
