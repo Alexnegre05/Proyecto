@@ -82,9 +82,7 @@ namespace BibliotecaFrontend
             if (location == null)
             {
                 Console.WriteLine("ERROR: No se pudo obtener ubicación, usando Barcelona por defecto");
-                send_parameter_xyz(4595227.0, frontend_socket);
-                send_parameter_xyz(171864.0, frontend_socket);
-                send_parameter_xyz(4078884.0, frontend_socket);
+                
                 return;
             }
 
