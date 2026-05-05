@@ -156,7 +156,11 @@ namespace BibliotecaFrontend
                 // 3. Todo el trabajo de red en hilo de fondo, con las coordenadas ya calculadas
                 await Task.Run(() =>
                 {
-                    send_num(num_opcion, frontend_socket);
+                    if (num_opcion != 2)
+                    {
+                        send_num(num_opcion, frontend_socket);
+                    }
+                    
 
                     if (num_opcion == 1) send_num(1, frontend_socket);
                     else if (num_opcion == 2) send_num(2, frontend_socket);
