@@ -153,14 +153,26 @@ namespace BibliotecaFrontend
                     final_z = (R + z) * Math.Sin(y);
                 }
 
-                // 3. Todo el trabajo de red en hilo de fondo, con las coordenadas ya calculadas
+
+                // Para entender lo que sigue hay que saber que maui tiene un hilo principal y varios secundarios
+                // el hilo principal es el que se encarga de mostrar los botones ponerles sus atributos y en general de el xaml y solo el lo puede hacer
+                // se llama mainthread
+
+                // y los hilos secundarios son los que se encargan de todo el tema de sockets y calculo de funciones
+                // este await task run crea como un hilo secundario donde vamos a ejecutar todo lo que tiene que ver con sockets
+                // para que no se congele la aplicaicon en el hilo principal
+
+                // Run es para decirle que ejecute el codigo que vera a continuacion en uno de los hilos secundarios
+                
                 await Task.Run(() =>
                 {
                     if (num_opcion != 2)
                     {
                         send_num(num_opcion, frontend_socket);
                     }
-                    
+                    // enviamos si estamos en  modificar o poner notas, leer ya se envia en el onapearing
+
+                    // dependiendo de la opcion para saber la estacion cercana enviamos un numero u otro
 
                     if (num_opcion == 1) send_num(1, frontend_socket);
                     else if (num_opcion == 2) send_num(2, frontend_socket);
@@ -171,22 +183,27 @@ namespace BibliotecaFrontend
                     send_parameter_xyz(final_y, frontend_socket);
                     send_parameter_xyz(final_z, frontend_socket);
 
-                    string estacion = recibir_texto(frontend_socket);
+                    string estacion = recibir_texto(frontend_socket); // recibimos la estacion y el numero de paradas
                     int num = recibir_numero(frontend_socket);
 
                     List<InfoLinea> paradas = new List<InfoLinea>();
-                    for (int i = 0; i < num; i++)
+                    for (int i = 0; i < num; i = i + 1)
                     {
                         string linea = recibir_texto(frontend_socket);
+                        // por cada parada recibimos el texto y lo guardamos en infolinea
+                        // junto con su correspondiente color que nos servira mas tarde en las funciones posteriores
                         InfoLinea linea_actual = new InfoLinea
                         {
                             Nombre = linea,
-                            Color = colores.GetValueOrDefault(linea, Colors.Gray)
+                            Color = colores.GetValueOrDefault(linea, Colors.Gray) // con getvalue sacamos el valor de el diccionario a partir de la key(la linea)
                         };
                         paradas.Add(linea_actual);
                     }
 
-                    if (num_opcion == 1)
+                // dependiendo de que opcion sea si poner o lñeer o modificar habvra que cambiar en el xaml ciertos parametros u otros y llamar a unos u otros hilos
+                // para eso usamos los structs creados en clases
+                
+                    if (num_opcion == 1) 
                     {
                         PonerNotasParams parametros = new PonerNotasParams
                         {
@@ -262,7 +279,7 @@ namespace BibliotecaFrontend
 
             for(int i = 0; i <  numero_bucle; i = i + 1)
             {
-                string estacion = recibir_texto(frontend_socket);
+                string estacion = recibir_texto(frontend_socket); //por cada estacion la guardamos en la lista y se lo pasamos a el hilo que se encargara de mostrar la ruta 
                 lista_estaciones.Add(estacion);
             }
 
