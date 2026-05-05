@@ -7,17 +7,19 @@ namespace BibliotecaBackend
 {
     public class Estadisticas
     {
+
+        
         public static void estadisticas(Socket backend_service_socket, DBProyectoContext context)
         {
             Console.WriteLine("Menu");
             Console.WriteLine("0: salir");
             Console.WriteLine("1: mostrar incidencias");
 
-            int opcion = recibir_numero(backend_service_socket);
+            int opcion = recibir_numero(backend_service_socket); // obtenemos la opcion para el menu
 
             int totalIncidenciasAño;
             int totalIncidenciasHoy;
-            int puesto = 1;
+            int puesto = 1; // variable que nos sirve para saber la posicion en el ranking de cada estacion
 
             while (opcion != 0)
             {
@@ -29,8 +31,8 @@ namespace BibliotecaBackend
 
                     // Realizamos el conteo filtrando por la fecha
                     totalIncidenciasHoy = context.Incidencias
-                        .Where(i => i.fecha.Date == hoy && i.fecha < hoy.AddDays(1)) // comprovamos que el dia es el actual
-                        .Count();
+                        .Where(i => i.fecha.Date == hoy && i.fecha < hoy.AddDays(1)) // comprovamos que el dia es el actual y miorando que no sea el dia superior y que sea == fecha.date
+                        .Count(); // el count es para que me de el numero de incidencias que coinciden con el where
 
                     // Ejemplo de cómo podrías usar el resultado
                     Console.WriteLine($"Total de incidencias hoy ({hoy:dd/MM/yyyy}): {totalIncidenciasHoy}");
@@ -38,20 +40,24 @@ namespace BibliotecaBackend
                     enviar_numero(totalIncidenciasHoy,backend_service_socket); // enviamos este numero 
 
                     // la mayor estacion con incidencias TOP 5
-                    var topEstaciones = context.Incidencias
-                .GroupBy(i => i.Paradas.EstacionId)
-                .Select(grupo => new
+                    List<RankingEstacion> topEstaciones = context.Incidencias
+                .GroupBy(i => i.Paradas.EstacionId) // esto agrupa todas las incidencias que hay en una parada y nos lo da en muchos grupos
+                .Select(grupo => new // seleccionamos de cada grupo de incidencias por paradas su id de la estacion y el total de incidencias
+                                     // (key es el valor que hemos agrupado el grupo(que es como un diccionario con clave y valor)
                 {
                     EstacionId = grupo.Key,
-                    TotalIncidencias = grupo.Count()
+                    TotalIncidencias = grupo.Count() // aqui queremos saber cuantas incidencias tiene ese grupo de paradas por estacion
                 })
-                .OrderByDescending(x => x.TotalIncidencias)
-                .Take(5) // Tomamos solo las 5 primeras
-                .Join(context.Estaciones,
-                      res => res.EstacionId,
-                      est => est.Id,
-                      (res, est) => new { est.nombre, res.TotalIncidencias })
-                .ToList();
+                .OrderByDescending(x => x.TotalIncidencias) // ordena por el numero de incidencias la primera la que mas hasta la que queda abajo de el todo
+
+                .Take(5) // Tomamos solo las 5 primeras, es un LIMIT es sql
+
+                .Join(context.Estaciones, // el join es para unir la tabla estaciones con el id que acabamos de encontrar el estacion Id para ver que estacion coincide ç
+                                          // y saber el nombre de la estacion, no el id
+                      resultado => resultado.EstacionId,
+                      estacion => estacion.Id,
+                      (resultado, estacion) => new RankingEstacion { Nombre = estacion.nombre, TotalIncidencias = resultado.TotalIncidencias }) // hacemos que solo queremos estos dos valores, para ello necesitamos una clase nueva que 
+                .ToList(); // lo ponemos en una lista
 
                     // 2. Mostrar resultados
                     Console.WriteLine("--- TOP 5 ESTACIONES CON MÁS INCIDENCIAS ---");
@@ -59,12 +65,12 @@ namespace BibliotecaBackend
 
                     enviar_numero(topEstaciones.Count, backend_service_socket);
 
-                    foreach (var e in topEstaciones)
+                    for(int i = 0; i < topEstaciones.Count; i = i+ 1)
                     {
-                        Console.WriteLine($"{puesto}. {e.nombre}: {e.TotalIncidencias} incidencias");
+                        Console.WriteLine($"{puesto}. {topEstaciones[i].Nombre}: {topEstaciones[i].TotalIncidencias} incidencias");
 
-                        enviar_texto(e.nombre, backend_service_socket); // enviamos el texto y el numero 
-                        enviar_numero(e.TotalIncidencias, backend_service_socket);
+                        enviar_texto(topEstaciones[i].Nombre, backend_service_socket); // enviamos el texto y el numero 
+                        enviar_numero(topEstaciones[i].TotalIncidencias, backend_service_socket);
                         puesto = puesto + 1;
                     }
 

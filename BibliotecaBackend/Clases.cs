@@ -131,6 +131,14 @@ namespace BibliotecaBackend
             
         }
 
+
+        public class RankingEstacion
+        {
+            public string Nombre { get; set; }
+            public int TotalIncidencias { get; set; }
+        }
+
+
         public class DBProyectoContext : DbContext
         {
             public DbSet<Estacion> Estaciones { get; set; }
