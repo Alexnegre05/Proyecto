@@ -13,7 +13,7 @@ namespace BibliotecaFrontend
     {
 
         
-        static bool evento_conectado = false; // variable para que el += no se este acumulando todo el rato
+        static bool evento_conectado = false;
 
         public static void mainthreadLeerNotas(LeerNotasParams parametros)
         {
@@ -24,7 +24,7 @@ namespace BibliotecaFrontend
 
                 
 
-                if (evento_conectado == false)
+                if (!evento_conectado)
                 {
                     evento_conectado = true;
 
@@ -38,8 +38,7 @@ namespace BibliotecaFrontend
                         parametros.LineasView.SelectedItem = null;
 
                         
-                        string estacion_actual = parametros.LabelEstacion.Text.Replace("Estación: ", "").Split(" (")[0]; 
-                        // aqui queremos solo el nombre de la estacion sin parentesis ni nada, se recibe como estacion(linea)
+                        string estacion_actual = parametros.LabelEstacion.Text.Replace("Estación: ", "").Split(" (")[0];
 
                         
                         parametros.LabelEstacion.Text = $"Estación: {estacion_actual} ({seleccion.Nombre})";
@@ -50,25 +49,24 @@ namespace BibliotecaFrontend
                         parametros.LineasView.IsVisible = false;
                         parametros.BtnFlecha.Text = "Cambiar Lineas ▼";
 
-                        await Task.Run(() => // como vamos a hacer cosas de sockets hay que cambiar a el hilo secundario
+                        await Task.Run(() =>
                         {
-                            send_num(3, parametros.frontend_socket); // la opcion 3 es la de mostrar notas
+                            send_num(3, parametros.frontend_socket);
 
                             string texto_envio = $"Estación: {estacion_actual} ({seleccion.Nombre})";
-                            enviar_texto(texto_envio, parametros.frontend_socket); // enviamos la estacion actual junto a que parada se ha seleccionado
+                            enviar_texto(texto_envio, parametros.frontend_socket);
 
-                            int num_incidencias = recibir_numero(parametros.frontend_socket); // recibimos el numero de incidenicas,
-                                                                                              // vamos una por una y recibimos por cada incidencia cuantas notas hay por incidencias
+                            int num_incidencias = recibir_numero(parametros.frontend_socket);
 
                             List<Incidencia> lista_temporal_incidencias = new List<Incidencia>();
 
                             if (num_incidencias > 0)
                             {
-                                for (int i = 0; i < num_incidencias; i = i + 1)
+                                for (int i = 0; i < num_incidencias; i++)
                                 {
                                     int numero_notas = recibir_numero(parametros.frontend_socket);
 
-                                    for (int j = 0; j < numero_notas; j = j + 1)
+                                    for (int j = 0; j < numero_notas; j++)
                                     {
                                         string titulo_actual = recibir_texto(parametros.frontend_socket);
                                         string descripcion_actual = recibir_texto(parametros.frontend_socket);
