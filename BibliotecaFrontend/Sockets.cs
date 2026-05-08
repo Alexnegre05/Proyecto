@@ -44,9 +44,10 @@ namespace BibliotecaFrontend
                 : calcular_ip_automatico(); // Móvil físico
             #else
                 ip = calcular_ip_automatico();
-#           endif
+            #endif
 
-                IPAddress address = IPAddress.Parse("192.168.111.37");
+                ip = calcular_ip_automatico();
+                IPAddress address = IPAddress.Parse(ip);
                 IPEndPoint endpoint = new IPEndPoint(address, puerto);
                 Socket frontend_socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
                 frontend_socket.Connect(endpoint);
