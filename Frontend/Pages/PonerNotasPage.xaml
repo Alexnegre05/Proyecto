@@ -258,7 +258,7 @@
                  Source="dataanalytics.png"
                  HorizontalOptions="Center" VerticalOptions="Center"
                  HeightRequest="30" WidthRequest="30"
-                 BackgroundColor="White"
+                 Clicked ="OnEstadisticasClicked" BackgroundColor="White"
                   />
         </Grid>
     </Grid>

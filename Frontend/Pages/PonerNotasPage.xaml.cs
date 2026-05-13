@@ -132,9 +132,9 @@ public partial class PonerNotasPage : ContentPage
         string titulo = TituloIncidencia.Text;
         string descripcion = DescripcionIncidencia.Text;
 
-        if(titulo == null || descripcion == null) // si el titulo o la descripcion es nula entonces no enviar nada
+        if(titulo == null || titulo == "" || descripcion == null || descripcion == "") // si el titulo o la descripcion es nula entonces no enviar nada
         {
-            Shell.Current.DisplayAlert("Introduce texto", "", "Cerrar");
+           await Shell.Current.DisplayAlert("Introduce texto", "", "Cerrar");
         }
         else
         {
@@ -193,5 +193,10 @@ public partial class PonerNotasPage : ContentPage
     protected async void OnEnlaceClicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync("EnlacesPage");
+    }
+
+    protected async void OnEstadisticasClicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("EstadisticasPage");
     }
 }
