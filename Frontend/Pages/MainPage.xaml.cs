@@ -28,7 +28,7 @@ namespace Frontend.Pages
 
         private void OnHoverExit(object sender, PointerEventArgs e)
         {
-            if (sender is Button button)
+            if (sender is Button button == true)
             {
                 button.BorderColor = Colors.Transparent;
                 button.BorderWidth = 0;

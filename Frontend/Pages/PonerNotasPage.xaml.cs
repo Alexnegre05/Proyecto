@@ -24,23 +24,41 @@ public partial class PonerNotasPage : ContentPage
     // la funcion onAppearing sirve para indicarle a la aplicacion que cuando se abra la pagina  se llame a la funcion que quieras
     protected override async void OnAppearing()
     {
-        base.OnAppearing();
 
-        frontend_socket = crear_frontend_socket(1000); // funcion que crea el socket
+        try
+        {
+            base.OnAppearing();
 
-        await EstacionCercana( // funcion que sirve tanto para poner como leer como modificar incidencias, dependiendo de cada caso habra iertos componentes de la funcion que seran null u otros
+            frontend_socket = crear_frontend_socket(1000); // funcion que crea el socket
 
-            1,
-            frontend_socket,
-            LabelEstacion,
-            LineasView,
-            BordePrincipal,
-            guardar,
-            Titulo,
-            BtnFlecha,
-            ContenedorIncidencias,
-            null
-        );
+
+            if (frontend_socket == null)
+            {
+                await Shell.Current.DisplayAlert("Error",
+                    "No se pudo conectar al backend",
+                    "OK");
+
+                return;
+            }
+            await EstacionCercana( // funcion que sirve tanto para poner como leer como modificar incidencias, dependiendo de cada caso habra iertos componentes de la funcion que seran null u otros
+
+                1,
+                frontend_socket,
+                LabelEstacion,
+                LineasView,
+                BordePrincipal,
+                guardar,
+                Titulo,
+                BtnFlecha,
+                ContenedorIncidencias,
+                null
+            );
+        }
+        catch(Exception ex)
+        {
+            await Shell.Current.DisplayAlert("ERROR", ex.ToString(), "OK");
+        }
+        
         // sirve para decirle a el backend que tiene que hacer en este momento, enviara un 1 y por tanto sabra que queremos que nos envien la estacion mas cercana posible
     }
     // es lo mismo que on apearing pero para cuando un usuario cierra la pantalla o cambia de pestaña

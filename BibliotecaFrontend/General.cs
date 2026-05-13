@@ -76,7 +76,7 @@ namespace BibliotecaFrontend
             // Ahora sí comprobamos null ANTES de usar location
             if (location == null)
             {
-                Console.WriteLine("ERROR: No se pudo obtener ubicación, usando Barcelona por defecto");
+                Console.WriteLine("ERROR: No se pudo obtener ubicación");
                 
                 return;
             }
@@ -104,15 +104,15 @@ namespace BibliotecaFrontend
 
         // la unica excepcion son en los eventos de funciones de maui como lo son en nuestro codigo las funciones para moverse entre pantallas
         public async static Task EstacionCercana(int num_opcion,
-    Socket frontend_socket,
-    Label LabelEstacion,
-    CollectionView LineasView,
-    Border BordePrincipal,
-    Button guardar,
-    Label Titulo,
-    Button BtnFlecha,
-    Border ContenedorIncidencias,
-    CollectionView lista_incidencias)
+        Socket frontend_socket,
+        Label LabelEstacion,
+        CollectionView LineasView,
+        Border BordePrincipal,
+        Button guardar,
+        Label Titulo,
+        Button BtnFlecha,
+        Border ContenedorIncidencias,
+        CollectionView lista_incidencias)
         {
             try
             {
